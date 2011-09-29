@@ -1,5 +1,5 @@
 <?php
-/* HotelsPicture Test cases generated on: 2011-09-20 14:09:29 : 1316509169*/
+/* HotelsPicture Test cases generated on: 2011-09-23 15:09:44 : 1316773064*/
 App::import('Model', 'manager.HotelsPicture');
 
 class HotelsPictureTestCase extends CakeTestCase {

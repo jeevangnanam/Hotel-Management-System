@@ -4,12 +4,7 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id');?></th>
 			<th><?php echo $this->Paginator->sort('name');?></th>
-			<th><?php echo $this->Paginator->sort('address');?></th>
-			<th><?php echo $this->Paginator->sort('phone');?></th>
-			<th><?php echo $this->Paginator->sort('email');?></th>
-			<th><?php echo $this->Paginator->sort('web');?></th>
-			<th><?php echo $this->Paginator->sort('contactperson');?></th>
-			<th><?php echo $this->Paginator->sort('starclass');?></th>
+			
 			<th><?php echo $this->Paginator->sort('status');?></th>
 			<th class="actions"><?php __('Actions');?></th>
 	</tr>
@@ -24,12 +19,7 @@
 	<tr<?php echo $class;?>>
 		<td><?php echo $hotel['Hotel']['id']; ?>&nbsp;</td>
 		<td><?php echo $hotel['Hotel']['name']; ?>&nbsp;</td>
-		<td><?php echo $hotel['Hotel']['address']; ?>&nbsp;</td>
-		<td><?php echo $hotel['Hotel']['phone']; ?>&nbsp;</td>
-		<td><?php echo $hotel['Hotel']['email']; ?>&nbsp;</td>
-		<td><?php echo $hotel['Hotel']['web']; ?>&nbsp;</td>
-		<td><?php echo $hotel['Hotel']['contactperson']; ?>&nbsp;</td>
-		<td><?php echo $hotel['Hotel']['starclass']; ?>&nbsp;</td>
+		
 		<td><?php echo $hotel['Hotel']['status']; ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View', true), array('action' => 'view', $hotel['Hotel']['id'])); ?>

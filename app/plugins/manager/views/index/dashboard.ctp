@@ -1,8 +1,2 @@
-<?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-?>
-Dashboard
+<a href="/manager/hotels/">Manage hotels</a><br />
+<a href="/manager/hotels/">Manage rooms</a>

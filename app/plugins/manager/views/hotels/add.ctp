@@ -1,4 +1,26 @@
-<div class="hotels form">
+<script>
+
+$(document).ready(function(){
+$('#tabs').tabs();
+$('#tabs ul li a').click(function () {location.hash = $(this).attr('href');});
+$( 'html, body' ).animate( { scrollTop: 0 }, 0 );
+});
+
+</script>
+
+<div id="tabs">
+
+			<ul>
+				<li><a href="#tabs-1">Hotel details</a></li>
+				<li><a href="/manager/hotelsPictures/add"><span>Hotel Pictures</span></a></li>
+				<li><a href="/manager/hotelsPictures/add"><span>Rooms</span></a></li>
+				 
+				<li><a href="#tabs-3">Room types</a></li>
+				<li><a href="#tabs-3">Features</a></li>
+				<li><a href="#tabs-3">Managers</a></li>
+				<li><a href="#tabs-3">Meta values</a></li>
+			</ul>
+			<div id="tabs-1"><div class="hotels form">
 <?php echo $this->Form->create('Hotel');?>
 	<fieldset>
  		<legend><?php __('Add Hotel'); ?></legend>
@@ -12,13 +34,7 @@
 		echo $this->Form->input('starclass');
 		echo $this->Form->input('status');
 		echo $this->Form->input('Category');
-		echo $this->Form->input('CategoryList');
-		echo $this->Form->input('Feature');
-		echo $this->Form->input('Manager');
-		echo $this->Form->input('Metum');
-		echo $this->Form->input('Picture');
-		echo $this->Form->input('RoomCapacity');
-		echo $this->Form->input('RoomType');
+
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>
@@ -47,4 +63,8 @@
 		<li><?php echo $this->Html->link(__('List Hotels Room Types', true), array('controller' => 'hotels_room_types', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Room Type', true), array('controller' => 'hotels_room_types', 'action' => 'add')); ?> </li>
 	</ul>
-</div>
+</div></div>
+			<div id="tabs-2">Phasellus mattis tincidunt nibh. Cras orci urna, blandit id, pretium vel, aliquet ornare, felis. Maecenas scelerisque sem non nisl. Fusce sed lorem in enim dictum bibendum.</div>
+
+			<div id="tabs-3">Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.</div>
+		</div>

@@ -1,5 +1,5 @@
 <?php
-/* Hotel Fixture generated on: 2011-09-20 14:09:35 : 1316508215 */
+/* Hotel Fixture generated on: 2011-09-25 02:09:53 : 1316899493 */
 class HotelFixture extends CakeTestFixture {
 	var $name = 'Hotel';
 

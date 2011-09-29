@@ -1,5 +1,5 @@
 <?php
-/* HotelsPicture Fixture generated on: 2011-09-20 14:09:29 : 1316509169 */
+/* HotelsPicture Fixture generated on: 2011-09-23 15:09:44 : 1316773064 */
 class HotelsPictureFixture extends CakeTestFixture {
 	var $name = 'HotelsPicture';
 
@@ -8,7 +8,7 @@ class HotelsPictureFixture extends CakeTestFixture {
 		'hotel_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
 		'picture' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 250),
 		'caption' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 250),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'hotel_id' => array('column' => 'hotel_id', 'unique' => 0), 'hotel_id_2' => array('column' => 'hotel_id', 'unique' => 0)),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'hotel_id' => array('column' => 'hotel_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_unicode_ci', 'engine' => 'InnoDB')
 	);
 

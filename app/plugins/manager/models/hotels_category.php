@@ -1,6 +1,7 @@
 <?php
 class HotelsCategory extends ManagerAppModel {
 	var $name = 'HotelsCategory';
+       // var $displayField = 'username';
 	var $validate = array(
 		'hotel_id' => array(
 			'numeric' => array(
@@ -33,8 +34,8 @@ class HotelsCategory extends ManagerAppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Category' => array(
-			'className' => 'Category',
+		'HotelCategory' => array(
+			'className' => 'HotelCategory',
 			'foreignKey' => 'category_id',
 			'conditions' => '',
 			'fields' => '',

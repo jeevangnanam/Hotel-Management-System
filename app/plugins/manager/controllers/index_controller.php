@@ -13,7 +13,10 @@ class IndexController extends ManagerAppController{
         $this->Auth->loginRedirect = array( 'controller' => 'index', 'action' => 'dashboard', 'home');
         
     }
-    function index(){}
+    function index(){
+        
+       //$this->Auth->user('id');
+    }
     
     
     function login()

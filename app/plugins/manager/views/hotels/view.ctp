@@ -265,16 +265,7 @@
 				$class = ' class="altrow"';
 			}
 		?>
-		<tr<?php echo $class;?>>
-			<td><?php echo $manager['id'];?></td>
-			<td><?php echo $manager['hotel_id'];?></td>
-			<td><?php echo $manager['user_id'];?></td>
-			<td class="actions">
-				<?php echo $this->Html->link(__('View', true), array('controller' => 'hotels_managers', 'action' => 'view', $manager['id'])); ?>
-				<?php echo $this->Html->link(__('Edit', true), array('controller' => 'hotels_managers', 'action' => 'edit', $manager['id'])); ?>
-				<?php echo $this->Html->link(__('Delete', true), array('controller' => 'hotels_managers', 'action' => 'delete', $manager['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $manager['id'])); ?>
-			</td>
-		</tr>
+		
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>

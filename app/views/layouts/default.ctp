@@ -14,18 +14,20 @@
     <?php
         echo $layout->meta();
         echo $layout->feed();
-        echo $html->script(array('jquery/jquery.min'));
+        echo $html->script(array('jquery/jquery-ui-1.8.16.custom/js/jquery-1.6.2.min'));
         echo $layout->js();
         echo $html->css(array(
             'reset',
             '960',
             'theme',
+            '/js/jquery/jquery-ui-1.8.16.custom/css/ui-lightness/jquery-ui-1.8.16.custom'
         ));
         echo $html->script(array(
             'jquery/jquery.hoverIntent.minified',
             'jquery/superfish',
             'jquery/supersubs',
             'theme',
+            'jquery/jquery-ui-1.8.16.custom/js/jquery-ui-1.8.16.custom.min'
         ));
         echo $scripts_for_layout;
     ?>
@@ -47,17 +49,17 @@
         </div>
 
         <div id="main" class="container_16">
-            <div id="content" class="grid_11">
+            <div id="content" class="grid_16">
             <?php
                 $layout->sessionFlash();
                 echo $content_for_layout;
             ?>
             </div>
-
+<!--
             <div id="sidebar" class="grid_5">
             <?php echo $layout->blocks('right'); ?>
             </div>
-
+-->
             <div class="clear"></div>
         </div>
 
@@ -76,3 +78,4 @@
 
     </body>
 </html>
+<?php echo $this->element('sql_dump'); ?>

@@ -88,13 +88,77 @@ class Hotel extends ManagerAppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
+		),
+                'Feature' => array(
+			'className' => 'HotelsFeature',
+
+			'foreignKey' => 'hotel_id',
+
+
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => '',
+                        'counterQuery' => ''
+		),
+
+                'Metum' => array(
+			'className' => 'HotelsMetum',
+
+			'foreignKey' => 'hotel_id',
+
+
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => '',
+                        'counterQuery' => ''
+		),
+                'Picture' => array(
+                            'className' => 'HotelsPicture',
+                           
+                            'foreignKey' => 'hotel_id',
+                           
+                           
+                            'conditions' => '',
+                            'fields' => '',
+                            'order' => '',
+                            'limit' => '',
+                            'offset' => '',
+                            'finderQuery' => '',
+                            'deleteQuery' => '',
+                            'insertQuery' => '',
+                            'counterQuery' => ''
+                    ),
+                    'RoomType' => array(
+			'className' => 'HotelsRoomType',
+
+			'foreignKey' => 'hotel_id',
+
+
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'counterQuery' => ''
 		)
 	);
 
 
 	var $hasAndBelongsToMany = array(
 		'Category' => array(
-			'className' => 'HotelsCategory',
+			'className' => 'HotelsCategoryList',
 			'joinTable' => 'hotels_categories',
 			'foreignKey' => 'hotel_id',
 			'associationForeignKey' => 'category_id',
@@ -108,41 +172,13 @@ class Hotel extends ManagerAppModel {
 			'deleteQuery' => '',
 			'insertQuery' => ''
 		),
-		'CategoryList' => array(
-			'className' => 'HotelsCategoryList',
-			'joinTable' => 'hotels_category_lists',
-			'foreignKey' => 'hotel_id',
-			'associationForeignKey' => 'category_list_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
-		),
-		'Feature' => array(
-			'className' => 'HotelsFeature',
-			'joinTable' => 'hotels_features',
-			'foreignKey' => 'hotel_id',
-			'associationForeignKey' => 'feature_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
-		),
+		
+		
 		'Manager' => array(
-			'className' => 'HotelsManager',
+			'className' => 'User',
 			'joinTable' => 'hotels_managers',
 			'foreignKey' => 'hotel_id',
-			'associationForeignKey' => 'manager_id',
+			'associationForeignKey' => 'user_id',
 			'unique' => true,
 			'conditions' => '',
 			'fields' => '',
@@ -153,54 +189,11 @@ class Hotel extends ManagerAppModel {
 			'deleteQuery' => '',
 			'insertQuery' => ''
 		),
-		'Metum' => array(
-			'className' => 'Metum',
-			'joinTable' => 'hotels_meta',
-			'foreignKey' => 'hotel_id',
-			'associationForeignKey' => 'metum_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
-		),
-		'Picture' => array(
-			'className' => 'HotelsPicture',
-			'joinTable' => 'hotels_pictures',
-			'foreignKey' => 'hotel_id',
-			'associationForeignKey' => 'picture_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
-		),
+		
+		
 		'RoomCapacity' => array(
-			'className' => 'HotelsRoomCapacity',
+			'className' => 'HotelsRoomTypes',
 			'joinTable' => 'hotels_room_capacities',
-			'foreignKey' => 'hotel_id',
-			'associationForeignKey' => 'room_capacity_id',
-			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
-		),
-		'RoomType' => array(
-			'className' => 'HotelsRoomType',
-			'joinTable' => 'hotels_room_types',
 			'foreignKey' => 'hotel_id',
 			'associationForeignKey' => 'room_type_id',
 			'unique' => true,
@@ -213,6 +206,7 @@ class Hotel extends ManagerAppModel {
 			'deleteQuery' => '',
 			'insertQuery' => ''
 		)
+		
 	);
 
 }
