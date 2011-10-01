@@ -8,9 +8,10 @@
 		echo $this->Form->input('price');
 		echo $this->Form->input('size');
 		echo $this->Form->input('info');
-		echo $this->Form->input('view');
-		echo $this->Form->input('cooling');
-		echo $this->Form->input('status');
+		echo $this->Form->input('view',array('type' => 'select', 'options' => array('Garden'=> 'Garden','Sea' => 'Sea','Pond'=>'Pond','NONE'=>'NONE'),'selected' => 'NONE'));
+		echo $this->Form->input('cooling',array('type' => 'select', 'options' => array('AC' => 'AC','FAN' => 'FAN','NONE' => "NONE") ,'selected' => 'NONE'));
+
+		echo $this->Form->input('status' ,array('type' => 'select','options' => array('APPROVED' => 'APPROVED','NOT_APPROVED' => 'NOT_APPROVED'),'selected' => 'APPROVED'));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>

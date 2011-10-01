@@ -6,6 +6,7 @@ class HotelsRoomTypesController extends ManagerAppController {
         function beforeFilter() {
 
         $this->Auth->allow('test');
+        $this->layout = "manager";
       
        
         }
@@ -33,7 +34,8 @@ class HotelsRoomTypesController extends ManagerAppController {
 				$this->Session->setFlash(__('The hotels room type could not be saved. Please, try again.', true));
 			}
 		}
-		$hotels = $this->HotelsRoomType->Hotel->find('list');
+		$hotels = $this->HotelsRoomType->Hotel->find('list',array('joins' => array(array('table' => 'hotels_managers' , 'alias' => 'HotelManager' , 'type' => 'INNER' , 'conditions' => array('Hotel.id = HotelManager.hotel_id','HotelManager.user_id' => $this->Auth->user('id'))))));
+                debug($hotels);
 		$this->set(compact('hotels'));
 	}
 

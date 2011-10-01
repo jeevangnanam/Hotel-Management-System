@@ -84,7 +84,7 @@ class HotelsController extends ManagerAppController {
  
         $features = $this->Hotel->Feature->find('list');
         $managers = $this->Hotel->Manager->find('list');
-        $meta = $this->Hotel->Metum->find('list');
+        $meta = $this->Hotel->Meta->find('list');
         $pictures = $this->Hotel->Picture->find('list');
         $roomCapacities = $this->Hotel->RoomCapacity->find('list');
         $roomTypes = $this->Hotel->RoomType->find('list');

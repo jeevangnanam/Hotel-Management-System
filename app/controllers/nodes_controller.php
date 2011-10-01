@@ -212,7 +212,9 @@ class NodesController extends AppController {
         }
         if (empty($this->data)) {
             $data = $this->Node->read(null, $id);
+            
             $data['Role']['Role'] = $this->Node->decodeData($data['Node']['visibility_roles']);
+      
             $this->data = $data;
         }
 

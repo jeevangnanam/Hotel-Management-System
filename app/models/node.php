@@ -157,6 +157,8 @@ class Node extends AppModel {
  * @return array
  */
     public function beforeFind($q) {
+//        echo "Start printing..<br /><br />";
+//        debug($q);die();
         if($this->type != null) {
             $q['conditions']['Node.type'] = $this->type;
         }

@@ -6,7 +6,7 @@ class ManagerAppController extends AppController {
     
     
     function beforeFilter() {     
-        
+        $this->layout = 'manager';
        $this->Auth->loginAction = "/manager/index/login";
        $this->Auth->loginRedirect = array( 'controller' => 'index', 'action' => 'dashboard', 'home');
        $this->Auth->authorize = 'controller';  
