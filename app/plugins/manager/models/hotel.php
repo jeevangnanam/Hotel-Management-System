@@ -91,7 +91,7 @@ class Hotel extends ManagerAppModel {
             'finderQuery' => '',
             'counterQuery' => ''
         ),
-        'Feature' => array(
+        'HotelsFeature' => array(
             'className' => 'HotelsFeature',
             'foreignKey' => 'hotel_id',
             'conditions' => '',
@@ -104,22 +104,9 @@ class Hotel extends ManagerAppModel {
             'insertQuery' => '',
             'counterQuery' => ''
         ),
-        
-        'Meta' => array(
-            'className' => 'Meta',
-            'foreignKey' => 'foreign_key',
-            'dependent' => false,
-            'conditions' => array('Meta.model' => 'Hotel'),
-            'fields' => '',
-            'order' => 'Meta.key ASC',
-            'limit' => '',
-            'offset' => '',
-            'exclusive' => '',
-            'finderQuery' => '',
-            'counterQuery' => '',
-        ),
-        'Picture' => array(
-            'className' => 'HotelsPicture',
+
+        'HotelsRoomType' => array(
+            'className' => 'HotelsRoomType',
             'foreignKey' => 'hotel_id',
             'conditions' => '',
             'fields' => '',
@@ -131,8 +118,22 @@ class Hotel extends ManagerAppModel {
             'insertQuery' => '',
             'counterQuery' => ''
         ),
-        'RoomType' => array(
-            'className' => 'HotelsRoomType',
+        
+       /* 'HotelsMeta' => array(
+            'className' => 'HotelsMeta',
+            'foreignKey' => 'foreign_key',
+            'dependent' => false,
+            'conditions' => array('Meta.model' => 'Hotel'),
+            'fields' => '',
+            'order' => 'Meta.key ASC',
+            'limit' => '',
+            'offset' => '',
+            'exclusive' => '',
+            'finderQuery' => '',
+            'counterQuery' => '',
+        ),*/
+        'HotelsPicture' => array(
+            'className' => 'HotelsPicture',
             'foreignKey' => 'hotel_id',
             'conditions' => '',
             'fields' => '',
@@ -141,11 +142,12 @@ class Hotel extends ManagerAppModel {
             'offset' => '',
             'finderQuery' => '',
             'deleteQuery' => '',
+            'insertQuery' => '',
             'counterQuery' => ''
         )
     );
     var $hasAndBelongsToMany = array(
-        'Category' => array(
+        'HotelsCategoryList' => array(
             'className' => 'HotelsCategoryList',
             'joinTable' => 'hotels_categories',
             'foreignKey' => 'hotel_id',
@@ -160,26 +162,11 @@ class Hotel extends ManagerAppModel {
             'deleteQuery' => '',
             'insertQuery' => ''
         ),
-        'Manager' => array(
+        'HotelsManager' => array(
             'className' => 'User',
             'joinTable' => 'hotels_managers',
             'foreignKey' => 'hotel_id',
             'associationForeignKey' => 'user_id',
-            'unique' => true,
-            'conditions' => '',
-            'fields' => '',
-            'order' => '',
-            'limit' => '',
-            'offset' => '',
-            'finderQuery' => '',
-            'deleteQuery' => '',
-            'insertQuery' => ''
-        ),
-        'RoomCapacity' => array(
-            'className' => 'HotelsRoomTypes',
-            'joinTable' => 'hotels_room_capacities',
-            'foreignKey' => 'hotel_id',
-            'associationForeignKey' => 'room_type_id',
             'unique' => true,
             'conditions' => '',
             'fields' => '',

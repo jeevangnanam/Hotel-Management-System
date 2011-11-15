@@ -35,7 +35,6 @@ class HotelsRoomTypesController extends ManagerAppController {
 			}
 		}
 		$hotels = $this->HotelsRoomType->Hotel->find('list',array('joins' => array(array('table' => 'hotels_managers' , 'alias' => 'HotelManager' , 'type' => 'INNER' , 'conditions' => array('Hotel.id = HotelManager.hotel_id','HotelManager.user_id' => $this->Auth->user('id'))))));
-                debug($hotels);
 		$this->set(compact('hotels'));
 	}
 

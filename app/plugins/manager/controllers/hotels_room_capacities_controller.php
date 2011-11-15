@@ -53,7 +53,6 @@ class HotelsRoomCapacitiesController extends ManagerAppController {
         if (isset($id)) {
 
             $hotelRoomTypes = $this->HotelsRoomCapacity->HotelRoomType->find('list', array('conditions' => array('hotel_id' => $id)));
-
             if (count($hotelRoomTypes) >= 1) {
                 echo '<label for="HotelsRoomCapacityRoomTypeId">Room Type</label>';
                 echo "<select id='HotelsRoomCapacityRoomTypeId' name='data[HotelsRoomCapacity][room_type_id]'>";
@@ -64,7 +63,9 @@ class HotelsRoomCapacitiesController extends ManagerAppController {
             }
         }
     }
-
+	
+    
+    
     function edit($id = null) {
         if (!$id && empty($this->data)) {
             $this->Session->setFlash(__('Invalid hotels room capacity', true));

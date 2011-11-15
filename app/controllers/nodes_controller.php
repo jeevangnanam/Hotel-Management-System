@@ -493,6 +493,7 @@ class NodesController extends AppController {
 
     public function promoted() {
         $this->set('title_for_layout', __('Nodes', true));
+		$this->layout = "limejungle";
 
         $this->paginate['Node']['order'] = 'Node.created DESC';
         $this->paginate['Node']['limit'] = Configure::read('Reading.nodes_per_page');
