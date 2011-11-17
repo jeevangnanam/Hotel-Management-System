@@ -1,0 +1,130 @@
+body {
+font-family:verdana;
+font-size:15px;
+}
+
+a {color:#333; text-decoration:none}
+a:hover {color:#ccc; text-decoration:none}
+
+#mask {
+  position:absolute;
+  left:0;
+  top:0;
+  z-index:9000;
+/*  background-color:#000;*/
+  display:none;
+}
+  
+#boxes .window {
+  position:absolute;
+  left:0;
+  top:0;
+  width:600px;
+  height:400px;
+  display:none;
+  z-index:9999;
+  padding:20px;
+
+  
+}
+
+#boxes #dialog {
+  width:60%; 
+  height:10%;
+  padding:10px;
+/*  background-color:#000;*/
+}
+
+#boxes #dialog1 {
+  width:375px; 
+  height:203px;
+}
+
+#dialog1 .d-header {
+  background:url(images/login-header.png) no-repeat 0 0 transparent; 
+  width:375px; 
+  height:150px;
+}
+
+#dialog1 .d-header input {
+  position:relative;
+  top:60px;
+  left:100px;
+  border:3px solid #cccccc;
+  height:22px;
+  width:200px;
+  font-size:15px;
+  padding:5px;
+  margin-top:4px;
+}
+
+#dialog1 .d-blank {
+  float:left;
+  background:url(images/login-blank.png) no-repeat 0 0 transparent; 
+  width:267px; 
+  height:53px;
+}
+
+#dialog1 .d-login {
+  float:left;
+  width:108px; 
+  height:53px;
+}
+
+#boxes #dialog2 {
+  background:url(images/notice.png) no-repeat 0 0 transparent; 
+  width:326px; 
+  height:229px;
+  padding:50px 0 20px 25px;
+}
+.ui-tabs{
+	height: 400px;
+    overflow: scroll;
+    padding: 0.2em;
+    position: relative;
+}
+/*popup images*/
+.image_pr{
+	width:100px;
+	height:100px;
+	border:none;
+	padding:2px;
+}
+		
+.thumbnail{
+position: relative;
+z-index: 0;
+}
+
+.thumbnail:hover{
+background-color: transparent;
+z-index: 50;
+}
+
+.thumbnail span{ /*CSS for enlarged image*/
+position: absolute;
+background-color: #CCC;
+padding: 5px;
+left: -1000px;
+border: 3px solid #CCC;
+visibility: hidden;
+color: black;
+text-decoration: none;
+width:205px;
+height:205px;
+
+}
+
+.thumbnail span img{ /*CSS for enlarged image*/
+border-width: 0;
+padding: 2px;
+width:200px;
+height:200px;
+}
+
+.thumbnail:hover span{ /*CSS for enlarged image on hover*/
+visibility: visible;
+top: -50px;
+left: 60px; /*position where enlarged image should offset horizontally */
+
+}

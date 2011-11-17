@@ -37,4 +37,10 @@
 
     // Contact
     CroogoRouter::connect('/contact', array('controller' => 'contacts', 'action' => 'view', 'contact'));
+    
+    //booking
+     /*CroogoRouter::connect('/manager/logout', array('plugin' => 'manager', 'controller' => 'index', 'action' => 'logout'));
+    
+     CroogoRouter::connect('/manager/logout', array('plugin' => 'manager', 'controller' => 'booking', 'action' => 'logout'));
+    */
 ?>

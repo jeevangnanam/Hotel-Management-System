@@ -12,6 +12,9 @@
             '/ui-themes/smoothness/jquery-ui.css',
             'admin',
             'thickbox',
+			'ajaxtabs',
+			'popup'
+			
         ));
         echo $html->script(array(
             'jquery/jquery-ui.min',
@@ -25,6 +28,7 @@
             'jquery/jquery.elastic-1.6.1.js',
             'jquery/thickbox-compressed',
             'admin',
+			'popup.js'
         ));
         echo $scripts_for_layout;
     ?>

@@ -1,0 +1,129 @@
+.content .mainbar .article {
+    background-color: #FFFFFF;
+}
+
+.container{	
+ 	
+}
+.roomTypes{
+	float:left;
+	width:65%;
+}
+.holelList{
+	float:left;
+	width:35%;
+}
+.roomtypediv{
+	float:left;
+	background-color: #F7FAF6;
+	/*cursor:pointer;*/
+	width:99%;
+	border:dashed 1px #FFF;
+}
+.roomtype{
+	float:left;
+	background-color: #F7FAF6;
+	/*cursor:pointer;*/
+	width:50%;
+	border:dashed 1px #FFF;
+}
+.roomcap{
+	float:left;
+	cursor:pointer;
+	width:50px;
+	height:16px;
+	border:dashed 1px #FFF;
+}
+.roomcap input{
+	width:20px;
+	height:14px;
+	text-align:right;
+	font-size:10px;
+}
+.roomtypesearch{	
+	float:left;
+	background:url(../img/icons/bullet_arrow_down.png) no-repeat;
+	cursor:pointer;
+	width:20px;
+	height:20px;
+	border:dashed 1px #FFF;
+}
+.roomdests{
+	float:left;
+	background:url(../img/icons/details.png) no-repeat;
+	cursor:pointer;
+	width:20px;
+	height:20px;
+	border:dashed 1px #FFF;
+}
+.searcdiv{
+	float:left;
+	background:url(../img/icons/search.png) no-repeat;
+	cursor:pointer;
+	width:20px;
+	height:20px;
+	border:dashed 1px #FFF;
+}
+.sdate{
+	float:left;
+	width:70px;
+	height:20px;
+}
+.idate{
+	float:left;
+	width:100px;
+	height:20px;
+}
+
+.xdiv{
+	float:left;
+	width:90%;
+	background:#FFF;
+	/*border:solid 1px #999;*/
+}
+.adiv{
+	float:left;
+	width:9%;
+	background:#003;
+	border:solid 1px #FF0;
+	text-align:center;
+	cursor:pointer;
+}
+.pdiv{
+	float:left;
+	width:9%;
+	background:#393;
+	border:solid 1px #FF0;
+	text-align:center;
+	cursor:pointer;
+}
+.ediv{
+	float:left;
+	width:9%;
+	background:#06C;
+	border:solid 1px #FF0;
+	text-align:center;
+	cursor:pointer;
+}
+
+.roomselected{
+	background:url(../img/icons/roomselect.png) no-repeat;
+	background-color:#F7FAF6;
+	float:left;
+	width:9%;
+	border:solid 1px #FF0;
+	text-align:center;
+	cursor:pointer;
+}
+
+.bookimg{
+	
+	float:right;
+	background:url(../img/icons/book_bg.png) repeat-x;
+	width:58px;
+	height:20px;
+	cursor:pointer;
+	color:#FFF;
+	text-align:center;
+	
+}

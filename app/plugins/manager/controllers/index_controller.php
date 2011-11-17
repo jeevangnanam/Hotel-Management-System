@@ -3,7 +3,7 @@
 class IndexController extends ManagerAppController{
     
     var $uses = array('Hotel','HotelsRoomType','HotelsRoomCapacities','Booking');
-   
+    var $helpers = array('Lightbox');
     
     function beforeFilter(){
         
@@ -71,7 +71,9 @@ class IndexController extends ManagerAppController{
 	}
 	
 	function setroomtypes($hotelId=NULL){
+		
 		$hotelId=$this->params['pass'][0];
+		$this->Session->write('hotelId',$hotelId);
 		$roomtypes=$this->HotelsRoomType->find('all',array(			
 			 'fields' => array(
      				'HotelsRoomType.id',
@@ -81,22 +83,37 @@ class IndexController extends ManagerAppController{
 		);
 		
 		//debug($roomtypes);
+		
+		
 		$res='';
 		foreach($roomtypes as $key=>$value){
-			$res.="<div  onclick=' getRoomtypes(this)' class=\"roomtype\" id=\"". $value['HotelsRoomType']['id']."\">".$value['HotelsRoomType']['name']."</div>";
-			$res.="<div class=\"roomtypedes".$value['HotelsRoomType']['id']."\"></div>";
+			$res.="<form action=\"/manager/bookings/stepone/\" name=\"frm\" method=\"get\"><div class=\"roomtypediv\">";
+			$res.="<div class=\"roomtype\">".$value['HotelsRoomType']['name']."</div>";
+			$res.="<div class=\"roomtypesearch\" onclick='showRoomSearch(this)'  id=\"". $value['HotelsRoomType']['id']."\"></div>";
+			$res.="<div class=\"roomdests\" ></div>";
+			$res.="<div class=\"roomcap\" align=\"center\"><input type=\"text\" value=\"0\" id=\"book".$value['HotelsRoomType']['id']."\" name=\"data[bookings][nsr]\"/></div>";
+			$res.="<input type=\"hidden\" value=\"".$value['HotelsRoomType']['id']."\" id=\"rtype".$value['HotelsRoomType']['id']."\" name=\"data[bookings][roomtype]\"/></div>";		
+			$res.="<div class=\"clr\"></div>";	
+			$res.="<div class=\"roomtypesearch".$value['HotelsRoomType']['id']."\"  id=\"roomtypesearch". $value['HotelsRoomType']['id']."\"></div>";
+			$res.="<div class=\"clr\"></div>";	
+			$res.="<div class=\"roomtypedes".$value['HotelsRoomType']['id']."\"></div></form>";
+				
 		}
 		echo $res;
+		
 	}
 	
-	function setroomavalability($rtlId=NULL){
+	function setroomavalability($rtId=NULL,$hotelId=NULL){
+		$hotelId=$this->Session->read('hotelId');
 		$rtId=$this->params['form']['rtid'];
+		$dateFrom=$this->params['form']['dateFrom'];
+		$dateTo=$this->params['form']['dateTo'];
 		$rooms=$this->HotelsRoomCapacities->find('all',array(			
 			 'fields' => array(
      				'HotelsRoomCapacities.id',
                     'HotelsRoomCapacities.room_type_id',
 					'HotelsRoomCapacities.total_rooms'),
-		  	'conditions' =>array("HotelsRoomCapacities.room_type_id=$rtId" ),
+		  	'conditions' =>array("HotelsRoomCapacities.room_type_id=$rtId AND HotelsRoomCapacities.hotel_id=$hotelId" ),
 		  )
 		);
 		$noofrooms=0;
@@ -114,50 +131,51 @@ class IndexController extends ManagerAppController{
 		
 		$start="<div class=\"xdiv\">";
 		$end="</div>";
-		$rType=$this->roomstatus(2,$rtId);
+		$rType=$this->roomstatus($hotelId,$rtId,$dateFrom,$dateTo);
 		$aCount=$pCount=0;
 		if(count($rType) > 0){
 			$aCount=$rType[0][0]['S'];
 			$pCount=$rType[1][0]['S'];
 		}
 		
-		$empty='E';
-		$approved='B';
-		$proccessing='BP';
+		$empty='&nbsp';
+		$approved='&nbsp';
+		$proccessing='&nbsp';
 		$a=$p=1;
+		$roomDiv='';
 		if($y==1){
 			for($i=1; $i<11; $i++ ){
 				if($aCount >= $a){
-					$x.="<div class=\"adiv\" onclick=\"loadbookings(this);\">$approved</div>";
+					$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rtId."');\" id=\"\">$approved</div>";
 					$a++;
 				}
 				else if ($pCount >= $p){
-					$x.="<div class=\"pdiv\" onclick=\"loadbookings(this);\">$proccessing</div>";
+					$x.="<div class=\"pdiv\" onclick=\"selectDiv(this,'".$rtId."');\">$proccessing</div>";
 					$p++;
 				}
 				else{
-					$x.="<div class=\"ediv\" onclick=\"loadbookings(this);\">$empty</div>";
+					$x.="<div class=\"ediv\" onclick=\"selectDiv(this,'".$rtId."');\">$empty</div>";
 				}
 				
 			}
-			echo $start.$x.$end;
+			$roomDiv= $start.$x.$end;
 		}
 		else if($noofrooms < 10 && $noofrooms <> 0){
 			for($i=1; $i<10; $i++ ){
 				if($aCount >= $a ){
-						$x.="<div class=\"adiv\" onclick=\"loadbookings(this);\">$approved</div>";
+						$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rtId."');\">$approved</div>";
 						$a++;
 					}
 				else if ($pCount >= $p){
-						$x.="<div class=\"pdiv\" onclick=\"loadbookings(this);\">$proccessing</div>";
+						$x.="<div class=\"pdiv\" onclick=\"selectDiv(this,'".$rtId."');\">$proccessing</div>";
 						$p++;
 					}
 				else{
-						$x.="<div class=\"ediv\" onclick=\"loadbookings(this);\">$empty</div>";
+						$x.="<div class=\"ediv\" onclick=\"selectDiv(this,'".$rtId."');\">$empty</div>";
 					}
 				
 			}
-				echo $start.$x.$end;
+				$roomDiv= $start.$x.$end;
 		}
 		else{
 			for($i=1; $i<$noofrooms+1; $i++ ){
@@ -165,40 +183,80 @@ class IndexController extends ManagerAppController{
 					$x.=$start;
 				}
 					if($aCount >= $a){
-						$x.="<div class=\"adiv\" onclick=\"loadbookings(this);\">$approved</div>";
+						$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rtId."');\">$approved</div>";
 						$a++;
 					}
 					else if ($pCount >= $p){
-						$x.="<div class=\"pdiv\" onclick=\"loadbookings(this);\">$proccessing</div>";
+						$x.="<div class=\"pdiv\" onclick=\"selectDiv(this,'".$rtId."');\">$proccessing</div>";
 						$p++;
 					}
 					else{
-						$x.="<div class=\"ediv\" onclick=\"loadbookings(this);\">$empty</div>";
+						$x.="<div class=\"ediv\" onclick=\"selectDiv(this,'".$rtId."');\">$empty</div>";
 					}
 				if($i%10 == 0){
 					$x.=$end;
 				}
 				
 			}
-			echo $x;
+			$roomDiv= $x;
 		}
+		echo $roomDiv."<div class=\"clr\"></div><div class=\"bookdiv\"><input type=\"submit\" value=\"Book\" class=\"bookimg\" /></div>";
 	}
 	
-	function roomstatus($hotelId=NULL,$roomtypeid=NULL){
+	function roomstatus($hotelId=NULL,$roomtypeid=NULL,$dateFrom=NULL,$dateTo=NULL){
 		$roomStatus=$this->Booking->find('all',
 			array(
 			'fields' => array(
      				'sum(Booking.number_of_rooms) AS S',
                     'Booking.status'),
-			'conditions' =>array(" Booking.hotel_id = 2 AND Booking.room_type_id = $roomtypeid AND Booking.from_date > 2011-11-15 GROUP BY Booking.`status` ORDER BY Booking.`status` DESC;" ),
+			'conditions' =>array(" Booking.hotel_id = $hotelId AND Booking.room_type_id = $roomtypeid AND Booking.from_date >= '".$dateFrom."' AND Booking.end_date <= '".$dateTo."' GROUP BY Booking.`status` ORDER BY Booking.`status` DESC;" ),
 			)
 		);
 		return $roomStatus;
 	}
 	
-	function booking(){
-	
+	function booking($hotelId=NULL,$rtId=NULL){
+		$hotelId= $this->Session->read('hotelId');
+		
+		$rtId=$this->params['pass']['0'];
+		$roomdets=$this->HotelsRoomCapacities->find('all',array(
+			'fields'=>array('HotelsRoomCapacities.id',
+							'HotelsRoomCapacities.hotel_id',
+							'HotelsRoomCapacities.room_type_id',
+							'HotelsRoomCapacities.max_adults',
+							'HotelsRoomCapacities.max_children',
+							'HotelsRoomCapacities.additional_adult_charge',
+							'HotelsRoomCapacities.additional_child_charge',
+							'HotelsRoomCapacities.total_rooms',
+							'HotelsRoomType.`name`',
+							'Hotel.`name`'),
+			'joins'=>array(
+				   array(
+                        'table' => 'hotels',
+                        'alias' => 'Hotel',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Hotel.id = HotelsRoomCapacities.hotel_id'),
+                        ),
+                   array(
+                        'table' => 'hotels_room_types',
+                        'alias' => 'HotelsRoomType',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('HotelsRoomCapacities.hotel_id = HotelsRoomType.hotel_id','HotelsRoomCapacities.room_type_id = HotelsRoomType.id'),
+                        ),
+					),
+					 'conditions' =>array("HotelsRoomCapacities.hotel_id='$hotelId'","HotelsRoomCapacities.room_type_id='$rtId';" ),
+			)
+		);
+
+		$this->set(compact('roomdets'));
+		$this->layout='default';
+		$this->render('booking');
+		
 	}
+	
+	
 	
 }
 ?>
