@@ -2,7 +2,7 @@
 
 class BookingsController extends ManagerAppController{
     var $name = 'Bookings';
-    var $uses = array('Bookings','HotelsRoomType','HotelsRoomCapacities','Hotel');
+    var $uses = array('Bookings','HotelsRoomType','HotelsRoomCapacities','Hotel','Coupon');
    
     
     function beforeFilter(){
@@ -42,6 +42,25 @@ class BookingsController extends ManagerAppController{
 		$this->set(compact('roomDes'));
 	
 	}
+	function steptwo(){
+		$params=$this->params;
+		
+		$hotelId=$this->Session->read('hotelId');
+		$rtId=$params['data']['bookings']['room_type'];
+		$dateFrom=$params['data']['bookings']['fromdate'];
+		$dateTo=$params['data']['bookings']['todate'];
+		$noOfSelectedRooms=$params['data']['bookings']['nofselectedrooms'];
+		$additionalAdults=$params['data']['bookings']['max_adults'];
+		$additionalChildren=$params['data']['bookings']['max_children'];
+		
+		$this->set('dateFrom',$dateFrom);
+		$this->set('dateTo',$dateTo);
+		$this->set('noOfSelectedRooms',$noOfSelectedRooms);
+		$this->set('additionalAdults',$additionalAdults);		
+		$this->set('additionalChildren',$additionalChildren);	
+		$roomDes=$this->getRoomTypeDetails($hotelId,$rtId);
+		$this->set(compact('roomDes'));
+	}
 	
 	function getRoomTypeDetails($hotelId=NULL,$rtId=NULL){
 		$roomdets=$this->HotelsRoomCapacities->find('all',array(
@@ -53,7 +72,10 @@ class BookingsController extends ManagerAppController{
 							'HotelsRoomCapacities.additional_adult_charge',
 							'HotelsRoomCapacities.additional_child_charge',
 							'HotelsRoomCapacities.total_rooms',
+							'HotelsRoomType.`id`',
 							'HotelsRoomType.`name`',
+							'HotelsRoomType.`price`',
+							'Coupon.reduce_percentage',
 							'Hotel.`name`'),
 			'joins'=>array(
 				   array(
@@ -69,6 +91,13 @@ class BookingsController extends ManagerAppController{
                         'type'  => 'INNER',
                         'foreignKey'    => false,
                         'conditions'    => array('HotelsRoomCapacities.hotel_id = HotelsRoomType.hotel_id','HotelsRoomCapacities.room_type_id = HotelsRoomType.id'),
+                        ),
+					array(
+                        'table' => 'coupons',
+                        'alias' => 'Coupon',
+                        'type'  => 'LEFT',
+                        'foreignKey'    => false,
+                        'conditions'    => array('HotelsRoomType.`coupon` = Coupon.id',"Coupon.status='ACTIVATE'"),
                         ),
 					),
 					 'conditions' =>array("HotelsRoomCapacities.hotel_id='$hotelId'","HotelsRoomCapacities.room_type_id='$rtId';" ),

@@ -12,7 +12,8 @@
             '960',
             'theme',
             '/js/jquery/jquery-ui-1.8.16.custom/css/ui-lightness/jquery-ui-1.8.16.custom',
-			'hotelmanager.css'
+			'hotelmanager.css',
+			'popup.css'
         ));
         echo $html->script(array(
             'jquery/jquery.hoverIntent.minified',
@@ -20,7 +21,8 @@
             'jquery/supersubs',
             'theme',
             'jquery/jquery-ui-1.8.16.custom/js/jquery-ui-1.8.16.custom.min',
-			'/js/image_upload/jquery.imgareaselect-0.3.min'
+			'/js/image_upload/jquery.imgareaselect-0.3.min',
+			'popup.js'
         ));
         echo $scripts_for_layout;
     ?>
