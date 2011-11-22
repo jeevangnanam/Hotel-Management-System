@@ -90,7 +90,7 @@ class IndexController extends ManagerAppController{
 			$res.="<form action=\"/manager/bookings/stepone/\" name=\"frm\" method=\"get\"><div class=\"roomtypediv\">";
 			$res.="<div class=\"roomtype\">".$value['HotelsRoomType']['name']."</div>";
 			$res.="<div class=\"roomtypesearch\" onclick='showRoomSearch(this)'  id=\"". $value['HotelsRoomType']['id']."\"></div>";
-			$res.="<div class=\"roomdests\" ></div>";
+			$res.="<div class=\"roomdests\" onclick=\"loadPopUp('".$value['HotelsRoomType']['id']."');\"></div>";
 			$res.="<div class=\"roomcap\" align=\"center\"><input type=\"text\" value=\"0\" id=\"book".$value['HotelsRoomType']['id']."\" name=\"data[bookings][nsr]\"/></div>";
 			$res.="<input type=\"hidden\" value=\"".$value['HotelsRoomType']['id']."\" id=\"rtype".$value['HotelsRoomType']['id']."\" name=\"data[bookings][roomtype]\"/></div>";		
 			$res.="<div class=\"clr\"></div>";	
@@ -103,6 +103,23 @@ class IndexController extends ManagerAppController{
 		
 	}
 	
+	function popuproomdetails($hotelId=NULL,$roomtype=NULL){
+		$hotelId=$this->Session->read('hotelId'); 
+		$roomtype=$this->params['pass'][0];
+		$json = '{
+		"uroomdetails": [ 
+		{ 
+			"roomtype":'.$roomtype.',
+			"price":"Huber",
+			"max_adults":"elementum.purus@utdolordapibus.edu",
+			"max_children":"Mayagüez",
+			"additional_adult_charge":"Mayagüez",
+			"additional_child_charge":"Mayagüez","offers":"" 
+		}
+		]
+	}';
+	echo $json;
+	}
 	function setroomavalability($rtId=NULL,$hotelId=NULL){
 		$hotelId=$this->Session->read('hotelId');
 		$rtId=$this->params['form']['rtid'];

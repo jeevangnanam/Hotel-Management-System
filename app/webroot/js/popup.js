@@ -57,16 +57,7 @@ function centerPopup(){
 //CONTROLLING EVENTS IN jQuery
 $(document).ready(function(){
 	
-	//LOADING POPUP
-	//Click the button event!
-	$("#button").click(function(){
-		//centering with css
-		centerPopup();
-		//load popup
-		loadPopup();
-	});
-				
-	//CLOSING POPUP
+		//CLOSING POPUP
 	//Click the x event!
 	$("#popupContactClose").click(function(){
 		disablePopup();
@@ -83,3 +74,38 @@ $(document).ready(function(){
 	});
 
 });
+
+function loadPopUp(rt){
+	//LOADING POPUP
+	//Click the button event!
+	//$(".roomdests").click(function(){
+		//centering with css
+		centerPopup();
+		$("#contactArea").html("");
+		$.getJSON(
+			"/manager/Index/popuproomdetails/"+rt,
+			function(data){
+				//alert(data.uroomdetails.roomtype);
+				$.each(data.uroomdetails, function(i,user){
+					var tblRow ="";
+						
+						tblRow+=user.roomtype+"<br />"
+						tblRow+=user.price+"<br />"
+						tblRow+=user.max_adults+"<br />"
+						tblRow+=user.max_children+"<br />"
+						tblRow+=user.additional_adult_charge+"<br />"
+						tblRow+=user.additional_child_charge+"<br />"
+						tblRow+=user.offers+"<br />"
+
+					$('#contactArea').append(tblRow);
+				});
+			}
+		);
+		
+		
+		//load popup
+		loadPopup();
+//	});
+				
+
+}

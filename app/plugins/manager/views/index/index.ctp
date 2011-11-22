@@ -100,19 +100,14 @@ function loadbookings(obj,hotelId,rtId){
    	 	<h3>Hotels </h3>
     	<ul>
         	<?php foreach($getHotels as $key=>$value){ ?>
-            <?=$this->Html->link($value['Hotel']['name'], '#', array('class' => 'hotelLinks','id'=>$value['Hotel']['id'])); ?>
+            <li><?=$this->Html->link($value['Hotel']['name'], '#', array('class' => 'hotelLinks','id'=>$value['Hotel']['id'])); ?></li>
             <?php }?>
         </ul>
     </div>
 </div>
-
-<center>
-		<a href="http://www.yensdesign.com"><img src="logo.jpg" alt="Go to yensdesign.com"/></a>
-		<div id="button"><input type="submit" value="Press me please!" /></div>
-	</center>
 	<div id="popupContact">
 		<a id="popupContactClose">x</a>
-		<h1>Title of our cool popup, yay!</h1>
+		<h1>Room Type . . details</h1>
 		<p id="contactArea">
 			Here we have a simple but interesting sample of our new stuning and smooth popup. As you can see jQuery and CSS does it easy...
 			<br/><br/>
@@ -120,7 +115,7 @@ function loadbookings(obj,hotelId,rtId){
 			<br/><br/>
 			Press ESCAPE, Click on X (right-top) or Click Out from the popup to close the popup!
 			<br/><br/>
-			<a href="http://www.yensdesign.com"><img src="logo.jpg" alt="Go to yensdesign.com"/></a>
+			
 		</p>
 	</div>
 	<div id="backgroundPopup"></div>
