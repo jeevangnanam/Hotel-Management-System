@@ -47,13 +47,23 @@ function getRoomtypes(obj){
     var rtid=$(obj).attr('id');
 	var dateFrom=$("#dateFrom"+rtid).val();
 	var dateTo=$("#dateTo"+rtid).val();
-	//$(".roomtypedes"+rtid).slideToggle("slow");
+	if(dateFrom==""){
+		alert("Please select 'Date From'.");
+		return false;
+	}
+	else if(dateTo==""){
+		alert("Please select 'Date To'.");
+		return false;
+	}
+	else{
+		//$(".roomtypedes"+rtid).slideToggle("slow");
 		$.post("/manager/Index/setroomavalability/", { rtid: rtid,dateFrom:dateFrom,dateTo:dateTo},
 		   function(data) {
 			 $(".roomtypedes"+rtid).html(data);
 			// alert(data);
 			  
 		   });
+	}
 
 }
 
