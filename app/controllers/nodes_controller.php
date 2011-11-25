@@ -35,7 +35,7 @@ class NodesController extends AppController {
  * @access public
  */
     public $uses = array(
-        'Node',
+        'Node','Hotel','HotelsPicture'
     );
 
     public function beforeFilter() {
@@ -332,77 +332,35 @@ class NodesController extends AppController {
     }
 
     public function index() {
-        if (!isset($this->params['named']['type'])) {
-            $this->params['named']['type'] = 'node';
-        }
-
-        $this->paginate['Node']['order'] = 'Node.created DESC';
-        $this->paginate['Node']['limit'] = Configure::read('Reading.nodes_per_page');
-        $this->paginate['Node']['conditions'] = array(
-            'Node.status' => 1,
-            'OR' => array(
-                'Node.visibility_roles' => '',
-                'Node.visibility_roles LIKE' => '%"' . $this->Croogo->roleId . '"%',
-            ),
-        );
-        $this->paginate['Node']['contain'] = array(
-            'Meta',
-            'Taxonomy' => array(
-                'Term',
-                'Vocabulary',
-            ),
-            'User',
-        );
-        if (isset($this->params['named']['type'])) {
-            $type = $this->Node->Taxonomy->Vocabulary->Type->find('first', array(
-                'conditions' => array(
-                    'Type.alias' => $this->params['named']['type'],
-                ),
-                'cache' => array(
-                    'name' => 'type_'.$this->params['named']['type'],
-                    'config' => 'nodes_index',
-                ),
-            ));
-            if (!isset($type['Type']['id'])) {
-                $this->Session->setFlash(__('Invalid content type.', true), 'default', array('class' => 'error'));
-                $this->redirect('/');
-            }
-            if (isset($type['Params']['nodes_per_page'])) {
-                $this->paginate['Node']['limit'] = $type['Params']['nodes_per_page'];
-            }
-            $this->paginate['Node']['conditions']['Node.type'] = $type['Type']['alias'];
-            $this->set('title_for_layout', $type['Type']['title']);
-        }
-
-        if ($this->usePaginationCache) {
-            $cacheNamePrefix = 'nodes_index_'.$this->Croogo->roleId.'_'.Configure::read('Config.language');
-            if (isset($type)) {
-                $cacheNamePrefix .= '_'.$type['Type']['alias'];
-            }
-            $this->paginate['page'] = isset($this->params['named']['page']) ? $this->params['named']['page'] : 1;
-            $cacheName = $cacheNamePrefix.'_'.$this->params['named']['type'].'_'.$this->paginate['page'].'_'.$this->paginate['Node']['limit'];
-            $cacheNamePaging = $cacheNamePrefix.'_'.$this->params['named']['type'].'_'.$this->paginate['page'].'_'.$this->paginate['Node']['limit'].'_paging';
-            $cacheConfig = 'nodes_index';
-            $nodes = Cache::read($cacheName, $cacheConfig);
-            if (!$nodes) {
-                $nodes = $this->paginate('Node');
-                Cache::write($cacheName, $nodes, $cacheConfig);
-                Cache::write($cacheNamePaging, $this->params['paging'], $cacheConfig);
-            } else {
-                $paging = Cache::read($cacheNamePaging, $cacheConfig);
-                $this->params['paging'] = $paging;
-                $this->helpers[] = 'Paginator';
-            }
-        } else {
-            $nodes = $this->paginate('Node');
-        }
-
-        $this->set(compact('type', 'nodes'));
-        $this->__viewFallback(array(
-            'index_' . $type['Type']['alias'],
-        ));
+       $hotelDets=$this->hotelsDets();
+       //debug($hotelDets);
+       $this->set(compact('hotelDets'));
     }
-
+	function hotelsDets(){
+		 $loadHotels=$this->Hotel->find('all',
+        			array(
+        				'fields'=>array('Hotel.id',
+        								'Hotel.`name`',
+        								'Hotel.address',
+        								'Hotel.phone',
+        								'Hotel.email',
+        								'Hotel.web',
+        								'HotelsPicture.picture'),
+        				'joins'=>array(
+        						 array(
+		                       		'table' => 'hotels_pictures',
+		                        	'alias' => 'HotelsPicture',
+		                        	'type'  => 'LEFT',
+		                        	'foreignKey'    => false,
+                        			'conditions'    => array('Hotel.id = HotelsPicture.hotel_id'),
+                       	 		),
+        								
+        							   ),
+        				'conditions'=>array('Hotel.`status`=1 limit 0,3')
+        			)
+        	);
+      return $loadHotels;
+	}
     public function term() {
         $term = $this->Node->Taxonomy->Term->find('first', array(
             'conditions' => array(

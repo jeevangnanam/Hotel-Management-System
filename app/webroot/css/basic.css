@@ -1,0 +1,90 @@
+.searchbox{
+	margin-top:10px;
+	float:left;
+	width:30%;
+	height:250px;
+	background:#F7FAF6;
+	/*border:dashed #CCC 1px;*/
+}
+.heading{
+	padding-top:10px;
+	height:28px;
+	background:#72A946;
+	color:#FFFFFF;
+	font-size:16px;
+	text-align:center;
+}
+.searchformcontent{
+	margin-left:5px;
+}
+#NodeHotelname,#NodeLocation{	
+	width:250px;
+	height:25px;
+	color:#666;
+}
+#NodeStarclass{
+	width:255px;
+	height:25px;
+	color:#666;
+}
+.submit input{
+	float:right;
+	margin-right:10px;
+	width:70px;
+	height:25px;
+	border:none;
+	background:#72A946;
+	font-size:14px;
+	color:#FFFFFF;
+	cursor:pointer;
+}
+
+.searchresult{
+	margin-top:10px;
+	float:right;
+	background:#FFF;
+	width:68%;
+	height:500px;
+	/*border:1px dashed #CCC;*/
+}
+
+.hoteldescontainer{
+	border:1px dashed #CCCCCC;
+	background:#F7FAF6;
+	height:150px;
+	margin:5px 0;
+}
+.img{
+	width:150px;
+	height:150px;
+}
+.hoteldets{
+	padding-left:10px;
+	float:left;
+	width:73%;
+	height:30px;
+	background:#F7FAF6;
+}
+.hotelname{
+	color:#72A946;
+	font-size:14px;
+	/*border-bottom:1px dashed #72A946;*/
+}
+.hoteladdress,.hotelphone,.hotelweb{
+	color:#72A946;
+	font-size:13px;
+	margin:5px 0;
+}
+.imgbox{
+	float:left;
+	width:25%;
+	height:150px;
+}
+.htllbl{
+	float:left;
+	width:100px;
+}
+.htldet{
+	float:left;
+	width:300px;
+}

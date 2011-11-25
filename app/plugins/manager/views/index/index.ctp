@@ -5,6 +5,14 @@
  * and open the template in the editor.
  */
 ?>
+<style>
+	.detailLables{
+		width:200px;
+	}
+	.detailFields{
+		width:150px;
+	}
+</style>
 <script>
 
   
@@ -116,15 +124,9 @@ function loadbookings(obj,hotelId,rtId){
     </div>
 </div>
 	<div id="popupContact">
-		<a id="popupContactClose">x</a>
-		<h1>Room Type . . details</h1>
+		<a id="popupContactClose"><?=$html->image('/img/icons/close.png',array('width'=>'20px'));?></a>
+		<h1>Room Details</h1>
 		<p id="contactArea">
-			Here we have a simple but interesting sample of our new stuning and smooth popup. As you can see jQuery and CSS does it easy...
-			<br/><br/>
-			We can use it for popup-forms and more... just experiment!
-			<br/><br/>
-			Press ESCAPE, Click on X (right-top) or Click Out from the popup to close the popup!
-			<br/><br/>
 			
 		</p>
 	</div>

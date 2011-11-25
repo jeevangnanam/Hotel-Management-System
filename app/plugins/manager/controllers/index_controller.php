@@ -106,15 +106,19 @@ class IndexController extends ManagerAppController{
 	function popuproomdetails($hotelId=NULL,$roomtype=NULL){
 		$hotelId=$this->Session->read('hotelId'); 
 		$roomtype=$this->params['pass'][0];
+		$roomTypeDetails=$this->getroomtypedetails($hotelId,$roomtype);
+	//	debug($roomTypeDetails[0]['HotelsRoomType']['name']);
+		
 		$json = '{
 		"uroomdetails": [ 
 		{ 
-			"roomtype":'.$roomtype.',
-			"price":"Huber",
-			"max_adults":"elementum.purus@utdolordapibus.edu",
-			"max_children":"Mayagüez",
-			"additional_adult_charge":"Mayagüez",
-			"additional_child_charge":"Mayagüez","offers":"" 
+			"roomtype":"'.$roomTypeDetails[0]['HotelsRoomType']['name'].'",
+			"price":"'.$roomTypeDetails[0]['HotelsRoomType']['price'].'",
+			"size":"'.$roomTypeDetails[0]['HotelsRoomType']['size'].'",
+			"info":"'.$roomTypeDetails[0]['HotelsRoomType']['info'].'",
+			"view":"'.$roomTypeDetails[0]['HotelsRoomType']['view'].'",
+			"cooling":"'.$roomTypeDetails[0]['HotelsRoomType']['cooling'].'",
+			"offers":"'.$roomTypeDetails[0]['HotelsRoomType']['coupon'].'" 
 		}
 		]
 	}';
@@ -273,7 +277,31 @@ class IndexController extends ManagerAppController{
 		
 	}
 	
-	
+	function getroomtypedetails($hotelId=NULL,$roomtype=NULL){
+		$rTypeDes=$this->HotelsRoomType->find('all',array(
+			'fields'=>array(
+					'HotelsRoomType.`name`',
+					'HotelsRoomType.`price`',
+					'HotelsRoomType.`size`',
+					'HotelsRoomType.`info`',
+					'HotelsRoomType.`view`',
+					'HotelsRoomType.`cooling`',
+					'HotelsRoomType.`coupon`',
+					),
+			'joins'=>array(
+				   array(
+                        'table' => 'hotels',
+                        'alias' => 'Hotel',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Hotel.id = HotelsRoomType.hotel_id'),
+                        ),
+                       ),
+             					 'conditions' =>array("HotelsRoomType.hotel_id='$hotelId'","HotelsRoomType.id='$roomtype';" ),
+			)
+		);
+		return $rTypeDes;
+	}
 	
 }
 ?>

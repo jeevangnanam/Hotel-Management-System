@@ -13,7 +13,8 @@
             'theme',
             '/js/jquery/jquery-ui-1.8.16.custom/css/ui-lightness/jquery-ui-1.8.16.custom',
 			'hotelmanager.css',
-			'popup.css'
+			'popup.css',
+			'basic'
         ));
         echo $html->script(array(
             'jquery/jquery.hoverIntent.minified',

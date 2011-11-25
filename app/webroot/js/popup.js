@@ -85,17 +85,16 @@ function loadPopUp(rt){
 		$.getJSON(
 			"/manager/Index/popuproomdetails/"+rt,
 			function(data){
-				//alert(data.uroomdetails.roomtype);
 				$.each(data.uroomdetails, function(i,user){
 					var tblRow ="";
 						
-						tblRow+=user.roomtype+"<br />"
-						tblRow+=user.price+"<br />"
-						tblRow+=user.max_adults+"<br />"
-						tblRow+=user.max_children+"<br />"
-						tblRow+=user.additional_adult_charge+"<br />"
-						tblRow+=user.additional_child_charge+"<br />"
-						tblRow+=user.offers+"<br />"
+						tblRow+="<div class=\"detailLables\">Room Type : </div><div class=\"detailFields\">"+user.roomtype+"</div>"
+						tblRow+="<div class=\"detailLables\">Price : </div><div class=\"detailFields\">"+user.price+"</div>"
+						tblRow+="<div class=\"detailLables\">Size : </div><div class=\"detailFields\">"+user.size+"</div>"
+						tblRow+="<div class=\"detailLables\">Info : </div><div class=\"detailFields\">"+user.info+"</div>"
+						tblRow+="<div class=\"detailLables\">View : </div><div class=\"detailFields\">"+user.view+"</div>"
+						tblRow+="<div class=\"detailLables\">Cooling : </div><div class=\"detailFields\">"+user.cooling+"</div>"
+						tblRow+="<div class=\"detailLables\">Offers : </div><div class=\"detailFields\">"+user.offers+"</div>"
 
 					$('#contactArea').append(tblRow);
 				});

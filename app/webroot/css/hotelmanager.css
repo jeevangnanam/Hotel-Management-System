@@ -127,3 +127,25 @@
 	text-align:center;
 	
 }
+
+.detailLables{
+	padding-left:10px;
+	width:300px;
+	height:20px;
+	float:left;
+	background:#F7FAF6;
+	border:dashed 1px #CCC;
+	margin:5px ;
+	color:#360;
+}
+.detailFields{
+	padding-left:10px;
+	width:450px;
+	height:20px;
+	float:left;
+	background:#F7FAF6;
+	border:dashed 1px #CCC;
+	margin:5px ;
+	color:#360;
+}
+
