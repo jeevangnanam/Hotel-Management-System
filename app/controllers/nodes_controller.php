@@ -35,7 +35,7 @@ class NodesController extends AppController {
  * @access public
  */
     public $uses = array(
-        'Node','Hotel','HotelsPicture'
+        'Node','Hotel','HotelsPicture','Users','HotelsRoomType'
     );
 
     public function beforeFilter() {
@@ -333,10 +333,15 @@ class NodesController extends AppController {
 
     public function index() {
        $hotelDets=$this->hotelsDets();
+       
        //debug($hotelDets);
        $this->set(compact('hotelDets'));
     }
-	function hotelsDets(){
+	function hotelsDets($hotelId=NULL){
+		$hw='';
+		if(!empty($hotelId)) {
+			$hw=" AND Hotel.id=$hotelId ";
+		}
 		 $loadHotels=$this->Hotel->find('all',
         			array(
         				'fields'=>array('Hotel.id',
@@ -345,6 +350,69 @@ class NodesController extends AppController {
         								'Hotel.phone',
         								'Hotel.email',
         								'Hotel.web',
+        								'HotelsPicture.picture',
+        								'Hotel.contactperson',
+										'Hotel.starclass',
+        								'Users.first_name',
+										'Users.last_name'),
+        				'joins'=>array(
+        						 array(
+		                       		'table' => 'hotels_pictures',
+		                        	'alias' => 'HotelsPicture',
+		                        	'type'  => 'LEFT',
+		                        	'foreignKey'    => false,
+                        			'conditions'    => array('Hotel.id = HotelsPicture.hotel_id'),
+                       	 		),
+                       	 		array(
+		                       		'table' => 'users',
+		                        	'alias' => 'Users',
+		                        	'type'  => 'LEFT',
+		                        	'foreignKey'    => false,
+                        			'conditions'    => array('Users.id = Hotel.contactperson'),
+                       	 		),
+        								
+        							   ),
+        				'conditions'=>array("Hotel.`status`=1 $hw "),
+        				'group'=>array('Hotel.id'),
+        				'order'    => array('Hotel.id'    => 'asc'),
+        				'limit' =>3
+        							   
+        			)
+        	);
+      return $loadHotels;
+	}
+	
+	function hoteltypedets($hotelId=NULL){
+		$loadtypes=$this->Hotel->find('all',
+        			array(
+        				'fields'=>array('HotelsRoomType.id',
+        								'HotelsRoomType.`name`',
+										'HotelsRoomType.`status`'),
+        				'joins'=>array(
+        						 array(
+		                       		'table' => 'hotels_room_types',
+		                        	'alias' => 'HotelsRoomType',
+		                        	'type'  => 'INNER',
+		                        	'foreignKey'    => false,
+                        			'conditions'    => array('Hotel.id = HotelsRoomType.hotel_id'),
+                       	 		),        								
+        					 ),
+        				'conditions'=>array("HotelsRoomType.`status`='APPROVED' AND HotelsRoomType.hotel_id=$hotelId"),
+        				'group'=>array('HotelsRoomType.id'),
+        				'order'    => array('HotelsRoomType.id'    => 'asc'),
+        				'limit' =>3
+        							   
+        			)
+        	);
+      return $loadtypes;
+	}
+	
+	function gethotelpictures($hotelId=NULL){
+		
+	$loadHotelspics=$this->Hotel->find('all',
+        			array(
+        				'fields'=>array('Hotel.id',
+        								'HotelsPicture.id',
         								'HotelsPicture.picture'),
         				'joins'=>array(
         						 array(
@@ -354,12 +422,41 @@ class NodesController extends AppController {
 		                        	'foreignKey'    => false,
                         			'conditions'    => array('Hotel.id = HotelsPicture.hotel_id'),
                        	 		),
+                       	 		
         								
         							   ),
-        				'conditions'=>array('Hotel.`status`=1 limit 0,3')
+        				'conditions'=>array("Hotel.`status`=1 AND Hotel.id= $hotelId"),
+        				'group'=>array('HotelsPicture.id'),
+        				'order'    => array('HotelsPicture.id'    => 'asc'),
+        				'limit' =>5
+        							   
         			)
         	);
-      return $loadHotels;
+      return $loadHotelspics;
+	}
+	function searchhotels(){
+		//$this->layout='';
+		//$this->render();
+		debug($this->data);
+	}
+	
+	function hoteldetails(){
+		$hotelId=$this->data['Node']['hotelid'];
+		$hoteldets=$this->hotelsDets($hotelId);
+		$hoteltypedets=$this->hoteltypedets($hotelId);
+		$loadHotelspics=$this->gethotelpictures($hotelId);
+		$this->set(compact('hoteldets','hoteltypedets','loadHotelspics'));
+	}
+	
+	function getroomtypes($hotelId=NULL){
+		
+		$roomtypes=$this->HotelsRoomType->find('all',array(			
+			 'fields' => array(
+     				'HotelsRoomType.id',
+                    'HotelsRoomType.`name`'),
+		  	'conditions' =>array("HotelsRoomType.hotel_id=$hotelId" ),
+		  )
+		);
 	}
     public function term() {
         $term = $this->Node->Taxonomy->Term->find('first', array(
