@@ -10,7 +10,7 @@
 var popupStatus = 0;
 
 //loading popup with jQuery magic!
-function loadPopup(){
+function loadPopup(str){
 	//loads popup only if it is disabled
 	if(popupStatus==0){
 		$("#backgroundPopup").css({
@@ -19,6 +19,7 @@ function loadPopup(){
 		$("#backgroundPopup").fadeIn("slow");
 		$("#popupContact").fadeIn("slow");
 		popupStatus = 1;
+		$("#cap").html(str);
 	}
 }
 
@@ -74,7 +75,7 @@ $(document).ready(function(){
 	});
 
 });
-
+//popup for managers
 function loadPopUp(rt){
 	//LOADING POPUP
 	//Click the button event!
@@ -100,11 +101,57 @@ function loadPopUp(rt){
 				});
 			}
 		);
-		
-		
+
 		//load popup
-		loadPopup();
+		loadPopup('Room Details');
 //	});
 				
 
+}
+
+//pop up for all
+function loadPopUpnormal(h,rt){
+	//LOADING POPUP
+	//Click the button event!
+	//$(".roomdests").click(function(){
+		//centering with css
+		centerPopup();
+		
+		$("#contactArea").html("");
+		
+		$.getJSON(
+			"/nodes/popuproomdetails/"+h+"/"+rt,
+			function(data){
+				$.each(data.uroomdetails, function(i,user){
+					var tblRow ="";
+						
+						tblRow+="<div class=\"detailLables\">Room Type : </div><div class=\"detailFields\">"+user.roomtype+"</div>"
+						tblRow+="<div class=\"detailLables\">Price : </div><div class=\"detailFields\">"+user.price+"</div>"
+						tblRow+="<div class=\"detailLables\">Size : </div><div class=\"detailFields\">"+user.size+"</div>"
+						tblRow+="<div class=\"detailLables\">Info : </div><div class=\"detailFields\">"+user.info+"</div>"
+						tblRow+="<div class=\"detailLables\">View : </div><div class=\"detailFields\">"+user.view+"</div>"
+						tblRow+="<div class=\"detailLables\">Cooling : </div><div class=\"detailFields\">"+user.cooling+"</div>"
+						tblRow+="<div class=\"detailLables\">Offers : </div><div class=\"detailFields\">"+user.offers+"</div>"
+
+					$('#contactArea').append(tblRow);
+				});
+			}
+		);		
+		//load popup
+		
+		loadPopup("Room Details");
+		//$('#capdet').html("Room Details");
+}
+
+//pop up for all
+function loadRoomAvailability(h){
+	//LOADING POPUP
+	//Click the button event!
+	//$(".roomdests").click(function(){
+		//centering with css
+		centerPopup();
+		$("#contactArea").html("");
+		//load popup
+		loadPopup("Rooms Availability");
+		//$('#capavl').html("Room Availability");
 }

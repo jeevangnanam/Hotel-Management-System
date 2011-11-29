@@ -35,7 +35,7 @@ class NodesController extends AppController {
  * @access public
  */
     public $uses = array(
-        'Node','Hotel','HotelsPicture','Users','HotelsRoomType'
+        'Node','Hotel','HotelsPicture','Users','HotelsRoomType','HotelsRoomCapacities','Booking'
     );
 
     public function beforeFilter() {
@@ -385,7 +385,8 @@ class NodesController extends AppController {
 	function hoteltypedets($hotelId=NULL){
 		$loadtypes=$this->Hotel->find('all',
         			array(
-        				'fields'=>array('HotelsRoomType.id',
+        				'fields'=>array('Hotel.id',
+        								'HotelsRoomType.id',
         								'HotelsRoomType.`name`',
 										'HotelsRoomType.`status`'),
         				'joins'=>array(
@@ -434,6 +435,55 @@ class NodesController extends AppController {
         	);
       return $loadHotelspics;
 	}
+	
+	function popuproomdetails($hotelId=NULL,$roomtype=NULL){
+		
+		$hotelId=$this->params['pass'][0]; 
+		$roomtype=$this->params['pass'][1];
+		$roomTypeDetails=$this->getroomtypedetails($hotelId,$roomtype);
+		//debug($roomTypeDetails);
+		
+		$json = '{
+		"uroomdetails": [ 
+		{ 
+			"roomtype":"'.$roomTypeDetails[0]['HotelsRoomType']['name'].'",
+			"price":"'.$roomTypeDetails[0]['HotelsRoomType']['price'].'",
+			"size":"'.$roomTypeDetails[0]['HotelsRoomType']['size'].'",
+			"info":"'.$roomTypeDetails[0]['HotelsRoomType']['info'].'",
+			"view":"'.$roomTypeDetails[0]['HotelsRoomType']['view'].'",
+			"cooling":"'.$roomTypeDetails[0]['HotelsRoomType']['cooling'].'",
+			"offers":"'.$roomTypeDetails[0]['HotelsRoomType']['coupon'].'" 
+		}
+		]
+	}';
+	echo $json;
+	}
+	
+	function getroomtypedetails($hotelId=NULL,$roomtype=NULL){
+		$rTypeDes=$this->HotelsRoomType->find('all',array(
+			'fields'=>array(
+					'HotelsRoomType.`name`',
+					'HotelsRoomType.`price`',
+					'HotelsRoomType.`size`',
+					'HotelsRoomType.`info`',
+					'HotelsRoomType.`view`',
+					'HotelsRoomType.`cooling`',
+					'HotelsRoomType.`coupon`',
+					),
+			'joins'=>array(
+				   array(
+                        'table' => 'hotels',
+                        'alias' => 'Hotel',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Hotel.id = HotelsRoomType.hotel_id'),
+                        ),
+                       ),
+             					 'conditions' =>array("HotelsRoomType.hotel_id='$hotelId'","HotelsRoomType.id='$roomtype';" ),
+			)
+		);
+		return $rTypeDes;
+	}
 	function searchhotels(){
 		//$this->layout='';
 		//$this->render();
@@ -442,11 +492,134 @@ class NodesController extends AppController {
 	
 	function hoteldetails(){
 		$hotelId=$this->data['Node']['hotelid'];
+		$this->Session->write('hotelId',$hotelId);
+		$hotelId=$this->Session->read('hotelId');
+		
 		$hoteldets=$this->hotelsDets($hotelId);
 		$hoteltypedets=$this->hoteltypedets($hotelId);
 		$loadHotelspics=$this->gethotelpictures($hotelId);
+		$roomopt=array();
+		for($i=0;$i<count($hoteltypedets);$i++){
+			$rid=$hoteltypedets[$i]['HotelsRoomType']['id'];
+			$name=$hoteltypedets[$i]['HotelsRoomType']['name'];
+			$roomopt[$rid]=$name;
+		}
+		$this->set('hotelid',$hotelId);
+		$this->set('roomopt',$roomopt);
 		$this->set(compact('hoteldets','hoteltypedets','loadHotelspics'));
 	}
+	function roomstatus($hotelId=NULL,$roomtypeid=NULL,$dateFrom=NULL,$dateTo=NULL){
+		$roomStatus=$this->Booking->find('all',
+			array(
+			'fields' => array(
+     				'sum(Booking.number_of_rooms) AS S',
+                    'Booking.status'),
+			'conditions' =>array(" Booking.hotel_id = $hotelId AND Booking.room_type_id = $roomtypeid AND Booking.from_date >= '".$dateFrom."' AND Booking.end_date <= '".$dateTo."' GROUP BY Booking.`status` ORDER BY Booking.`status` DESC;" ),
+			)
+		);
+		return $roomStatus;
+	}
+	function roomavailability($rtId=NULL,$hotelId=NULL){
+		debug($this->params);
+		$hotelId=$this->Session->read('hotelId');
+		$rtId=$this->params['data']['Node']['roomtypes'];
+		$dateFrom=$this->params['data']['Node']['datefrom'];
+		$dateTo=$this->params['data']['Node']['dateto'];
+		$rooms=$this->HotelsRoomCapacities->find('all',array(			
+			 'fields' => array(
+     				'HotelsRoomCapacities.id',
+                    'HotelsRoomCapacities.room_type_id',
+					'HotelsRoomCapacities.total_rooms'),
+		  	'conditions' =>array("HotelsRoomCapacities.room_type_id=$rtId AND HotelsRoomCapacities.hotel_id=$hotelId" ),
+		  )
+		);
+		$noofrooms=0;
+		if(count($rooms) > 0){
+			$noofrooms=$rooms[0]['HotelsRoomCapacities']['total_rooms'];
+		}
+		
+		$pages=1;
+		if($noofrooms > 100){
+			$pages=$noofrooms/100;
+		}
+		$x='';
+		$y=$noofrooms/10;
+		$rest=$noofrooms%10;
+		
+		$start="<div class=\"xdiv\">";
+		$end="</div>";
+		$rType=$this->roomstatus($hotelId,$rtId,$dateFrom,$dateTo);
+		$aCount=$pCount=0;
+		if(count($rType) > 0){
+			$aCount=$rType[0][0]['S'];
+			$pCount=$rType[1][0]['S'];
+		}
+		
+		$empty='&nbsp';
+		$approved='&nbsp';
+		$proccessing='&nbsp';
+		$a=$p=1;
+		$roomDiv='';
+		if($y==1){
+			for($i=1; $i<11; $i++ ){
+				if($aCount >= $a){
+					$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rtId."');\" id=\"\">$approved</div>";
+					$a++;
+				}
+				else if ($pCount >= $p){
+					$x.="<div class=\"pdiv\" onclick=\"selectDiv(this,'".$rtId."');\">$proccessing</div>";
+					$p++;
+				}
+				else{
+					$x.="<div class=\"ediv\" onclick=\"selectDiv(this,'".$rtId."');\">$empty</div>";
+				}
+				
+			}
+			$roomDiv= $start.$x.$end;
+		}
+		else if($noofrooms < 10 && $noofrooms <> 0){
+			for($i=1; $i<10; $i++ ){
+				if($aCount >= $a ){
+						$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rtId."');\">$approved</div>";
+						$a++;
+					}
+				else if ($pCount >= $p){
+						$x.="<div class=\"pdiv\" onclick=\"selectDiv(this,'".$rtId."');\">$proccessing</div>";
+						$p++;
+					}
+				else{
+						$x.="<div class=\"ediv\" onclick=\"selectDiv(this,'".$rtId."');\">$empty</div>";
+					}
+				
+			}
+				$roomDiv= $start.$x.$end;
+		}
+		else{
+			for($i=1; $i<$noofrooms+1; $i++ ){
+				if($i%10 == 1){
+					$x.=$start;
+				}
+					if($aCount >= $a){
+						$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rtId."');\">$approved</div>";
+						$a++;
+					}
+					else if ($pCount >= $p){
+						$x.="<div class=\"pdiv\" onclick=\"selectDiv(this,'".$rtId."');\">$proccessing</div>";
+						$p++;
+					}
+					else{
+						$x.="<div class=\"ediv\" onclick=\"selectDiv(this,'".$rtId."');\">$empty</div>";
+					}
+				if($i%10 == 0){
+					$x.=$end;
+				}
+				
+			}
+			$roomDiv= $x;
+		}
+		echo $roomDiv."<div class=\"clr\"></div><div class=\"bookdiv\"><input type=\"submit\" value=\"Book\" class=\"bookimg\" /></div>";
+	}
+	
 	
 	function getroomtypes($hotelId=NULL){
 		

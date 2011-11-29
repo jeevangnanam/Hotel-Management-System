@@ -125,7 +125,8 @@ function loadbookings(obj,hotelId,rtId){
 </div>
 	<div id="popupContact">
 		<a id="popupContactClose"><?=$html->image('/img/icons/close.png',array('width'=>'20px'));?></a>
-		<h1>Room Details</h1>
+		
+        <div id="cap"><h1>Room Details</h1></div>
 		<p id="contactArea">
 			
 		</p>

@@ -1,4 +1,21 @@
-
+<script type="text/javascript">
+	function loadRooms(obj,hotelid){
+			
+	}
+	
+function loadCalander(obj){
+ $('#'+obj.id).datepicker({ dateFormat: 'yy-mm-dd' });
+ $('#'+obj.id).datepicker({ dateFormat: 'yy-mm-dd' });
+}
+</script>
+<style>
+.detailLables{
+	width: 100px;
+}
+.detailFields{
+	width: 250px;
+}
+</style>
 <?php
 	foreach($hoteldets as $key=>$value){ ?>
 		<div class="hoteldescontainer">
@@ -28,7 +45,7 @@
 		<div class="clr"></div>
 		<div class="roomdets"><?php //debug($hoteltypedets);?>
         <?php foreach($hoteltypedets as $key=>$value){ ?>
-			<div class="roomtype"><?=$value['HotelsRoomType']['name'];?></div>
+			<div class="roomtype"><?=$value['HotelsRoomType']['name'];?><div class="roomdests" onclick="loadPopUpnormal(<?=$value['Hotel']['id'];?>,<?=$value['HotelsRoomType']['id'];?>);"></div></div>
 		<?php } ?>
 		</div>
 		<div class="clr"></div>
@@ -39,5 +56,24 @@
             <?php } ?>
 		</div>
         <div class="clr"></div>
-        <div>BOOK</div>
+        
 <?php }?>
+	<?=$this->Form->button('Booking Process', array('type'=>'button','class'=>'normalbtn','onclick'=>"loadRoomAvailability('".$hotelid."')"));?>
+	<div id="popupContact" class="popupContact">
+		<a id="popupContactClose"><?=$html->image('/img/icons/close.png',array('width'=>'20px'));?></a>
+		
+        <div style="" id="cap"><h1>Room Details</h1></div>
+        <div class="clr"></div>
+        <div class="">
+        <?=$this->Form->create(array('id'=>'Nodes','action'=>'/roomavailability')); ?>
+        <?=$this->Form->input('roomtypes', array('type'=>'select','options'=>$roomopt ,'empty'=>'','class'=>'idate','label'=>''));?>
+        <?=$this->Form->input('datefrom', array('type'=>'text','class'=>'idate','onclick'=>'loadCalander(this)','label'=>''));?>
+        <?=$this->Form->input('dateto', array('type'=>'text','class'=>'idate','onclick'=>'loadCalander(this)','label'=>''));?>
+        <?=$this->Form->end('Search',array('class'=>'idate')); ?>
+        </div>
+		<p id="contactArea" class="contactArea">
+			
+		</p>
+	</div>
+	<div id="backgroundPopup" class="backgroundPopup"></div>
+

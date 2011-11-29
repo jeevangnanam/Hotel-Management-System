@@ -38,7 +38,17 @@
 	color:#FFFFFF;
 	cursor:pointer;
 }
-
+.normalbtn{
+	float:right;
+	margin-right:10px;
+	width:auto;
+	height:25px;
+	border:none;
+	background:#72A946;
+	font-size:14px;
+	color:#FFFFFF;
+	cursor:pointer;
+}
 .searchresult{
 	margin-top:10px;
 	float:right;
