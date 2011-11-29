@@ -1,12 +1,50 @@
 <script type="text/javascript">
-	function loadRooms(obj,hotelid){
-			
+function loadroomavailabity(){
+	var rtid=$('#roomtypes').val()
+	var dateFrom=$('#datefrom').val();
+	var dateTo=$('#dateto').val();
+	if(dateFrom==""){
+		alert("Please select 'Date From'.");
+		return false;
 	}
+	else if(dateTo==""){
+		alert("Please select 'Date To'.");
+		return false;
+	}
+	else{
+		//$(".roomtypedes"+rtid).slideToggle("slow");
+		$.post("/Nodes/roomavailability/", { rtid: rtid,dateFrom:dateFrom,dateTo:dateTo},
+		   function(data) {
+			 $(".roomtypedes").html(data);
+			// alert(data);
+			  
+		   });
+	}
+}
 	
 function loadCalander(obj){
- $('#'+obj.id).datepicker({ dateFormat: 'yy-mm-dd' });
- $('#'+obj.id).datepicker({ dateFormat: 'yy-mm-dd' });
+ $('#datefrom').datepicker({ dateFormat: 'yy-mm-dd' });
+ $('#dateto').datepicker({ dateFormat: 'yy-mm-dd' });
 }
+
+function selectDiv(obj,id){
+	var sr=0;
+	if($(obj).is('.ediv')){
+		$(obj).removeClass('ediv');
+		$(obj).addClass('roomselected');
+			sr=$('#book'+id).val();
+			$('#book'+id).val(parseInt(sr)+1);
+	}
+	else{
+		if($(obj).is('.roomselected')){
+			$(obj).removeClass('roomselected');
+			$(obj).addClass('ediv');
+			   sr=$('#book'+id).val();
+			   $('#book'+id).val(parseInt(sr)-1);
+		}			
+	}
+}
+
 </script>
 <style>
 .detailLables{
@@ -65,15 +103,17 @@ function loadCalander(obj){
         <div style="" id="cap"><h1>Room Details</h1></div>
         <div class="clr"></div>
         <div class="">
-        <?=$this->Form->create(array('id'=>'Nodes','action'=>'/roomavailability')); ?>
+        
         <?=$this->Form->input('roomtypes', array('type'=>'select','options'=>$roomopt ,'empty'=>'','class'=>'idate','label'=>''));?>
         <?=$this->Form->input('datefrom', array('type'=>'text','class'=>'idate','onclick'=>'loadCalander(this)','label'=>''));?>
         <?=$this->Form->input('dateto', array('type'=>'text','class'=>'idate','onclick'=>'loadCalander(this)','label'=>''));?>
-        <?=$this->Form->end('Search',array('class'=>'idate')); ?>
+        <?=$this->Form->button('Search',array('onclick'=>'loadroomavailabity()')); ?>
         </div>
 		<p id="contactArea" class="contactArea">
 			
 		</p>
+        <div class="roomtypedes">
+        </div>
 	</div>
 	<div id="backgroundPopup" class="backgroundPopup"></div>
 

@@ -520,11 +520,11 @@ class NodesController extends AppController {
 		return $roomStatus;
 	}
 	function roomavailability($rtId=NULL,$hotelId=NULL){
-		debug($this->params);
+		//debug($this->params);
 		$hotelId=$this->Session->read('hotelId');
-		$rtId=$this->params['data']['Node']['roomtypes'];
-		$dateFrom=$this->params['data']['Node']['datefrom'];
-		$dateTo=$this->params['data']['Node']['dateto'];
+		$rtId=$this->params['form']['rtid'];
+		$dateFrom=$this->params['form']['dateFrom'];
+		$dateTo=$this->params['form']['dateTo'];
 		$rooms=$this->HotelsRoomCapacities->find('all',array(			
 			 'fields' => array(
      				'HotelsRoomCapacities.id',
