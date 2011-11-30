@@ -1,5 +1,6 @@
 <script type="text/javascript">
 function loadroomavailabity(){
+	$('#roomcount').val(0);
 	var rtid=$('#roomtypes').val()
 	var dateFrom=$('#datefrom').val();
 	var dateTo=$('#dateto').val();
@@ -22,9 +23,9 @@ function loadroomavailabity(){
 	}
 }
 	
-function loadCalander(obj){
- $('#datefrom').datepicker({ dateFormat: 'yy-mm-dd' });
- $('#dateto').datepicker({ dateFormat: 'yy-mm-dd' });
+function loadCalander(str){
+ $('#'+str).datepicker({ dateFormat: 'yy-mm-dd' });
+ //$('#'+str).datepicker({ dateFormat: 'yy-mm-dd' });
 }
 
 function selectDiv(obj,id){
@@ -32,19 +33,22 @@ function selectDiv(obj,id){
 	if($(obj).is('.ediv')){
 		$(obj).removeClass('ediv');
 		$(obj).addClass('roomselected');
-			sr=$('#book'+id).val();
-			$('#book'+id).val(parseInt(sr)+1);
+			sr=$('#roomcount').val();
+			$('#roomcount').val(parseInt(sr)+1);
 	}
 	else{
 		if($(obj).is('.roomselected')){
 			$(obj).removeClass('roomselected');
 			$(obj).addClass('ediv');
-			   sr=$('#book'+id).val();
-			   $('#book'+id).val(parseInt(sr)-1);
+			   sr=$('#roomcount').val();
+			   $('#roomcount').val(parseInt(sr)-1);
 		}			
 	}
 }
 
+function submitform(frm){
+	$('#'+frm)[0].submit();
+}
 </script>
 <style>
 .detailLables{
@@ -52,6 +56,22 @@ function selectDiv(obj,id){
 }
 .detailFields{
 	width: 250px;
+}
+.lbl{
+	float:left;
+}
+.submit{
+	display:none;
+}
+#datefrom,#dateto{
+	margin-left:2px;
+	width:70px;
+	height:15px;
+}
+#roomcount{
+	margin-left:2px;
+	width:20px;
+	height:15px;
 }
 </style>
 <?php
@@ -102,18 +122,35 @@ function selectDiv(obj,id){
 		
         <div style="" id="cap"><h1>Room Details</h1></div>
         <div class="clr"></div>
-        <div class="">
         
-        <?=$this->Form->input('roomtypes', array('type'=>'select','options'=>$roomopt ,'empty'=>'','class'=>'idate','label'=>''));?>
-        <?=$this->Form->input('datefrom', array('type'=>'text','class'=>'idate','onclick'=>'loadCalander(this)','label'=>''));?>
-        <?=$this->Form->input('dateto', array('type'=>'text','class'=>'idate','onclick'=>'loadCalander(this)','label'=>''));?>
-        <?=$this->Form->button('Search',array('onclick'=>'loadroomavailabity()')); ?>
-        </div>
 		<p id="contactArea" class="contactArea">
-			
-		</p>
-        <div class="roomtypedes">
+		<div class="searchformdet">
+        	<?=$this->Form->create('Nodes', array('type' => 'post','id'=>'frm','action' => '/stepone/'));?>
+        	<div class="lbl">Room Types</div>
+            <div class="lbl">Date From</div>
+            <div class="lbl">Data To</div>
+            <div class="clr"></div>
+            <div class="lbl">
+				<?=$this->Form->input('roomtypes', array('type'=>'select','options'=>$roomopt ,'empty'=>'','class'=>'cmb','label'=>'','id'=>'roomtypes'));?>
+            </div>
+            <div class="lbl">
+           		<?=$this->Form->input('datefrom', array('type'=>'text','id'=>'datefrom','class'=>'idate','onclick'=>"loadCalander('datefrom')",'label'=>''));?>
+            </div>
+            <div class="lbl">
+            	<?=$this->Form->input('dateto', array('type'=>'text','id'=>'dateto','class'=>'idate','onclick'=>"loadCalander('dateto')",'label'=>''));?>
+            </div>
+			<div class="lbl">
+				<?=$this->Form->input('roomcount', array('type'=>'text','id'=>'roomcount','class'=>'cbox','readonly'=>"readonly",'label'=>'','value'=>0));?>
+            </div>
+            <div class="searcdiv" onclick="loadroomavailabity();">
+            	
+        	</div>
+            <?=$this->Form->end('Book',array('id'=>'book'));?>
+            <div class="clr"></div>
+        	<div class="roomtypedes"></div>
         </div>
+		</p>
+       
 	</div>
 	<div id="backgroundPopup" class="backgroundPopup"></div>
 

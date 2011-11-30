@@ -2,7 +2,7 @@
 	<div class="heading">Search Hotels</div>
     <div class="clr"></div>
     <div class="searchformcontent">
-    <?=$this->Form->create(array('id'=>'Nodes','action'=>'/searchhotels')); ?>
+    <?=$this->Form->create(array('id'=>'Nodes','action'=>'/')); ?>
 	<?=$this->Form->input('hotelname',array('type'=>'text','label'=>'Hotel Name'));?>
     <?=$this->Form->input('location',array('type'=>'text','label'=>'Location'));?>
     <?php $opt=array('1'=>'One','2'=>'Two','3'=>'Three','4'=>'Four','5'=>'Five');?>

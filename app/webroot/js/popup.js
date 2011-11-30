@@ -140,7 +140,7 @@ function loadPopUpnormal(h,rt){
 		//load popup
 		
 		loadPopup("Room Details");
-		//$('#capdet').html("Room Details");
+		$('.searchformdet').css("display","none");
 }
 
 //pop up for all
@@ -153,5 +153,8 @@ function loadRoomAvailability(h){
 		$("#contactArea").html("");
 		//load popup
 		loadPopup("Rooms Availability");
-		//$('#capavl').html("Room Availability");
+		$('#frm')[0].reset();
+		$("#roomtypedes").html("");
+		
+		$('.searchformdet').css("display","inline");
 }

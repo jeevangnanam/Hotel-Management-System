@@ -332,14 +332,41 @@ class NodesController extends AppController {
     }
 
     public function index() {
-       $hotelDets=$this->hotelsDets();
+       $param=$this->params;
+       $tag=0;
+       $hotelname=$location=$starclass=$hotelId='';
+       if(isset($this->params['data'])){
+       		$hotelname=$this->params['data']['Node']['hotelname'];
+       		$location=$this->params['data']['Node']['location'];
+       		$starclass=$this->params['data']['Node']['starclass'];
+       		$tag=1;
+       }
+       	$hotelDets=$this->hotelsDets($hotelId,$hotelname,$location,$starclass,$tag);
        
        //debug($hotelDets);
        $this->set(compact('hotelDets'));
     }
-	function hotelsDets($hotelId=NULL){
+	function hotelsDets($hotelId=NULL,$hotelname=NULL,$location=NULL,$starclass=NULL,$tag=NULL){
 		$hw='';
-		if(!empty($hotelId)) {
+		
+		if($tag==1){
+			if(!empty($hotelname) && !empty($location) && !empty($starclass))
+				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.address like '%$location%' AND Hotel.starclass like '%$starclass%' ";
+			elseif (!empty($hotelname) &&!empty($location))
+				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.address like '%$location%' ";
+			else if(!empty($hotelname) && !empty($starclass))
+				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.starclass like '%$starclass%' ";
+			else if(!empty($location) && !empty($starclass))
+				$hw=" AND Hotel.address like '%$location%' AND Hotel.starclass like '%$starclass%' ";				
+			else if(!empty($hotelname))
+				$hw=" AND Hotel.name like '%$hotelname%' ";
+			else if(!empty($location))
+				$hw=" AND Hotel.address like '%$location%' ";
+			else
+				$hw=" AND Hotel.starclass like '%$starclass%' ";
+				
+		}
+		else if(!empty($hotelId)) {
 			$hw=" AND Hotel.id=$hotelId ";
 		}
 		 $loadHotels=$this->Hotel->find('all',
@@ -462,6 +489,8 @@ class NodesController extends AppController {
 	function getroomtypedetails($hotelId=NULL,$roomtype=NULL){
 		$rTypeDes=$this->HotelsRoomType->find('all',array(
 			'fields'=>array(
+					'Hotel.name',
+					'HotelsRoomType.id',
 					'HotelsRoomType.`name`',
 					'HotelsRoomType.`price`',
 					'HotelsRoomType.`size`',
@@ -485,9 +514,12 @@ class NodesController extends AppController {
 		return $rTypeDes;
 	}
 	function searchhotels(){
-		//$this->layout='';
-		//$this->render();
-		debug($this->data);
+		$this->layout='default';
+		$this->render('index');
+		
+		$hotelDets=$this->hotelsDets();
+		//debug($hotelDets);
+        $this->set(compact('hotelDets'));
 	}
 	
 	function hoteldetails(){
@@ -617,7 +649,7 @@ class NodesController extends AppController {
 			}
 			$roomDiv= $x;
 		}
-		echo $roomDiv."<div class=\"clr\"></div><div class=\"bookdiv\"><input type=\"submit\" value=\"Book\" class=\"bookimg\" /></div>";
+		echo $roomDiv."<div class=\"clr\"></div><div class=\"bookdiv\"><input type=\"submit\" value=\"Book\" class=\"bookimg\" onclick=\"submitform('frm');\" /></div>";
 	}
 	
 	
@@ -630,6 +662,92 @@ class NodesController extends AppController {
 		  	'conditions' =>array("HotelsRoomType.hotel_id=$hotelId" ),
 		  )
 		);
+	}
+	
+	/* booking steps */
+	/* booking step one */
+	function stepone(){
+		//debug($this->params);
+		$params=$this->params;
+		$hotelId=$this->Session->read('hotelId');
+		$noOfRooms=$params['data']['Nodes']['roomcount'];
+		$fromDate=$params['data']['Nodes']['datefrom'];
+		$toDate=$params['data']['Nodes']['dateto'];
+		$rtId=$params['data']['Nodes']['roomtypes'];
+		$roomDes=$this->getRoomTypeDets($hotelId,$rtId);
+		$this->set('fromDate',$fromDate);
+		$this->set('toDate',$toDate);
+		$this->set('nsr',$noOfRooms);
+		$this->set(compact('roomDes'));
+		
+	}
+	/* booking step two */
+	function steptwo(){
+		$params=$this->params;
+		
+		$hotelId=$this->Session->read('hotelId');
+		$rtId=$params['data']['Nodes']['room_type'];
+		$dateFrom=$params['data']['Nodes']['fromdate'];
+		$dateTo=$params['data']['Nodes']['todate'];
+		$noOfSelectedRooms=$params['data']['Nodes']['nofselectedrooms'];
+		$additionalAdults=$params['data']['Nodes']['max_adults'];
+		$additionalChildren=$params['data']['Nodes']['max_children'];
+		
+		$this->set('dateFrom',$dateFrom);
+		$this->set('dateTo',$dateTo);
+		$this->set('noOfSelectedRooms',$noOfSelectedRooms);
+		$this->set('additionalAdults',$additionalAdults);		
+		$this->set('additionalChildren',$additionalChildren);	
+		$roomDes=$this->getRoomTypeDets($hotelId,$rtId);
+		$this->set(compact('roomDes'));
+		
+	}
+	/* booking step stepthree */
+	function stepthree(){
+		
+	}
+	function getRoomTypeDets($hotelId=NULL,$rtId=NULL){
+		$roomdets=$this->HotelsRoomCapacities->find('all',array(
+			'fields'=>array('HotelsRoomCapacities.id',
+							'HotelsRoomCapacities.hotel_id',
+							'HotelsRoomCapacities.room_type_id',
+							'HotelsRoomCapacities.max_adults',
+							'HotelsRoomCapacities.max_children',
+							'HotelsRoomCapacities.additional_adult_charge',
+							'HotelsRoomCapacities.additional_child_charge',
+							'HotelsRoomCapacities.total_rooms',
+							'HotelsRoomType.`id`',
+							'HotelsRoomType.`name`',
+							'HotelsRoomType.`price`',
+							'Coupon.reduce_percentage',
+							'Hotel.`name`'),
+			'joins'=>array(
+				   array(
+                        'table' => 'hotels',
+                        'alias' => 'Hotel',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Hotel.id = HotelsRoomCapacities.hotel_id'),
+                        ),
+                   array(
+                        'table' => 'hotels_room_types',
+                        'alias' => 'HotelsRoomType',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('HotelsRoomCapacities.hotel_id = HotelsRoomType.hotel_id','HotelsRoomCapacities.room_type_id = HotelsRoomType.id'),
+                        ),
+					array(
+                        'table' => 'coupons',
+                        'alias' => 'Coupon',
+                        'type'  => 'LEFT',
+                        'foreignKey'    => false,
+                        'conditions'    => array('HotelsRoomType.`coupon` = Coupon.id',"Coupon.status='ACTIVATE'"),
+                        ),
+					),
+					 'conditions' =>array("HotelsRoomCapacities.hotel_id='$hotelId'","HotelsRoomCapacities.room_type_id='$rtId';" ),
+			)
+		);
+		return $roomdets;
 	}
     public function term() {
         $term = $this->Node->Taxonomy->Term->find('first', array(
