@@ -1,4 +1,5 @@
 <script type="text/javascript">
+
 function loadroomavailabity(){
 	$('#roomcount').val(0);
 	var rtid=$('#roomtypes').val()
@@ -107,16 +108,107 @@ function submitform(frm){
 		<?php } ?>
 		</div>
 		<div class="clr"></div>
-		<div class="hotelimages">
-			<div ><?php //debug($loadHotelspics);?></div>
-            <?php foreach($loadHotelspics as $key=>$value){ ?>
-            <div style="float:left;margin:7px;border:dashed 1px #CCC;"><img src="<?php echo $this->Html->webroot;?>uploads/hotels/<?=$value['Hotel']['id'];?>/<?=$value['HotelsPicture']['picture'];?>" class="img" /></div>
-            <?php } ?>
-		</div>
+        	<?=$this->Form->button('Booking Process', array('type'=>'button','class'=>'normalbtn','onclick'=>"loadRoomAvailability('".$hotelid."')"));?>
         <div class="clr"></div>
+	
         
 <?php }?>
-	<?=$this->Form->button('Booking Process', array('type'=>'button','class'=>'normalbtn','onclick'=>"loadRoomAvailability('".$hotelid."')"));?>
+		<?=$html->css(array('skins/ie7/skin.css','fancybox/jquery.fancybox-1.3.4.css'));//'slide_show.css'?>,
+		<?=$html->script(array('jquery/jquery.jcarousel.min.js','thickbox/thickbox.js','fancybox/jquery.fancybox-1.3.4.pack.js'));?>
+
+
+		<!--asdadas-->
+		<script type="text/javascript">
+
+// Set thickbox loading image
+tb_pathToImage = "img/loading-thickbox.gif"; 
+
+var mycarousel_itemList = new Array();
+</script>
+<?php $i=0; 
+		foreach($loadHotelspics as $key=>$value){
+	 ?>
+<script>
+
+	mycarousel_itemList[<?=$i;?>]= {url:"<?=$this->Html->webroot;?>uploads/hotels/<?=$value['Hotel']['id'];?>/<?=$value['HotelsPicture']['picture'];?>", title: "" ,id:"<?=$value['HotelsPicture']['picture'];?>"}
+</script>
+<?php $i++; } ?>
+<script>
+function mycarousel_itemLoadCallback(carousel, state)
+{
+    for (var i = carousel.first; i <= carousel.last; i++) {
+        if (carousel.has(i)) {
+            continue;
+        }
+
+        if (i > mycarousel_itemList.length) {
+            break;
+        }
+
+        // Create an object from HTML
+        var item = jQuery(mycarousel_getItemHTML(mycarousel_itemList[i-1])).get(0);
+
+        // Apply thickbox
+        tb_init(item);
+
+        carousel.add(i, item);
+    }
+};
+
+/**
+ * Item html creation helper.
+ */
+function mycarousel_getItemHTML(item)
+{
+    var url_m = item.url.replace(/_s.jpg/g, '_m.jpg');
+    return '<a rel="fancyboxclass"  id="' + item.id + '"href="' + url_m + '" title="' + item.title + '"><img src="' + item.url + '" width="140" height="140" border="0" alt="' + item.title + '" /></a>';
+};
+
+jQuery(document).ready(function() {
+    jQuery('#mycarousel').jcarousel({
+        size: mycarousel_itemList.length,
+        itemLoadCallback: {onBeforeAnimation: mycarousel_itemLoadCallback}
+    });
+	/*$(".fancyboxclass").fancybox({
+				'overlayShow'	: true,
+				'transitionIn'	: 'elastic',
+				'transitionOut'	: 'elastic'
+			});*/
+	$("a[rel=fancyboxclass]").fancybox({
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'titlePosition' 	: 'over',
+				'transitionIn'	: 'elastic',
+				'transitionOut'	: 'elastic',
+				'titleFormat'		: function(title, currentArray, currentIndex, currentOpts) {
+					return '<span id="fancybox-title-over">Image ' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? ' &nbsp; ' + title : '') + '</span>';
+				}
+			});
+
+});
+
+function loadfancybox(obj) {
+
+			$(".fancyboxclass").fancybox({
+				'overlayShow'	: false,
+				'transitionIn'	: 'elastic',
+				'transitionOut'	: 'elastic'
+			});
+
+			
+		}
+</script>
+
+<div id="wrap">
+  
+
+  <ul id="mycarousel" class="jcarousel-skin-ie7">
+    <!-- The content will be dynamically loaded in here -->
+  </ul>
+
+</div>
+<!--end-->
+
 	<div id="popupContact" class="popupContact">
 		<a id="popupContactClose"><?=$html->image('/img/icons/close.png',array('width'=>'20px'));?></a>
 		
@@ -153,4 +245,3 @@ function submitform(frm){
        
 	</div>
 	<div id="backgroundPopup" class="backgroundPopup"></div>
-

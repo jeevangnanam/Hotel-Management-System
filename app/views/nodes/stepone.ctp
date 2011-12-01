@@ -177,6 +177,19 @@ $coupon=$value['Coupon']['reduce_percentage'];
 	<div class="detailLables">Additional Adult Charge</div>
 	<div class="detailFields"><?=$additionalAdultCharge;?></div>
 	<div class="clr"></div>
+    <?php 
+		$date1 = $fromDate;
+		$date2 = $toDate;
+		
+		$diff = abs(strtotime($date2) - strtotime($date1));
+		
+		$years = floor($diff / (365*60*60*24));
+		$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+		$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+	?>
+    <div class="detailLables">Number of days</div>
+	<div class="detailFields"><?=$days;?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>$days))?></div>
+    <div class="clr"></div>
 	<div class="detailLables">Additional Child Charge</div>
 	<div class="detailFields"><?=$additionalChildCharge;?></div>
 	<div class="clr"></div>

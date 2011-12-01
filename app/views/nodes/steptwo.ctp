@@ -150,6 +150,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 </div>
 
 <div class="formContainer">
+
 <?=$this->Form->create('Nodes', array('controller'=>'Nodes' ,'action' => '/stepthree/','type' => 'post','id'=>'cupon_check'));?>
  	<div class="clr"></div>
 	<div class="detailLables">Room Type</div>
@@ -176,14 +177,27 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 	<div class="detailLables">Additional Children Charges <?=$additionalChildCharge; ?> * <?=$additionalChildren;?></div>
     <?php $addC=$additionalChildren*$additionalChildCharge;?>
 	<div class="detailFields"><?=$addC;?><?=$this->Form->input('nofselectedrooms',array('type'=>'hidden','value'=>$addC))?></div>
-
+	<div class="clr"></div>
+    <?php 
+		$date1 = $dateFrom;
+		$date2 = $dateTo;
+		
+		$diff = abs(strtotime($date2) - strtotime($date1));
+		
+		$years = floor($diff / (365*60*60*24));
+		$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+		$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+	?>
+    <div class="detailLables">Cost for <?=$days;?> day(s)  <?=(($price*$noOfSelectedRooms)+$addC+$addAd);?>*<?=$days;?></div>
+	<div class="detailFields"><?=(($price*$noOfSelectedRooms)+$addC+$addAd)*$days;?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>$days))?></div>
+    
     <div class="clr"></div>
 	<div class="detailLables">Coupon Deduction <?=$cd;?>%</div>
-    <?php $couponDeduction=$price*($cd/100); ?>
+    <?php $couponDeduction=(($price*$noOfSelectedRooms)+$addC+$addAd)*$days*($cd/100); ?>
 	<div class="detailFields"><?=$couponDeduction;?><?=$this->Form->input('coupondeduction',array('type'=>'hidden','value'=>$couponDeduction))?></div>
 	<div class="clr"></div>
 	<div class="detailLables">Total Price</div>
-    <?php $total=(($price*$noOfSelectedRooms)+$addC+$addAd)-$couponDeduction; ?>
+    <?php $total=((($price*$noOfSelectedRooms)+$addC+$addAd)*$days)-$couponDeduction; ?>
 	<div class="detailFields"><?=$total?><?=$this->Form->input('total',array('type'=>'hidden','value'=>$total))?></div>
     <div class="clr"></div>
 <?=$this->Form->end('Submit');?>

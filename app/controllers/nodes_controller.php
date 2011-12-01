@@ -455,8 +455,7 @@ class NodesController extends AppController {
         							   ),
         				'conditions'=>array("Hotel.`status`=1 AND Hotel.id= $hotelId"),
         				'group'=>array('HotelsPicture.id'),
-        				'order'    => array('HotelsPicture.id'    => 'asc'),
-        				'limit' =>5
+        				'order'    => array('HotelsPicture.id'    => 'asc')
         							   
         			)
         	);
