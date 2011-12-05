@@ -20,7 +20,7 @@
 
  
 	$('.hotelLinks').click(function() {
-		var hotelid=$('.hotelLinks').attr('id');
+		var hotelid=this.id;
 		$('#rt').load('/manager/Index/setroomtypes/'+hotelid);
   		/*
 			$.post("/manager/Index/setroomtypes/", { hotelid: hotelid},
