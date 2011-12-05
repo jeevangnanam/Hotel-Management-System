@@ -583,7 +583,7 @@ class NodesController extends AppController {
 		$aCount=$pCount=0;
 		if(count($rType) > 0){
 			$aCount=$rType[0][0]['S'];
-			$pCount=$rType[1][0]['S'];
+			//$pCount=$rType[1][0]['S'];
 		}
 		
 		$empty='&nbsp';
@@ -702,7 +702,48 @@ class NodesController extends AppController {
 		
 	}
 	/* booking step stepthree */
+
 	function stepthree(){
+		
+		if (!($this->Auth->isAuthorized())){
+			$this->Auth->allow('login');
+		}
+		
+		$nofr=$this->params['data']['Nodes']['nofselectedrooms'];
+		$noofdays=$this->params['data']['Nodes']['nofselecteddays'];
+		$cd=$this->params['data']['Nodes']['coupondeduction']; 
+		$aac=$this->params['data']['Nodes']['maxadults']; 
+		$acc=$this->params['data']['Nodes']['maxchildren'];
+		$rt=$this->params['data']['Nodes']['room_type'];
+		$hotel=$this->Session->read('hotelId');
+		$det=$this->HotelsRoomType->find('all',array(
+			'fields'=>array('HotelsRoomType.price',
+							),
+			
+					 'conditions' =>array("HotelsRoomType.hotel_id='$hotel'","HotelsRoomType.id='$rt';" ),
+			)
+		);
+		/*debug($det);
+		die();*/
+		$p=$det[0]['HotelsRoomType']['price'];
+		$estimated_price=(($nofr*$p)+$aac+$acc)*((100-$cd)/100);
+		$this->data['Booking']['user_id'] = '2';
+		$this->data['Booking']['hotel_id'] = $this->Session->read('hotelId');
+        $this->data['Booking']['room_type_id'] = $this->params['data']['Nodes']['room_type'];
+        $this->data['Booking']['from_date'] = $this->params['data']['Nodes']['dateFrom']; 
+        $this->data['Booking']['end_date'] = $this->params['data']['Nodes']['dateTo'];
+        $this->data['Booking']['number_of_rooms'] = $this->params['data']['Nodes']['nofselectedrooms'];
+        $this->data['Booking']['estimated_price'] = $estimated_price;
+        $this->data['Booking']['coupon_id'] = $this->params['data']['Nodes']['coupondeduction'];
+        $this->data['Booking']['notes'] = 'n';
+        $this->data['Booking']['status'] = "PROCESSING";
+         
+        if($this->Booking->save($this->data)){
+        	
+        }
+        else{
+        	
+        }
 		
 	}
 	function getRoomTypeDets($hotelId=NULL,$rtId=NULL){
