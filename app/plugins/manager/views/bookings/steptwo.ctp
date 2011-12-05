@@ -150,41 +150,54 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 </div>
 
 <div class="formContainer">
-<?=$this->Form->create('Bookings', array('controller'=>'bookings' ,'action' => '/stepthree/','type' => 'post','id'=>'cupon_check'));?>
+<?=$this->Form->create('Booking', array('controller'=>'Booking' ,'action' => '/stepthree/','type' => 'post','id'=>'cupon_check'));?>
  	<div class="clr"></div>
 	<div class="detailLables">Room Type</div>
-	<div class="detailFields"><?=$roomType;?><?=$this->Form->input('bookings.room_type',array('type'=>'hidden','value'=>$roomType))?></div>	
+	<div class="detailFields"><?=$roomType;?><?=$this->Form->input('Booking.room_type',array('type'=>'hidden','value'=>$roomTypeId))?></div>	
     <div class="clr"></div>
 	<div class="detailLables">Price <?=$price;?>*<?=$noOfSelectedRooms;?></div>
-	<div class="detailFields"><?=$price*$noOfSelectedRooms;?><?=$this->Form->input('bookings.room_type',array('type'=>'hidden','value'=>$price*$noOfSelectedRooms))?></div>	
+	<div class="detailFields"><?=$price*$noOfSelectedRooms;?><?=$this->Form->input('Booking.price',array('type'=>'hidden','value'=>$price*$noOfSelectedRooms))?></div>	
 	<div class="clr"></div>
 	<div class="detailLables">Date From</div>
-	<div class="detailFields"><?=$dateFrom;?><?=$this->Form->input('bookings.dateFrom',array('type'=>'hidden','value'=>$dateFrom))?></div>
+	<div class="detailFields"><?=$dateFrom;?><?=$this->Form->input('Booking.dateFrom',array('type'=>'hidden','value'=>$dateFrom))?></div>
     <div class="clr"></div>
 	<div class="detailLables">Date To</div>
-	<div class="detailFields"><?=$dateTo;?><?=$this->Form->input('bookings.dateTo',array('type'=>'hidden','value'=>$dateTo))?></div>
+	<div class="detailFields"><?=$dateTo;?><?=$this->Form->input('Booking.dateTo',array('type'=>'hidden','value'=>$dateTo))?></div>
     <div class="clr"></div>
 	<div class="detailLables">No of Selected Rooms</div>
-	<div class="detailFields"><?=$noOfSelectedRooms?><?=$this->Form->input('bookings.nofselectedrooms',array('type'=>'hidden','value'=>$noOfSelectedRooms))?></div>
+	<div class="detailFields"><?=$noOfSelectedRooms?><?=$this->Form->input('Booking.nofselectedrooms',array('type'=>'hidden','value'=>$noOfSelectedRooms))?></div>
 
     <div class="clr"></div>
 	<div class="detailLables">Additional Adults Charges <?=$additionalAdultCharge; ?> * <?=$additionalAdults;?></div>
      <?php $addAd=$additionalAdultCharge*$additionalAdults;?>
-	<div class="detailFields"><?=$addAd;?><?=$this->Form->input('bookings.nofselectedrooms',array('type'=>'hidden','value'=>$noOfSelectedRooms))?></div>
+	<div class="detailFields"><?=$addAd;?><?=$this->Form->input('Booking.aac',array('type'=>'hidden','value'=>$additionalAdults))?></div>
     
     <div class="clr"></div>
 	<div class="detailLables">Additional Children Charges <?=$additionalChildCharge; ?> * <?=$additionalChildren;?></div>
     <?php $addC=$additionalChildren*$additionalChildCharge;?>
-	<div class="detailFields"><?=$addC;?><?=$this->Form->input('bookings.nofselectedrooms',array('type'=>'hidden','value'=>$addC))?></div>
-
+	<div class="detailFields"><?=$addC;?><?=$this->Form->input('Booking.acc',array('type'=>'hidden','value'=>$additionalChildren))?></div>
+	<div class="clr"></div>
+    <?php 
+		$date1 = $dateFrom;
+		$date2 = $dateTo;
+		
+		$diff = abs(strtotime($date2) - strtotime($date1));
+		
+		$years = floor($diff / (365*60*60*24));
+		$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+		$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+	?>
+    <div class="detailLables">Cost for <?=$days;?> day(s)  <?=(($price*$noOfSelectedRooms)+$addC+$addAd);?>*<?=$days;?></div>
+	<div class="detailFields"><?=(($price*$noOfSelectedRooms)+$addC+$addAd)*$days;?><?=$this->Form->input('Booking.nofselecteddays',array('type'=>'hidden','value'=>$days))?></div>
+ 
     <div class="clr"></div>
 	<div class="detailLables">Coupon Deduction <?=$cd;?>%</div>
     <?php $couponDeduction=$price*($cd/100); ?>
-	<div class="detailFields"><?=$couponDeduction;?><?=$this->Form->input('bookings.coupondeduction',array('type'=>'hidden','value'=>$couponDeduction))?></div>
+	<div class="detailFields"><?=$couponDeduction;?><?=$this->Form->input('Booking.coupondeduction',array('type'=>'hidden','value'=>$couponDeduction))?></div>
 	<div class="clr"></div>
 	<div class="detailLables">Total Price</div>
     <?php $total=(($price*$noOfSelectedRooms)+$addC+$addAd)-$couponDeduction; ?>
-	<div class="detailFields"><?=$total?><?=$this->Form->input('bookings.total',array('type'=>'hidden','value'=>$total))?></div>
+	<div class="detailFields"><?=$total?><?=$this->Form->input('Booking.total',array('type'=>'hidden','value'=>$total))?></div>
     <div class="clr"></div>
 <?=$this->Form->end('Submit');?>
  

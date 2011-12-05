@@ -154,10 +154,10 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 <?=$this->Form->create('Nodes', array('controller'=>'Nodes' ,'action' => '/stepthree/','type' => 'post','id'=>'cupon_check'));?>
  	<div class="clr"></div>
 	<div class="detailLables">Room Type</div>
-	<div class="detailFields"><?=$roomType;?><?=$this->Form->input('room_type',array('type'=>'hidden','value'=>$roomType))?></div>	
+	<div class="detailFields"><?=$roomType;?><?=$this->Form->input('room_type',array('type'=>'hidden','value'=>$roomTypeId))?></div>	
     <div class="clr"></div>
 	<div class="detailLables">Price <?=$price;?>*<?=$noOfSelectedRooms;?></div>
-	<div class="detailFields"><?=$price*$noOfSelectedRooms;?><?=$this->Form->input('room_type',array('type'=>'hidden','value'=>$price*$noOfSelectedRooms))?></div>	
+	<div class="detailFields"><?=$price*$noOfSelectedRooms;?><?=$this->Form->input('price',array('type'=>'hidden','value'=>$price*$noOfSelectedRooms))?></div>	
 	<div class="clr"></div>
 	<div class="detailLables">Date From</div>
 	<div class="detailFields"><?=$dateFrom;?><?=$this->Form->input('dateFrom',array('type'=>'hidden','value'=>$dateFrom))?></div>
@@ -171,12 +171,12 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
     <div class="clr"></div>
 	<div class="detailLables">Additional Adults Charges <?=$additionalAdultCharge; ?> * <?=$additionalAdults;?></div>
      <?php $addAd=$additionalAdultCharge*$additionalAdults;?>
-	<div class="detailFields"><?=$addAd;?><?=$this->Form->input('nofselectedrooms',array('type'=>'hidden','value'=>$noOfSelectedRooms))?></div>
+	<div class="detailFields"><?=$addAd;?><?=$this->Form->input('maxadults',array('type'=>'hidden','value'=>$additionalAdults))?></div>
     
     <div class="clr"></div>
 	<div class="detailLables">Additional Children Charges <?=$additionalChildCharge; ?> * <?=$additionalChildren;?></div>
     <?php $addC=$additionalChildren*$additionalChildCharge;?>
-	<div class="detailFields"><?=$addC;?><?=$this->Form->input('nofselectedrooms',array('type'=>'hidden','value'=>$addC))?></div>
+	<div class="detailFields"><?=$addC;?><?=$this->Form->input('maxchildren',array('type'=>'hidden','value'=>$additionalChildren))?></div>
 	<div class="clr"></div>
     <?php 
 		$date1 = $dateFrom;
