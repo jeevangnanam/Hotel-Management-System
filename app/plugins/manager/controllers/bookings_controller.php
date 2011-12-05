@@ -61,7 +61,14 @@ class BookingsController extends ManagerAppController{
 		$roomDes=$this->getRoomTypeDetails($hotelId,$rtId);
 		$this->set(compact('roomDes'));
 	}
-	
+	function stepthree(){
+		/*debug($this->params);
+		*/
+		debug($this->Bookings->save($this->data));
+		if($this->Bookings->save($this->data)){
+			$this->Session->setFlash("Bookings Saved!");
+		}die('hi');
+	}
 	function getRoomTypeDetails($hotelId=NULL,$rtId=NULL){
 		$roomdets=$this->HotelsRoomCapacities->find('all',array(
 			'fields'=>array('HotelsRoomCapacities.id',
