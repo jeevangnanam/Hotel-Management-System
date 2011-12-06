@@ -2,7 +2,7 @@
 
 class BookingsController extends ManagerAppController{
     var $name = 'Bookings';
-    var $uses = array('Bookings','HotelsRoomType','HotelsRoomCapacities','Hotel','Coupon');
+    var $uses = array('Booking','HotelsRoomType','HotelsRoomCapacities','Hotel','Coupon');
    
     
     function beforeFilter(){
@@ -62,12 +62,82 @@ class BookingsController extends ManagerAppController{
 		$this->set(compact('roomDes'));
 	}
 	function stepthree(){
-		/*debug($this->params);
-		*/
-		debug($this->Bookings->save($this->data));
-		if($this->Bookings->save($this->data)){
-			$this->Session->setFlash("Bookings Saved!");
-		}die('hi');
+		
+		if (!($this->Auth->isAuthorized())){
+			$this->Auth->allow('login');
+		}
+		
+		
+		$nofr=$this->params['data']['Booking']['nofselectedrooms'];
+		$noofdays=$this->params['data']['Booking']['nofselecteddays'];
+		$dFrom=$this->params['data']['Booking']['dateFrom'];
+		$dTo=$this->params['data']['Booking']['dateTo'];
+		$cd=$this->params['data']['Booking']['coupondeduction']; 
+		
+		$rt=$this->params['data']['Booking']['room_type'];
+		$hotel=$this->Session->read('hotelId');
+		$det=$this->HotelsRoomType->find('all',array(
+			'fields'=>array('HotelsRoomType.price','HotelsRoomCapacities.additional_adult_charge','HotelsRoomCapacities.additional_child_charge'
+							),
+			'joins'=>array(
+        					array(
+			                        'table' => 'hotels_room_capacities',
+			                        'alias' => 'HotelsRoomCapacities',
+			                        'type'  => 'INNER',
+			                        'foreignKey'    => false,
+			                        'conditions'    => array('HotelsRoomType.hotel_id = HotelsRoomCapacities.hotel_id AND HotelsRoomType.id=HotelsRoomCapacities.room_type_id'),
+			                  ),
+			                  ),
+					 'conditions' =>array("HotelsRoomType.hotel_id='$hotel'","HotelsRoomType.id='$rt';" ),
+			)
+		);
+		$aac=$det[0]['HotelsRoomCapacities']['additional_adult_charge']; 
+		$acc=$det[0]['HotelsRoomCapacities']['additional_child_charge'];
+		$p=$det[0]['HotelsRoomType']['price'];
+		
+		$estimated_price=((($nofr * $det[0]['HotelsRoomType']['price'])+$aac+$acc)*$noofdays)*((100-$cd)/100);
+		$this->data['Booking']['user_id'] = $this->Auth->user('id');
+		$this->data['Booking']['hotel_id'] = $this->Session->read('hotelId');
+		$rtype=$this->params['data']['Booking']['room_type'];
+        $this->data['Booking']['room_type_id'] = $rtype;
+        $this->data['Booking']['from_date'] = $dFrom; 
+        $this->data['Booking']['end_date'] = $dTo;
+        $this->data['Booking']['number_of_rooms'] = $this->params['data']['Booking']['nofselectedrooms'];
+        $this->data['Booking']['estimated_price'] = $estimated_price;
+        $this->data['Booking']['coupon_id'] = $this->params['data']['Booking']['coupondeduction'];
+        $this->data['Booking']['notes'] = 'n';
+        $this->data['Booking']['status'] = "PROCESSING";
+         
+        if($this->Booking->save($this->data)){
+        	$dets=$this->Hotel->find('all', array(
+        			   		'fields'=>array('DISTINCT Hotel.`name`','HotelsRoomType.`name`'),
+        					'joins'=>array(
+        					array(
+			                        'table' => 'bookings',
+			                        'alias' => 'Booking',
+			                        'type'  => 'INNER',
+			                        'foreignKey'    => false,
+			                        'conditions'    => array('Hotel.id = Booking.hotel_id'),
+			                  ),
+			                  array(
+			                        'table' => 'hotels_room_types',
+			                        'alias' => 'HotelsRoomType',
+			                        'type'  => 'INNER',
+			                        'foreignKey'    => false,
+			                        'conditions'    => array('HotelsRoomType.hotel_id = Booking.hotel_id AND HotelsRoomType.id=Booking.room_type_id'),
+			                        ),
+        					
+        					),
+        					'conditions'=>array("Booking.hotel_id=$hotel AND HotelsRoomType.id=$rtype"),
+        			   )
+        		);
+        			   
+        	$this->set(compact('dets','dFrom','dTo','noofdays','estimated_price'));
+        	
+        }
+        else{
+        	
+        }
 	}
 	function getRoomTypeDetails($hotelId=NULL,$rtId=NULL){
 		$roomdets=$this->HotelsRoomCapacities->find('all',array(
