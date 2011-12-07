@@ -52,6 +52,31 @@ class BookingsController extends ManagerAppController{
 		$noOfSelectedRooms=$params['data']['bookings']['nofselectedrooms'];
 		$additionalAdults=$params['data']['bookings']['max_adults'];
 		$additionalChildren=$params['data']['bookings']['max_children'];
+		$coupon=$params['data']['bookings']['coupon'];
+		$cuopondet=$this->Hotel->find('all',array(
+			'fields'=>array('Coupon.reduce_percentage','Coupon.id'),
+			'joins'=>array(
+				   array(
+                        'table' => 'coupons',
+                        'alias' => 'Coupon',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Hotel.id = Coupon.hotel_id'),
+                        ),
+                        ),
+			'conditions' =>array("Coupon.hotel_id='$hotelId' AND Coupon.start_date >='$dateFrom' AND Coupon.start_date <= '$dateFrom' AND Coupon.coupon='$coupon'" ),
+			)
+		);
+		if(count($cuopondet) <> 0){
+			$cid=$cuopondet[0]['Coupon']['id'];
+			$cd=$cuopondet[0]['Coupon']['reduce_percentage'];
+		}
+		else{
+			$cid=0;
+			$cd=0;
+		}
+		$this->set('cd',$cd);	
+		$this->set('cid',$cid);	
 		
 		$this->set('dateFrom',$dateFrom);
 		$this->set('dateTo',$dateTo);
@@ -104,7 +129,7 @@ class BookingsController extends ManagerAppController{
         $this->data['Booking']['end_date'] = $dTo;
         $this->data['Booking']['number_of_rooms'] = $this->params['data']['Booking']['nofselectedrooms'];
         $this->data['Booking']['estimated_price'] = $estimated_price;
-        $this->data['Booking']['coupon_id'] = $this->params['data']['Booking']['coupondeduction'];
+        $this->data['Booking']['coupon_id'] = $this->params['data']['Booking']['couponid']; 
         $this->data['Booking']['notes'] = 'n';
         $this->data['Booking']['status'] = "PROCESSING";
          

@@ -156,7 +156,7 @@ class IndexController extends ManagerAppController{
 		$aCount=$pCount=0;
 		if(count($rType) > 0){
 			$aCount=$rType[0][0]['S'];
-			$pCount=$rType[1][0]['S'];
+			//$pCount=$rType[1][0]['S'];
 		}
 		
 		$empty='&nbsp';
