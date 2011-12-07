@@ -1,9 +1,12 @@
+<?=$html->css(array('jquery.autocomplete.css'));?>
+<?=$html->script(array('jquery/jquery.autocomplete.js','autocompleteAction.js'));?>
 <div class="searchbox">
 	<div class="heading">Search Hotels</div>
     <div class="clr"></div>
     <div class="searchformcontent">
     <?=$this->Form->create(array('id'=>'Nodes','action'=>'/')); ?>
 	<?=$this->Form->input('hotelname',array('type'=>'text','label'=>'Hotel Name'));?>
+	<?php echo $form->text('hotel.name', array('size'=>'30', 'id'=>'autoComplete'));?>
     <?=$this->Form->input('location',array('type'=>'text','label'=>'Location'));?>
     <?php $opt=array('1'=>'One','2'=>'Two','3'=>'Three','4'=>'Four','5'=>'Five');?>
     <?=$this->Form->input('starclass',array('type'=>'select','label'=>'Star Class','options'=>$opt,'empty'=>'Select One'));?>

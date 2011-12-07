@@ -520,7 +520,18 @@ class NodesController extends AppController {
 		//debug($hotelDets);
         $this->set(compact('hotelDets'));
 	}
-	
+	public function autoComplete(){
+		/*Configure::write('debug', 0);*/
+		$this->layout = 'ajax';
+		
+		
+		$hotelname=$this->params['url']['q'];
+		$Hotels = $this->Hotel->find('all', array(
+   			'conditions'=>array("Hotel.`name` like '%$hotelname%'"),
+   			'fields'=>array('Hotel.name')));
+		
+		$this->set('Hotels', $Hotels);
+	}
 	function hoteldetails(){
 		$hotelId=$this->data['Node']['hotelid'];
 		$this->Session->write('hotelId',$hotelId);
