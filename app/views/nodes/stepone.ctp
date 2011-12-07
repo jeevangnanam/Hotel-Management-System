@@ -105,6 +105,11 @@
 	text-align:center;
 	margin-left: 325px;
 }
+
+#NodesCoupon{
+	width:120px;
+	height:14px;
+}
 </style>
 <?php
 $hotelName=$roomType=$rtId=$price=$maxAdults=$maxChildren=$additionalAdultCharge=$additionalChildCharge='';
@@ -118,7 +123,7 @@ $maxAdults=$value['HotelsRoomCapacities']['max_adults'];
 $maxChildren=$value['HotelsRoomCapacities']['max_children'];
 $additionalAdultCharge=$value['HotelsRoomCapacities']['additional_adult_charge'];
 $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge'];
-$coupon=$value['Coupon']['reduce_percentage'];
+//$coupon=$value['Coupon']['reduce_percentage'];
 
 }
 
@@ -197,7 +202,7 @@ $coupon=$value['Coupon']['reduce_percentage'];
 	<div class="detailFields"><?=$nsr;?><?=$this->Form->input('nofselectedrooms',array('type'=>'hidden','value'=>$nsr))?></div>
 	<div class="clr"></div>
     <div class="detailLables">Coupon</div>
-	<div class="detailFields"><?php if(!empty($coupon)){echo $coupon;}?>%<?=$this->Form->input('bookings.coupon',array('type'=>'hidden','value'=>$coupon))?></div>
+	<div class="detailFields"><?=$this->Form->input('coupon',array('type'=>'text','value'=>'','label'=>''))?></div>
 	<div class="clr"></div>
 	<?php $opt=array('0'=>'Select','1'=>'One','2'=>'Two','3'=>'Three','4'=>'Four','5'=>'Five','6'=>'Six','7'=>'Seven');?>
     <div class="detailLableAdditional">No of Additional Adults</div>  

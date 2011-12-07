@@ -107,14 +107,14 @@
 }
 </style>
 <?php
-$hotelName=$roomType=$roomTypeId=$price=$maxAdults=$maxChildren=$additionalAdultCharge=$additionalChildCharge=$cd='';
+
+$hotelName=$roomType=$roomTypeId=$price=$maxAdults=$maxChildren=$additionalAdultCharge=$additionalChildCharge='';
 
 foreach($roomDes as $key=>$value){
 $hotelName=$value['Hotel']['name'];
 $roomTypeId=$value['HotelsRoomType']['id'];
 $roomType=$value['HotelsRoomType']['name'];
 $price=$value['HotelsRoomType']['price'];
-$cd=$value['Coupon']['reduce_percentage'];
 $additionalAdultCharge=$value['HotelsRoomCapacities']['additional_adult_charge'];
 $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge'];
 }
@@ -194,7 +194,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
     <div class="clr"></div>
 	<div class="detailLables">Coupon Deduction <?=$cd;?>%</div>
     <?php $couponDeduction=(($price*$noOfSelectedRooms)+$addC+$addAd)*$days*($cd/100); ?>
-	<div class="detailFields"><?=$couponDeduction;?><?=$this->Form->input('coupondeduction',array('type'=>'hidden','value'=>$couponDeduction))?></div>
+	<div class="detailFields"><?=$couponDeduction;?><?=$this->Form->input('coupondeduction',array('type'=>'hidden','value'=>$cd))?><?=$this->Form->input('couponid',array('type'=>'hidden','value'=>$cid))?></div>
 	<div class="clr"></div>
 	<div class="detailLables">Total Price</div>
     <?php $total=((($price*$noOfSelectedRooms)+$addC+$addAd)*$days)-$couponDeduction; ?>
