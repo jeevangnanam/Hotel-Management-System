@@ -193,7 +193,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
     <div class="clr"></div>
 	<div class="detailLables">Coupon Deduction <?=$cd;?>%</div>
     <?php $couponDeduction=$price*($cd/100); ?>
-	<div class="detailFields"><?=$couponDeduction;?><?=$this->Form->input('Booking.coupondeduction',array('type'=>'hidden','value'=>$couponDeduction))?></div>
+	<div class="detailFields"><?=$couponDeduction;?><?=$this->Form->input('Booking.coupondeduction',array('type'=>'hidden','value'=>$cd))?><?=$this->Form->input('Booking.couponid',array('type'=>'hidden','value'=>$cid))?></div>
 	<div class="clr"></div>
 	<div class="detailLables">Total Price</div>
     <?php $total=(($price*$noOfSelectedRooms)+$addC+$addAd)-$couponDeduction; ?>
