@@ -35,7 +35,7 @@ class NodesController extends AppController {
  * @access public
  */
     public $uses = array(
-        'Node','Hotel','HotelsPicture','Users','HotelsRoomType','HotelsRoomCapacities','Booking'
+        'Node','Hotel','HotelsPicture','Users','HotelsRoomType','HotelsRoomCapacities','Booking','Coupon'
     );
 
     public function beforeFilter() {
@@ -520,18 +520,18 @@ class NodesController extends AppController {
 		//debug($hotelDets);
         $this->set(compact('hotelDets'));
 	}
-	public function autoComplete(){
-		/*Configure::write('debug', 0);*/
+/*	public function autoComplete(){
+	    Configure::write('debug', 0);
 		$this->layout = 'ajax';
 		
 		
 		$hotelname=$this->params['url']['q'];
-		$Hotels = $this->Hotel->find('all', array(
-   			'conditions'=>array("Hotel.`name` like '%$hotelname%'"),
-   			'fields'=>array('Hotel.name')));
-		
-		$this->set('Hotels', $Hotels);
-	}
+		$Hotels = $this->Hotel->find('all', array('fields'=>array('Hotel.name'),
+											'conditions'=>array("Hotel.`name` like"=>'%'.$hotelname.'%')
+		));
+
+		$this->set(compact('Hotels'));
+	}*/
 	function hoteldetails(){
 		$hotelId=$this->data['Node']['hotelid'];
 		$this->Session->write('hotelId',$hotelId);
@@ -702,12 +702,36 @@ class NodesController extends AppController {
 		$noOfSelectedRooms=$params['data']['Nodes']['nofselectedrooms'];
 		$additionalAdults=$params['data']['Nodes']['max_adults'];
 		$additionalChildren=$params['data']['Nodes']['max_children'];
-		
+		$coupon=$params['data']['Nodes']['coupon'];
+		$cuopondet=$this->Hotel->find('all',array(
+			'fields'=>array('Coupon.reduce_percentage','Coupon.id'),
+			'joins'=>array(
+				   array(
+                        'table' => 'coupons',
+                        'alias' => 'Coupon',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Hotel.id = Coupon.hotel_id'),
+                        ),
+                        ),
+			'conditions' =>array("Coupon.hotel_id='$hotelId' AND Coupon.start_date >='$dateFrom' AND Coupon.start_date <= '$dateFrom' AND Coupon.coupon='$coupon'" ),
+			)
+		);
+		if(count($cuopondet) <> 0){
+			$cid=$cuopondet[0]['Coupon']['id'];
+			$cd=$cuopondet[0]['Coupon']['reduce_percentage'];
+		}
+		else{
+			$cid=0;
+			$cd=0;
+		}
 		$this->set('dateFrom',$dateFrom);
 		$this->set('dateTo',$dateTo);
 		$this->set('noOfSelectedRooms',$noOfSelectedRooms);
 		$this->set('additionalAdults',$additionalAdults);		
-		$this->set('additionalChildren',$additionalChildren);	
+		$this->set('additionalChildren',$additionalChildren);
+		$this->set('cd',$cd);	
+		$this->set('cid',$cid);	
 		$roomDes=$this->getRoomTypeDets($hotelId,$rtId);
 		$this->set(compact('roomDes'));
 		
@@ -737,7 +761,7 @@ class NodesController extends AppController {
 		/*debug($det);
 		die();*/
 		$p=$det[0]['HotelsRoomType']['price'];
-		$estimated_price=(($nofr*$p)+$aac+$acc)*((100-$cd)/100);
+		$estimated_price=((($nofr*$p)+$aac+$acc)*$noofdays)*((100-$cd)/100);
 		$this->data['Booking']['user_id'] = '2';
 		$this->data['Booking']['hotel_id'] = $this->Session->read('hotelId');
         $this->data['Booking']['room_type_id'] = $this->params['data']['Nodes']['room_type'];
@@ -745,7 +769,7 @@ class NodesController extends AppController {
         $this->data['Booking']['end_date'] = $this->params['data']['Nodes']['dateTo'];
         $this->data['Booking']['number_of_rooms'] = $this->params['data']['Nodes']['nofselectedrooms'];
         $this->data['Booking']['estimated_price'] = $estimated_price;
-        $this->data['Booking']['coupon_id'] = $this->params['data']['Nodes']['coupondeduction'];
+        $this->data['Booking']['coupon_id'] = $this->params['data']['Nodes']['couponid'];
         $this->data['Booking']['notes'] = 'n';
         $this->data['Booking']['status'] = "PROCESSING";
          
