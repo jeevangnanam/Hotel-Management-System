@@ -171,7 +171,7 @@
 
 
     <div class="hotels form">
-     <?php echo $this->Form->create('Hotel');?>
+     <?php echo $this->Form->create('Hotel',array("enctype" => "multipart/form-data","name" => "frm","id"=>"frm" ));?>
 	<fieldset>
  		<legend><?php __('Add Hotel'); ?></legend>
 		<div style="float:left;width:100px;">Name :</div>
@@ -199,6 +199,11 @@
 		    <?=$this->Form->input('Hotel.web',array('label'=>''));?>	
 		</div>
 		<div style="clear:both;"></div>
+		<div style="float:left;width:100px;">Subdomain :</div>
+		<div style="float:left;">
+			<?=$this->Form->input('Hotel.subdomain',array('type' => 'text','label' => false)); ?>
+		</div>
+		<div style="clear:both;"></div>
 		<div style="float:left;width:100px;">Contactperson :</div>
 		<div style="float:left;">	
 		    <?=$this->Form->input('Hotel.contactperson',array('options'=>$contactperson, 'label'=>'', 'empty'=>''));?>
@@ -208,6 +213,11 @@
 		<div style="float:left;">
 			<?php $options = array(''=>'Select','1'=>'One','2'=>'Two','3'=>'Three','4'=>'Four','5'=>'Five');?>
 			<?=$this->Form->input('Hotel.starclass',array('options'=>$options, 'label'=>'' , 'empty'=>''));?>
+		</div>
+		<div style="clear:both;"></div>
+				<div style="float:left;width:100px;">Logo :</div>
+				<div style="float:left;">
+					<?=$this->Form->input('Hotel.logo',array('type' => 'file','label' => false)); ?>
 		</div>
 		<div style="clear:both;"></div>
 		<div style="float:left;width:100px;">Status :</div>

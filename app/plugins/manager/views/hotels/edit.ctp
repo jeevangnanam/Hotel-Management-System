@@ -1,7 +1,14 @@
 <?=  $html->script(array('/js/image_upload/jquery.imgareaselect-0.3.min'),false); ?>
 <script>
     $(document).ready(function(){
-
+		$('.setlogo').click(function(){
+				if(confirm("Do you want set this image as the logo?")){
+					htmlobj=$.ajax({url:"/manager/Hotels/setlogoimag/"+this.id,async:false});
+				//	alert(htmlobj.responseText);
+				}
+				
+			});
+			
         $("#managersearch").change(function(){
 
             if($("#managersearch").val().length > 0){
@@ -215,9 +222,9 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 <div style="float:left;width:60%">
 	<?php
 
-		  echo  $this->Form->create('Hotel',array("name" => "frm","id"=>"frm" ));
+		  echo  $this->Form->create('Hotel',array("enctype" => "multipart/form-data","name" => "frm","id"=>"frm" ));
 		  if(count($records) < 1){
-		 	 $hid=$hname=$haddress=$hphone=$hemail=$hweb=$hcontact=$hstar=$hstatus='';
+		 	 $hid=$hname=$haddress=$hphone=$hemail=$hweb=$hcontact=$hstar=$hstatus=$subdomain='';
 		  }
 		  else{
 		    $hid=$records[0]['Hotel']['id'];
@@ -229,6 +236,7 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 			$hcontact=$records[0]['Hotel']['contactperson'];
 			$hstar=$records[0]['Hotel']['starclass'];
 			$hstatus=$records[0]['Hotel']['status'];
+			$subdomain=$records[0]['Hotel']['subdomain'];
 		  }
 		?>
 				<div style="width:25%;float:left;">Name :</div>
@@ -256,6 +264,11 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 				<div style="width:75%;float:left;">
 					<?php echo $this->Form->input('Hotel.email', array('type' => 'text','label'=>'','value'=>$hemail)); ?>
 				</div>
+				<div style="width:100%;clear:both;">&nbsp;</div>
+				<div style="width:25%;float:left;">Subdomain :</div>
+				<div style="width:75%;float:left;">
+					<?=$this->Form->input('Hotel.subdomain',array('type' => 'text','value'=>$subdomain,'label' => false)); ?>
+				</div>
 				
 				<div style="width:100%;clear:both;">&nbsp;</div>
 				<div style="width:25%;float:left;">Web :</div>
@@ -277,7 +290,11 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 					echo $this->Form->input('Hotel.starclass',array('options'=>$options, 'label'=>'' , 'selected'=>$hstar));
 				?>
 				</div>
-				
+				<div style="width:100%;clear:both;">&nbsp;</div>
+				<div style="width:25%;float:left;">Logo :</div>
+				<div style="width:75%;float:left;">
+					<?=$this->Form->input('Hotel.logo',array('type' => 'file','label' => false)); ?>
+				</div>
 				<div style="width:100%;clear:both;">&nbsp;</div>
 				<div style="width:25%;float:left;">Status :</div>
 				<div style="width:75%;float:left;">
@@ -323,7 +340,7 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 				$picid=$value['HotelsPicture']['id'];
 			?>
 					<?php $img=$this->webroot."uploads/hotels/$hotelid/$hotelImage";?>
-					<img src="<?php echo $img; ?>" style="width:50px;height:50px;"/>
+					<img class="setlogo" id="<?=$picid;?>"src="<?php echo $img; ?>" style="width:50px;height:50px;"/>
 			<?php 
 				}
 			}
