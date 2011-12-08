@@ -39,6 +39,7 @@ class NodesController extends AppController {
     );
 
     public function beforeFilter() {
+    	
         parent::beforeFilter();
 
         if (isset($this->params['slug'])) {
@@ -332,21 +333,50 @@ class NodesController extends AppController {
     }
 
     public function index() {
+       $hotelname=$location=$starclass=$hotelId=$subdomain='';
+       $domain=$this->getSubdomain();
+       if(!empty($domain)){
+        $this->setLogo($domain);
+       }
        $param=$this->params;
        $tag=0;
-       $hotelname=$location=$starclass=$hotelId='';
+       $subdomain=$domain;
        if(isset($this->params['data'])){
        		$hotelname=$this->params['data']['Node']['hotelname'];
        		$location=$this->params['data']['Node']['location'];
        		$starclass=$this->params['data']['Node']['starclass'];
        		$tag=1;
        }
-       	$hotelDets=$this->hotelsDets($hotelId,$hotelname,$location,$starclass,$tag);
+       	$hotelDets=$this->hotelsDets($hotelId,$hotelname,$location,$starclass,$tag,$subdomain);
        
        //debug($hotelDets);
        $this->set(compact('hotelDets'));
     }
-	function hotelsDets($hotelId=NULL,$hotelname=NULL,$location=NULL,$starclass=NULL,$tag=NULL){
+    
+	function getSubdomain() {
+		$domain = parse_url($_SERVER['HTTP_HOST']);
+		$domain = explode('.',$domain['path']);
+		if(count($domain)==3 and !empty($domain[0])) {
+		return $domain[0];
+		}
+		return '';
+	}
+	
+	function setLogo($domain=NULL){
+		$logoDets=$this->Hotel->find('all',array(
+        		'fields'=>array('Hotel.subdomain','Hotel.logo','Hotel.id'),
+        		'conditions'=>array("Hotel.subdomain='$domain'"),)
+        
+        );
+        	$path="/uploads/hotels/".$logoDets[0]['Hotel']['id']."/".$logoDets[0]['Hotel']['logo'];
+       
+    		$this->set('logo',$path);
+	}
+	function hotelsDets($hotelId=NULL,$hotelname=NULL,$location=NULL,$starclass=NULL,$tag=NULL,$subdomain=NULL){
+		$domain=$this->getSubdomain();
+       		if(!empty($domain)){
+        	$this->setLogo($domain);
+       	}
 		$hw='';
 		
 		if($tag==1){
@@ -368,6 +398,9 @@ class NodesController extends AppController {
 		}
 		else if(!empty($hotelId)) {
 			$hw=" AND Hotel.id=$hotelId ";
+		}
+		else if(!empty($subdomain)){
+			$hw=" AND Hotel.subdomain='$subdomain' ";
 		}
 		 $loadHotels=$this->Hotel->find('all',
         			array(
