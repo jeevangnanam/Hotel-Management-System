@@ -56,6 +56,7 @@ class AppController extends Controller {
         'Link',
         'Setting',
         'Node',
+    	'Hotel',
     );
 /**
  * Cache pagination results
@@ -101,24 +102,30 @@ class AppController extends Controller {
  * @return void
  */
     public function beforeFilter() {
+    	$domain=$this->getSubdomain();
         $this->AclFilter->auth();
         $this->RequestHandler->setContent('json', 'text/x-json');
         $this->Security->blackHoleCallback = '__securityError';
-
+		
+        
         if (isset($this->params['admin'])) {
             $this->layout = 'admin';
         }
+        
 
         if ($this->RequestHandler->isAjax()) {
             $this->layout = 'ajax';
         }
-
+		
+        
+        
         if (Configure::read('Site.theme') && !isset($this->params['admin'])) {
             $this->theme = Configure::read('Site.theme');
         } elseif (Configure::read('Site.admin_theme') && isset($this->params['admin'])) {
             $this->theme = Configure::read('Site.admin_theme');
         }
-
+		
+        
         if (!isset($this->params['admin']) && 
             Configure::read('Site.status') == 0) {
             $this->layout = 'maintenance';
@@ -129,6 +136,12 @@ class AppController extends Controller {
         if (isset($this->params['locale'])) {
             Configure::write('Config.language', $this->params['locale']);
         }
+        if(!empty($domain)){
+        	 $this->layout = 'default'; 
+        	// echo 'test';
+          }
+
+       
     }
 /**
  * blackHoleCallback for SecurityComponent
@@ -138,6 +151,15 @@ class AppController extends Controller {
     public function __securityError() {
         $this->cakeError('securityError');
     }
+/**/
 
+	public function getSubdomain() {
+		$domain = parse_url($_SERVER['HTTP_HOST']);
+		$domain = explode('.',$domain['path']);
+		if(count($domain)==3 and !empty($domain[0])) {
+		return $domain[0];
+		}
+		return '';
+		}
 }
 ?>
