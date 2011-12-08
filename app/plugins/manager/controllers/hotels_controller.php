@@ -79,9 +79,33 @@ class HotelsController extends ManagerAppController {
             //debug($this->Hotel);
 
             if (isset($this->data['Hotel']['name'])) {
-
+            	$imgName='';
+            		if (isset($this->data['Hotel']['name'])) {
+					
+						if(!empty($this->data['Hotel']['logo']['name'])){
+								
+								$uploadPath = "webroot\uploads\hotels\\";
+								$root=APP; 
+								$hotelId=$this->Session->read('eid');
+								$tmpName=$this->data['Hotel']['logo']['tmp_name'];
+								$imgName=$this->data['Hotel']['logo']['name'];
+								$this->data['Hotel']['logo']=$this->data['Hotel']['logo']['name'];
+								
+						}
+            		}
                 if ($this->Hotel->save($this->data)) {
                     $this->Session->write("id", $this->Hotel->getInsertID());
+                    $hotelId=$this->Hotel->getInsertID();
+                	if (!is_dir($root . $uploadPath . $hotelId)) {
+		                	
+		                   			mkdir($root . $uploadPath . $hotelId);
+		                    		chmod($root . $uploadPath . $hotelId, 0777);
+		               			}
+	
+			                	if (move_uploaded_file($tmpName, $root . $uploadPath . $hotelId . DS . $imgName)) {
+			             				
+			                	
+								}
                     $this->Session->setFlash(__('The hotel has been saved', true));
 
                     $this->set('tab', '1');
@@ -426,9 +450,29 @@ class HotelsController extends ManagerAppController {
 		/*----to save hotel datail start----*/
 	   if (!empty($this->data)) {	
 		   	if($this->data['Hotel']['act']=='editHotelInfo' ){
+		   		
 			  	$this->Hotel->create();	  
 				if (isset($this->data['Hotel']['name'])) {
-				
+					
+						if(!empty($this->data['Hotel']['logo']['name'])){
+								
+								$uploadPath = "webroot\uploads\hotels\\";
+								$root=APP; 
+								$hotelId=$this->Session->read('eid');
+								$tmpName=$this->data['Hotel']['logo']['tmp_name'];
+								
+								if (!is_dir($root . $uploadPath . $hotelId)) {
+		                	
+		                   			mkdir($root . $uploadPath . $hotelId);
+		                    		chmod($root . $uploadPath . $hotelId, 0777);
+		               			}
+	
+			                	if (move_uploaded_file($tmpName, $root . $uploadPath . $hotelId . DS . $this->data['Hotel']['logo']['name'])) {
+			             			$this->data['Hotel']['logo']=$this->data['Hotel']['logo']['name'];	
+			                	
+								}
+						}
+							
 		                if ($this->Hotel->save($this->data)) {
 							
 							$records=$this->loadhotelinfo($this->Session->read("eid"),$userId);
@@ -443,7 +487,8 @@ class HotelsController extends ManagerAppController {
         					$this->set(compact('metaInfo'));
 							$this->set(compact('hotelDets','records','hotelimages','hotelname','roomTypes','roomcapacitys','loadfeaturelist')); 
 							$this->Session->setFlash(__( 'The hotel has been updated.', true));      
-							$this->set('tab', '0'); 						                     
+							$this->set('tab', '0'); 	
+											                     
 		                } else {	
 		                	
 		                	$records=$this->loadhotelinfo($this->Session->read("eid"),$userId);
@@ -465,6 +510,7 @@ class HotelsController extends ManagerAppController {
 		   		}
 		   /*----to save hotel datail end----*/
 		   /*----to upload images------------*/
+
 		   if($this->data['Hotel']['act']=='uploadNewImage' ){
 			  	$this->Hotel->create();	  
 				if (isset($this->data['HotelsPicture']['picture']['name'])) {
@@ -681,7 +727,8 @@ class HotelsController extends ManagerAppController {
                     'Hotel.web',
                     'Hotel.contactperson',
                     'Hotel.starclass',
-					'Hotel.`status`'),
+					'Hotel.`status`',
+    				'Hotel.`subdomain`'),
                 'joins' => array(
                     array(
                         'table' => 'hotels_managers',
@@ -940,6 +987,18 @@ class HotelsController extends ManagerAppController {
             )
         );
          return $featuresDes;
+	}
+	
+	public function setlogoimag($id=NULL){
+		$id=$this->params['pass'][0];
+		$this->data['Hotel']['id']=$this->Session->read("eid");
+		$this->data['Hotel']['logo']=$this->params['id'];
+		if($this->Hotel->save($this->data)){
+			echo "Logo saved.";
+		}
+		else{
+			echo "Saving fail.";
+		}
 	}
 }
 ?>
