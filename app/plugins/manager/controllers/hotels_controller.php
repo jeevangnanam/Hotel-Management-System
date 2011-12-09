@@ -93,6 +93,7 @@ class HotelsController extends ManagerAppController {
 								
 						}
             		}
+            		
                 if ($this->Hotel->save($this->data)) {
                     $this->Session->write("id", $this->Hotel->getInsertID());
                     $hotelId=$this->Hotel->getInsertID();

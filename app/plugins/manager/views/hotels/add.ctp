@@ -227,7 +227,7 @@
 		<div style="clear:both;"></div>
 		<div style="float:left;width:100px;">Category :</div>
 		<div style="float:left;">
-		   <?=$this->Form->input('Hotel.Category',array('label'=>'', 'empty'=>''));?>
+		   <?=$this->Form->input('Hotel.category',array('label'=>'', 'empty'=>''));?>
 		</div>	
 		<div style="clear:both;"></div>
 		<div style="float:left;width:100px;"></div>
