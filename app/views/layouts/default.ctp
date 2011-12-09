@@ -72,14 +72,24 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
     padding: 8px 24px 8px 40px;
 
 }
+.logo{
+	width:200pcx;
+	height:80px;
+}
 </style>
 </head>
 <body>
+<?php $dlogo='/templates/limejungle/images/logo.png';
+	if(empty($logo)){
+		$logo=$dlogo;
+	}
+
+?>
 <div class="main">
 
   <div class="header">
     <div class="header_resize">
-      <div class="logo fbg_resize" style="width:890px;background-color: #FFF;margin:5px 0px 5px 0px; " ><h1><a href="index.html"><img src="/templates/limejungle/images/logo.png" /> </a></h1></div>
+      <div class="logo fbg_resize" style="width:890px;background-color: #FFF;margin:5px 0px 5px 0px; " ><h1><a href="index.html"><img src="<?=$logo;?>" class="logo" /> </a></h1></div>
       <div class="clr"></div>
       <div class="menu_nav">
         <ul>
