@@ -7,6 +7,7 @@
     <?=$this->Form->input('location',array('type'=>'text','label'=>'Location'));?>
     <?php $opt=array('1'=>'One','2'=>'Two','3'=>'Three','4'=>'Four','5'=>'Five');?>
     <?=$this->Form->input('starclass',array('type'=>'select','label'=>'Star Class','options'=>$opt,'empty'=>'Select One'));?>
+	<?=$this->Form->input('category',array('type'=>'select','label'=>'Category','options'=>$category,'empty'=>'Select One'));?>
     <?php echo $this->Form->end('Search'); ?>
     </div>
 </div>

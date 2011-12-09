@@ -26,8 +26,8 @@ class NodesController extends AppController {
  * @access public
  */
     public $components = array(
-        'Recaptcha',
-    );
+        'Recaptcha','Email'
+    );//  use component email 
 /**
  * Models used by the Controller
  *
@@ -35,9 +35,10 @@ class NodesController extends AppController {
  * @access public
  */
     public $uses = array(
-        'Node','Hotel','HotelsPicture','Users','HotelsRoomType','HotelsRoomCapacities','Booking','Coupon'
+        'Node','Hotel','HotelsPicture','Users','HotelsRoomType','HotelsRoomCapacities','Booking','Coupon','HotelsCategoryList'
     );
-
+    
+	
     public function beforeFilter() {
     	
         parent::beforeFilter();
@@ -348,9 +349,16 @@ class NodesController extends AppController {
        		$tag=1;
        }
        	$hotelDets=$this->hotelsDets($hotelId,$hotelname,$location,$starclass,$tag,$subdomain);
+        $cat=$this->setHotelCategory();
+        $category = array();
+        $c=0;
+        foreach ($cat as $key=>$value){
+        	$category[$c]=$value['HotelsCategoryList']['name'];
+        	$c++;
+        }
+      // debug($cat);
        
-       //debug($hotelDets);
-       $this->set(compact('hotelDets'));
+       $this->set(compact('hotelDets','category'));
     }
     
 	function getSubdomain() {
@@ -362,6 +370,14 @@ class NodesController extends AppController {
 		return '';
 	}
 	
+	function setHotelCategory(){
+		$cat=$this->HotelsCategoryList->find('all',array(
+			'fields'=>array('HotelsCategoryList.`id`','HotelsCategoryList.`name`'),
+			'order'=>array('HotelsCategoryList.`name`')
+			)
+		);
+		return $cat;
+	}
 	function setLogo($domain=NULL){
 		$logoDets=$this->Hotel->find('all',array(
         		'fields'=>array('Hotel.subdomain','Hotel.logo','Hotel.id'),
@@ -710,6 +726,10 @@ class NodesController extends AppController {
 	/* booking steps */
 	/* booking step one */
 	function stepone(){
+	$domain=$this->getSubdomain();
+       if(!empty($domain)){
+        $this->setLogo($domain);
+       }
 		//debug($this->params);
 		$params=$this->params;
 		$hotelId=$this->Session->read('hotelId');
@@ -726,6 +746,10 @@ class NodesController extends AppController {
 	}
 	/* booking step two */
 	function steptwo(){
+	$domain=$this->getSubdomain();
+       if(!empty($domain)){
+        $this->setLogo($domain);
+       }
 		$params=$this->params;
 		
 		$hotelId=$this->Session->read('hotelId');
@@ -772,7 +796,10 @@ class NodesController extends AppController {
 	/* booking step stepthree */
 
 	function stepthree(){
-		
+	$domain=$this->getSubdomain();
+       if(!empty($domain)){
+        $this->setLogo($domain);
+       }
 		if (!($this->Auth->isAuthorized())){
 			$this->Auth->allow('login');
 		}
@@ -807,6 +834,8 @@ class NodesController extends AppController {
         $this->data['Booking']['status'] = "PROCESSING";
          
         if($this->Booking->save($this->data)){
+        	 
+		$this->_sendNewUserMail( $this->data);
         	
         }
         else{
@@ -814,6 +843,26 @@ class NodesController extends AppController {
         }
 		
 	}
+
+	function _sendNewUserMail($data) {
+		
+	   // $User = $this->User->read(null,$id);
+	    $this->Email->to = 'ssk8323@gmail.com';
+	    $this->Email->bcc = array('ssk8323@yahoo.co.in');  
+	    $this->Email->subject = 'Welcome to our really cool thing';
+	    $this->Email->replyTo = 'ssk8323@gmail.com';
+	    $this->Email->from = 'Cool Web App <lasantha@loooops.com>';
+	    $this->Email->template = 'simple_message'; // note no '.ctp'
+	    //Send as 'html', 'text' or 'both' (default is 'text')
+	    $this->Email->sendAs = 'text'; // because we like to send pretty mail
+	    //Set view variables as normal
+	    $this->set('User', 'lasantha@loooops.com');
+	    //Do not pass any args to send()
+	    $this->Email->send();
+	 }
+
+	
+	
 	function getRoomTypeDets($hotelId=NULL,$rtId=NULL){
 		$roomdets=$this->HotelsRoomCapacities->find('all',array(
 			'fields'=>array('HotelsRoomCapacities.id',

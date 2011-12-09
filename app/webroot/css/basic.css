@@ -2,7 +2,7 @@
 	margin-top:10px;
 	float:left;
 	width:30%;
-	height:250px;
+	height:350px;
 	background:#F7FAF6;
 	/*border:dashed #CCC 1px;*/
 }
@@ -22,7 +22,7 @@
 	height:25px;
 	color:#666;
 }
-#NodeStarclass{
+#NodeStarclass,#NodeCategory{
 	width:255px;
 	height:25px;
 	color:#666;
