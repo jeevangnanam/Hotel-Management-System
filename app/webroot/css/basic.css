@@ -37,6 +37,7 @@
 	font-size:14px;
 	color:#FFFFFF;
 	cursor:pointer;
+	font-style:italic;
 }
 .normalbtn{
 	float:right;
@@ -77,8 +78,12 @@
 }
 .hotelname{
 	color:#72A946;
-	font-size:14px;
+	font-size:15px;
 	/*border-bottom:1px dashed #72A946;*/
+	background:#C0C0C0;
+	margin-left:-8px;
+	padding-left:5px;
+	font-style:oblique;
 }
 .hoteladdress,.hotelphone,.hotelweb{
 	color:#72A946;

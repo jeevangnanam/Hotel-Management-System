@@ -334,7 +334,9 @@ class NodesController extends AppController {
     }
 
     public function index() {
-       $hotelname=$location=$starclass=$hotelId=$subdomain='';
+    	//debug($this->params['data']);
+    	//die();
+       $hotelname=$location=$starclass=$hotelId=$subdomain=$category='';
        $domain=$this->getSubdomain();
        if(!empty($domain)){
         $this->setLogo($domain);
@@ -346,19 +348,20 @@ class NodesController extends AppController {
        		$hotelname=$this->params['data']['Node']['hotelname'];
        		$location=$this->params['data']['Node']['location'];
        		$starclass=$this->params['data']['Node']['starclass'];
+       		$category=$this->params['data']['Node']['category'];
        		$tag=1;
        }
-       	$hotelDets=$this->hotelsDets($hotelId,$hotelname,$location,$starclass,$tag,$subdomain);
+       	$hotelDets=$this->hotelsDets($hotelId,$hotelname,$location,$starclass,$tag,$category,$subdomain);
         $cat=$this->setHotelCategory();
         $category = array();
         $c=0;
         foreach ($cat as $key=>$value){
-        	$category[$c]=$value['HotelsCategoryList']['name'];
+        	$catego[$c]=$value['HotelsCategoryList']['name'];
         	$c++;
         }
       // debug($cat);
        
-       $this->set(compact('hotelDets','category'));
+       $this->set(compact('hotelDets','catego'));
     }
     
 	function getSubdomain() {
@@ -388,7 +391,7 @@ class NodesController extends AppController {
        
     		$this->set('logo',$path);
 	}
-	function hotelsDets($hotelId=NULL,$hotelname=NULL,$location=NULL,$starclass=NULL,$tag=NULL,$subdomain=NULL){
+	function hotelsDets($hotelId=NULL,$hotelname=NULL,$location=NULL,$starclass=NULL,$tag=NULL,$category=NULL,$subdomain=NULL){
 		$domain=$this->getSubdomain();
        		if(!empty($domain)){
         	$this->setLogo($domain);
@@ -396,20 +399,36 @@ class NodesController extends AppController {
 		$hw='';
 		
 		if($tag==1){
-			if(!empty($hotelname) && !empty($location) && !empty($starclass))
-				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.address like '%$location%' AND Hotel.starclass like '%$starclass%' ";
-			elseif (!empty($hotelname) &&!empty($location))
-				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.address like '%$location%' ";
+			if(!empty($hotelname) && !empty($location) && !empty($starclass) && !empty($category))
+				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.address like '%$location%' AND Hotel.starclass = '$starclass' AND Hotel.category = '$category' ";					
+			else if(!empty($hotelname) && !empty($location) && !empty($starclass))
+				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.address like '%$location%' AND Hotel.starclass = '$starclass' ";						
+			elseif (!empty($hotelname) &&!empty($location) && !empty($category))
+				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.address like '%$location%' AND Hotel.category = '$category'";
+			else if(!empty($hotelname) && !empty($starclass) && !empty($category))
+				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.starclass = '$starclass' AND Hotel.category = '$category' ";
+			else if(!empty($location)&& !empty($starclass) && !empty($category) )
+				$hw=" AND Hotel.address like '%$location%' AND Hotel.starclass = '$starclass' AND Hotel.category = '$category'";
+			else if(!empty($hotelname) && !empty($location))
+				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.address like '%$location%'";				
+			else if(!empty($hotelname) && !empty($category))
+				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.category = '$category'";
 			else if(!empty($hotelname) && !empty($starclass))
-				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.starclass like '%$starclass%' ";
-			else if(!empty($location) && !empty($starclass))
-				$hw=" AND Hotel.address like '%$location%' AND Hotel.starclass like '%$starclass%' ";				
+				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.starclass = '$starclass'";
+    		else if(!empty($location) && !empty($starclass))
+				$hw=" AND Hotel.address like '%$location%' AND Hotel.starclass = '$starclass '";
+			else if(!empty($location) && !empty($category))
+				$hw=" AND Hotel.address like '%$location%' AND Hotel.category = '$category'";			
+			else if(!empty($starclass) && !empty($category))
+				$hw=" AND Hotel.starclass like '%$starclass%' AND Hotel.category = '$category'";							
 			else if(!empty($hotelname))
-				$hw=" AND Hotel.name like '%$hotelname%' ";
+				$hw=" AND Hotel.name like '%$hotelname%'";				
 			else if(!empty($location))
-				$hw=" AND Hotel.address like '%$location%' ";
+				$hw=" AND Hotel.address like '%$location%' ";			
+			else if(!empty($starclass))
+				$hw=" AND Hotel.starclass = '$starclass'";				
 			else
-				$hw=" AND Hotel.starclass like '%$starclass%' ";
+				$hw=" AND Hotel.category = '$category' ";
 				
 		}
 		else if(!empty($hotelId)) {
