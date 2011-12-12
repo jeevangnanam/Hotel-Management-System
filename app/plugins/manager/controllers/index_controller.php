@@ -2,7 +2,7 @@
 
 class IndexController extends ManagerAppController{
     
-    var $uses = array('Hotel','HotelsRoomType','HotelsRoomCapacities','Booking');
+    var $uses = array('Hotel','HotelsRoomType','HotelsRoomCapacities','Booking','HotelsManager');
     var $helpers = array('Lightbox');
     
     function beforeFilter(){
@@ -303,5 +303,79 @@ class IndexController extends ManagerAppController{
 		return $rTypeDes;
 	}
 	
+	//Manager STATS	
+	function stat($mangerId=NULL,$htlAvl=NULL){
+		$userId=$this -> Session -> read();
+		$mangerId=$userId['Auth']['User']['id'];
+		$htlAvl=$this->Hotel->find('all',array(
+				'fields'=>array('count(Hotel.id) as C'),
+				'joins'=>array(
+						array(
+						'table' => 'hotels_managers',
+                        'alias' => 'HotelsManager',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Hotel.id = HotelsManager.hotel_id'),
+						),
+						),
+				'conditions' =>array("HotelsManager.user_id='$mangerId'" ),
+				));
+		if($htlAvl[0][0]['C'] == 2){
+			$this->redirect('stathome');
+
+		}
+		else{
+			$hotels=$this->getHotelNames($mangerId);
+			$this->set(compact('hotels'));
+		}
+	}
+	
+	function stathome($mangerId=NULL){
+		$userId=$this -> Session -> read();
+		$mangerId=$userId['Auth']['User']['id'];
+		$hotels=$this->getHotelNames($mangerId);
+		$this->set(compact('hotels'));
+
+	    $this->paginate = array(
+	    	'fields'=>array('HotelsRoomType.id',
+	    	'HotelsRoomType.name',
+	    	'Booking.`status`',
+	    	'Sum(Booking.number_of_rooms) as noOfRooms',
+	    	'Booking.room_type_id',
+			'Booking.estimated_price'),
+	    	'joins'=>array(
+						array(
+						'table' => 'bookings',
+                        'alias' => 'Booking',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Booking.hotel_id = HotelsRoomType.hotel_id AND HotelsRoomType.id = Booking.room_type_id'),
+						),
+						),
+	        'conditions' => array('HotelsRoomType.hotel_id' => '43',"Booking.from_date >= '2011-12-11'" ,"Booking.end_date <= '2011-12-31'"),
+			'group'=>array('HotelsRoomType.id,Booking.`status`'),
+	        'limit' => 5
+	    );
+	    $HotelsRoomType = $this->paginate('HotelsRoomType');
+	    $this->set(compact('HotelsRoomType'));
+	    
+	}
+	
+	function getHotelNames($mangerId=NULL){
+		$hotelname=$this->Hotel->find('all',array(
+		'fields'=>array('Hotel.id','Hotel.name'),
+		'joins'=>array(
+						array(
+						'table' => 'hotels_managers',
+                        'alias' => 'HotelsManager',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Hotel.id = HotelsManager.hotel_id'),
+						),
+						),
+		'conditions' =>array("HotelsManager.user_id='$mangerId'" ),
+		));
+		return $hotelname;
+	}
 }
 ?>
