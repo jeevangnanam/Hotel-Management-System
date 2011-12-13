@@ -74,6 +74,18 @@ function submitform(frm){
 	width:20px;
 	height:15px;
 }
+.rtypestopic{
+	margin:5px;
+	color:#538136;
+	font-size:14px;
+	background:#CCC;
+}
+.gallerystopic{
+	margin:1px 5px -8px;
+	color:#538136;
+	font-size:14px;
+	background:#CCC;
+}
 </style>
 <?php
 	foreach($hoteldets as $key=>$value){ ?>
@@ -93,25 +105,38 @@ function submitform(frm){
 				<div class="clr"></div>
 			</div>
 			<?php $path='';
-				 if(empty($value['HotelsPicture']['picture']))
+				 if(empty($value['Hotel']['logo']))
 					$path='no_photo.jpg';
 				  else
-				  	$path=$value['Hotel']['id']."/".$value['HotelsPicture']['picture'];
+				  	$path=$value['Hotel']['id']."/".$value['Hotel']['logo'];
 		    ?>
 			<?php ?>
 			<div class="imgbox"><img src="<?php echo $this->Html->webroot;?>uploads/hotels/<?=$path;?>" class="img" /></div>
         </div>
 		<div class="clr"></div>
-		<div class="roomdets"><?php //debug($hoteltypedets);?>
+		<div class="roomdets">
+        <div class="clr"></div>
+        <div class="rtypestopic">Room Types</div>
+        <div class="clr"></div>
         <?php foreach($hoteltypedets as $key=>$value){ ?>
 			<div class="roomtype"><?=$value['HotelsRoomType']['name'];?><div class="roomdests" onclick="loadPopUpnormal(<?=$value['Hotel']['id'];?>,<?=$value['HotelsRoomType']['id'];?>);"></div></div>
 		<?php } ?>
+        <div class="clr"></div>
+        <!-- Shows the page numbers -->
+        <?php echo $paginator->numbers(); ?>
+        <!-- Shows the next and previous links -->
+        <?php
+            echo $paginator->prev('« Previous ', null, null, array('class' => 'disabled'));
+            echo $paginator->next(' Next »', null, null, array('class' => 'disabled'));
+        ?> 
+        <!-- prints X of Y, where X is current page and Y is number of pages -->
+        <?php echo $paginator->counter(); ?>
+		<div class="clr"></div>
 		</div>
 		<div class="clr"></div>
         	<?=$this->Form->button('Booking Process', array('type'=>'button','class'=>'normalbtn','onclick'=>"loadRoomAvailability('".$hotelid."')"));?>
         <div class="clr"></div>
-	
-        
+        <div class="gallerystopic">Hotel Images</div>        
 <?php }?>
 		<?=$html->css(array('skins/ie7/skin.css','fancybox/jquery.fancybox-1.3.4.css'));//'slide_show.css'?>,
 		<?=$html->script(array('jquery/jquery.jcarousel.min.js','thickbox/thickbox.js','fancybox/jquery.fancybox-1.3.4.pack.js'));?>

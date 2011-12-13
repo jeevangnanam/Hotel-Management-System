@@ -338,7 +338,7 @@ class NodesController extends AppController {
     	//die();
        $hotelname=$location=$starclass=$hotelId=$subdomain=$category='';
        $domain=$this->getSubdomain();
-       if(!empty($domain)){
+       if(!empty($domain) && $domain!='demo-hotelms'){
         $this->setLogo($domain);
        }
        $param=$this->params;
@@ -367,7 +367,7 @@ class NodesController extends AppController {
 	function getSubdomain() {
 		$domain = parse_url($_SERVER['HTTP_HOST']);
 		$domain = explode('.',$domain['path']);
-		if(count($domain)==3 and !empty($domain[0])) {
+		if(count($domain)==3 and !empty($domain[0]) && $domain[0]!='demo-hotelms') {
 		return $domain[0];
 		}
 		return '';
@@ -382,6 +382,7 @@ class NodesController extends AppController {
 		return $cat;
 	}
 	function setLogo($domain=NULL){
+		if($domain != 'demo-hotelms'){
 		$logoDets=$this->Hotel->find('all',array(
         		'fields'=>array('Hotel.subdomain','Hotel.logo','Hotel.id'),
         		'conditions'=>array("Hotel.subdomain='$domain'"),)
@@ -390,6 +391,7 @@ class NodesController extends AppController {
         	$path="/uploads/hotels/".$logoDets[0]['Hotel']['id']."/".$logoDets[0]['Hotel']['logo'];
        
     		$this->set('logo',$path);
+		}
 	}
 	function hotelsDets($hotelId=NULL,$hotelname=NULL,$location=NULL,$starclass=NULL,$tag=NULL,$category=NULL,$subdomain=NULL){
 		$domain=$this->getSubdomain();
@@ -432,32 +434,25 @@ class NodesController extends AppController {
 				
 		}
 		else if(!empty($hotelId)) {
-			$hw=" AND Hotel.id=$hotelId ";
+			$hw=" AND Hotel.id='$hotelId'";
 		}
 		else if(!empty($subdomain)){
 			$hw=" AND Hotel.subdomain='$subdomain' ";
 		}
-		 $loadHotels=$this->Hotel->find('all',
-        			array(
+		 $this->paginate = array(
         				'fields'=>array('Hotel.id',
         								'Hotel.`name`',
         								'Hotel.address',
         								'Hotel.phone',
         								'Hotel.email',
         								'Hotel.web',
-        								'HotelsPicture.picture',
         								'Hotel.contactperson',
 										'Hotel.starclass',
+		 								'Hotel.logo',
         								'Users.first_name',
 										'Users.last_name'),
         				'joins'=>array(
-        						 array(
-		                       		'table' => 'hotels_pictures',
-		                        	'alias' => 'HotelsPicture',
-		                        	'type'  => 'LEFT',
-		                        	'foreignKey'    => false,
-                        			'conditions'    => array('Hotel.id = HotelsPicture.hotel_id'),
-                       	 		),
+        						
                        	 		array(
 		                       		'table' => 'users',
 		                        	'alias' => 'Users',
@@ -468,18 +463,20 @@ class NodesController extends AppController {
         								
         							   ),
         				'conditions'=>array("Hotel.`status`=1 $hw "),
-        				'group'=>array('Hotel.id'),
+        				
         				'order'    => array('Hotel.id'    => 'asc'),
         				'limit' =>3
         							   
-        			)
-        	);
-      return $loadHotels;
+        			);
+        		$loadHotels=$this->paginate('Hotel');
+      			return $loadHotels;
 	}
 	
 	function hoteltypedets($hotelId=NULL){
-		$loadtypes=$this->Hotel->find('all',
-        			array(
+		/*if(empty($hotelId)){
+			$hotelId=$this->Session->read('hotelId');
+		}*/
+		$this->paginate =array(
         				'fields'=>array('Hotel.id',
         								'HotelsRoomType.id',
         								'HotelsRoomType.`name`',
@@ -493,18 +490,21 @@ class NodesController extends AppController {
                         			'conditions'    => array('Hotel.id = HotelsRoomType.hotel_id'),
                        	 		),        								
         					 ),
-        				'conditions'=>array("HotelsRoomType.`status`='APPROVED' AND HotelsRoomType.hotel_id=$hotelId"),
-        				'group'=>array('HotelsRoomType.id'),
+        				'conditions'=>array("HotelsRoomType.`status`='APPROVED' AND HotelsRoomType.hotel_id='$hotelId'"),
+        				/*'group'=>array('HotelsRoomType.id'),*/
         				'order'    => array('HotelsRoomType.id'    => 'asc'),
-        				'limit' =>3
+        				'limit' =>5
         							   
-        			)
+        			
         	);
+      $loadtypes=$this->paginate('Hotel');
       return $loadtypes;
 	}
 	
 	function gethotelpictures($hotelId=NULL){
-		
+	/*if(empty($hotelId)){
+			$hotelId=$this->Session->read('hotelId');
+	}*/
 	$loadHotelspics=$this->Hotel->find('all',
         			array(
         				'fields'=>array('Hotel.id',
@@ -521,7 +521,7 @@ class NodesController extends AppController {
                        	 		
         								
         							   ),
-        				'conditions'=>array("Hotel.`status`=1 AND Hotel.id= $hotelId"),
+        				'conditions'=>array("Hotel.`status`=1 AND Hotel.id= '$hotelId'"),
         				'group'=>array('HotelsPicture.id'),
         				'order'    => array('HotelsPicture.id'    => 'asc')
         							   
@@ -588,24 +588,14 @@ class NodesController extends AppController {
 		//debug($hotelDets);
         $this->set(compact('hotelDets'));
 	}
-/*	public function autoComplete(){
-	    Configure::write('debug', 0);
-		$this->layout = 'ajax';
-		
-		
-		$hotelname=$this->params['url']['q'];
-		$Hotels = $this->Hotel->find('all', array('fields'=>array('Hotel.name'),
-											'conditions'=>array("Hotel.`name` like"=>'%'.$hotelname.'%')
-		));
 
-		$this->set(compact('Hotels'));
-	}*/
 	function hoteldetails(){
 		$hotelId=$this->data['Node']['hotelid'];
 		$this->Session->write('hotelId',$hotelId);
 		$hotelId=$this->Session->read('hotelId');
 		
 		$hoteldets=$this->hotelsDets($hotelId);
+		
 		$hoteltypedets=$this->hoteltypedets($hotelId);
 		$loadHotelspics=$this->gethotelpictures($hotelId);
 		$roomopt=array();
@@ -819,17 +809,25 @@ class NodesController extends AppController {
        if(!empty($domain)){
         $this->setLogo($domain);
        }
-		if (!($this->Auth->isAuthorized())){
-			$this->Auth->allow('login');
-		}
+		
 		
 		$nofr=$this->params['data']['Nodes']['nofselectedrooms'];
 		$noofdays=$this->params['data']['Nodes']['nofselecteddays'];
 		$cd=$this->params['data']['Nodes']['coupondeduction']; 
 		$aac=$this->params['data']['Nodes']['maxadults']; 
+		
+		
 		$acc=$this->params['data']['Nodes']['maxchildren'];
+		
+		
 		$rt=$this->params['data']['Nodes']['room_type'];
 		$hotel=$this->Session->read('hotelId');
+		$aacp=$this->getAddChages($hotel,$rt,'additional_adult_charge');
+		$accp=$this->getAddChages($hotel,$rt,'additional_child_charge');
+		
+		$aacp=$aacp[0]['HotelsRoomCapacities']['additional_adult_charge'];
+		$accp=$accp[0]['HotelsRoomCapacities']['additional_child_charge'];
+		
 		$det=$this->HotelsRoomType->find('all',array(
 			'fields'=>array('HotelsRoomType.price',
 							),
@@ -840,7 +838,8 @@ class NodesController extends AppController {
 		/*debug($det);
 		die();*/
 		$p=$det[0]['HotelsRoomType']['price'];
-		$estimated_price=((($nofr*$p)+$aac+$acc)*$noofdays)*((100-$cd)/100);
+		
+		$estimated_price=((($nofr*$p)+($aacp*$aac)+($accp*$acc))*$noofdays)*((100-$cd)/100);
 		$this->data['Booking']['user_id'] = '2';
 		$this->data['Booking']['hotel_id'] = $this->Session->read('hotelId');
         $this->data['Booking']['room_type_id'] = $this->params['data']['Nodes']['room_type'];
@@ -862,7 +861,14 @@ class NodesController extends AppController {
         }
 		
 	}
-
+	
+	function getAddChages($hotelId=NULL,$rt=NULL,$col=NULL){
+		$chr=$this->HotelsRoomCapacities->find('all',array(
+		'fields'=>array("HotelsRoomCapacities.`$col`"),
+		'conditions' =>array("HotelsRoomCapacities.hotel_id='$hotelId'","HotelsRoomCapacities.room_type_id='$rt';" ),
+		));
+		return $chr;
+	}
 	function _sendNewUserMail($data) {
 		
 	   // $User = $this->User->read(null,$id);

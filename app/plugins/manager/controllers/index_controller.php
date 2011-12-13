@@ -308,7 +308,7 @@ class IndexController extends ManagerAppController{
 		$userId=$this -> Session -> read();
 		$mangerId=$userId['Auth']['User']['id'];
 		$htlAvl=$this->Hotel->find('all',array(
-				'fields'=>array('count(Hotel.id) as C'),
+				'fields'=>array('count(Hotel.id) as C','Hotel.id'),
 				'joins'=>array(
 						array(
 						'table' => 'hotels_managers',
@@ -320,22 +320,52 @@ class IndexController extends ManagerAppController{
 						),
 				'conditions' =>array("HotelsManager.user_id='$mangerId'" ),
 				));
-		if($htlAvl[0][0]['C'] == 2){
-			$this->redirect('stathome');
+		if($htlAvl[0][0]['C'] == 1){
+			$this->redirect('stathome/'.$htlAvl[0]['Hotel']['id']);
 
 		}
 		else{
-			$hotels=$this->getHotelNames($mangerId);
+		$this->paginate = array(
+		'fields'=>array('Hotel.id','Hotel.name'),
+		'joins'=>array(
+						array(
+						'table' => 'hotels_managers',
+                        'alias' => 'HotelsManager',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Hotel.id = HotelsManager.hotel_id'),
+						),
+						),
+		'conditions' =>array("HotelsManager.user_id='$mangerId'" ),
+		'limit' => 5
+		
+	        
+	    );
+	    	$hotels = $this->paginate('Hotel');
 			$this->set(compact('hotels'));
 		}
 	}
 	
-	function stathome($mangerId=NULL){
+	function stathome($mangerId=NULL,$hotelId=NULL,$dfrom=NULL,$dto=NULL){
+		if(isset($this->data['Hotel'])){
+			$dfrom=$this->data['Hotel']['fromdate'];
+			$dto=$this->data['Hotel']['dateto'];
+		}
+		
+		if(empty($dfrom)){
+			$dfrom=$dto='now()';
+		}
+		
+		//die();
+		if(empty($hotelId)){
+			$hotelId=$this->params['pass'][0];
+		}
 		$userId=$this -> Session -> read();
 		$mangerId=$userId['Auth']['User']['id'];
-		$hotels=$this->getHotelNames($mangerId);
+		$hotels=$this->getHotelNames($mangerId,$hotelId);
 		$this->set(compact('hotels'));
-
+		
+		
 	    $this->paginate = array(
 	    	'fields'=>array('HotelsRoomType.id',
 	    	'HotelsRoomType.name',
@@ -352,16 +382,53 @@ class IndexController extends ManagerAppController{
                         'conditions'    => array('Booking.hotel_id = HotelsRoomType.hotel_id AND HotelsRoomType.id = Booking.room_type_id'),
 						),
 						),
-	        'conditions' => array('HotelsRoomType.hotel_id' => '43',"Booking.from_date >= '2011-12-11'" ,"Booking.end_date <= '2011-12-31'"),
+	        'conditions' => array("HotelsRoomType.hotel_id" => "$hotelId","Booking.from_date >= '$dfrom'" ,"Booking.end_date <= '$dto'"),
 			'group'=>array('HotelsRoomType.id,Booking.`status`'),
 	        'limit' => 5
 	    );
 	    $HotelsRoomType = $this->paginate('HotelsRoomType');
+	    $totRooms=$this->getTotRoom($hotelId);
+	    $booked=$this->getRoomStat($hotelId,'APPROVED',$dfrom,$dto); 
+	    $process=$this->getRoomStat($hotelId,'PROCESSING',$dfrom,$dto);
+	    $bookedPrc=$processPrc=$income=0;
+	    if(isset($totRooms)){
+	    	$totRooms=$totRooms[0][0]['R'];
+	    }
+	    else{
+	    	$totRooms=0;
+	    }
+	    if(isset($booked[0][0]['R'])){
+	    	$booked=$booked[0][0]['R'];
+	    	$bookedPrc=$this->getRoomTotPrice($hotelId,'APPROVED',$dfrom,$dto);
+	    	$bookedPrc=$bookedPrc[0][0]['R'];
+	    }
+		else{
+	    	$booked=0;
+	    }
+	    if(isset($process[0][0]['R'])){
+	    	$process=$process[0][0]['R'];
+	    	$processPrc=$this->getRoomTotPrice($hotelId,'PROCESSING',$dfrom,$dto);
+	    	$processPrc=$processPrc[0][0]['R'];
+	    }
+		else{
+	    	$process=0;
+	    }
+	    $pending= ($totRooms -($booked+$process));
+	    $this->set('booked',$booked);
+	    $this->set('process',$process);
+	    $this->set('pending',$pending);
+	    $this->set('bookedPrc',$bookedPrc);
+	    $this->set('processPrc',$processPrc);
+	    $this->set('income',($bookedPrc+$processPrc));
 	    $this->set(compact('HotelsRoomType'));
 	    
 	}
 	
-	function getHotelNames($mangerId=NULL){
+	function searchstat(){
+		debug($this->data);
+		//die();
+	}
+	function getHotelNames($mangerId=NULL,$hotelId=NULL){
 		$hotelname=$this->Hotel->find('all',array(
 		'fields'=>array('Hotel.id','Hotel.name'),
 		'joins'=>array(
@@ -373,9 +440,70 @@ class IndexController extends ManagerAppController{
                         'conditions'    => array('Hotel.id = HotelsManager.hotel_id'),
 						),
 						),
-		'conditions' =>array("HotelsManager.user_id='$mangerId'" ),
+		'conditions' =>array("HotelsManager.user_id='$mangerId'","Hotel.id='$hotelId'" ),
 		));
 		return $hotelname;
+	}
+	
+	function getRoomStat($hotelId=NULL,$type=NULL,$dfrom=NULL,$dto=NULL){
+		$RoomStat=$this->Hotel->find('all',array(
+		'fields'=>array('Sum(Booking.number_of_rooms) AS R'),
+		'joins'=>array(
+						array(
+						'table' => 'bookings',
+                        'alias' => 'Booking',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Hotel.id = Booking.hotel_id'),
+						),
+						),
+		'conditions' =>array("Booking.hotel_id='$hotelId'","Booking.`status` = '$type'","Booking.from_date >= '$dfrom'" , "Booking.end_date <= '$dto'"),
+		'group'=>array("Booking.`status`"),		
+					
+		));
+		return $RoomStat;
+		
+	}
+	
+	function getRoomTotPrice($hotelId=NULL,$type=NULL,$dfrom=NULL,$dto=NULL){
+		$RoomStat=$this->Hotel->find('all',array(
+		'fields'=>array('Sum(Booking.estimated_price) AS R'),
+		'joins'=>array(
+						array(
+						'table' => 'bookings',
+                        'alias' => 'Booking',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Hotel.id = Booking.hotel_id'),
+						),
+						),
+		'conditions' =>array("Booking.hotel_id='$hotelId'","Booking.`status` = '$type'","Booking.from_date >= '$dfrom'" , "Booking.end_date <= '$dto'"),
+		'group'=>array("Booking.`status`"),		
+					
+		));
+		return $RoomStat;
+		
+	}
+	
+	function getTotRoom($hotelId=NULL)
+	{
+		$RoomTotRooms=$this->Hotel->find('all',array(
+		'fields'=>array('Sum(HotelsRoomCapacities.total_rooms) AS R'),
+		'joins'=>array(
+						array(
+						'table' => 'hotels_room_capacities',
+                        'alias' => 'HotelsRoomCapacities',
+                        'type'  => 'INNER',
+                        'foreignKey'    => false,
+                        'conditions'    => array('Hotel.id = HotelsRoomCapacities.hotel_id'),
+						),
+						),
+		'conditions' =>array("HotelsRoomCapacities.hotel_id='$hotelId'"),
+		'group'=>array("HotelsRoomCapacities.hotel_id"),		
+					
+		));
+		return $RoomTotRooms;
+
 	}
 }
 ?>

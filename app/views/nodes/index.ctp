@@ -29,18 +29,27 @@
 				</div>
 			</div>
 			<?php $path='';
-				 if(empty($value['HotelsPicture']['picture']))
+				 if(empty($value['Hotel']['logo']))
 					$path='no_photo.jpg';
 				  else
-				  	$path=$value['Hotel']['id']."/".$value['HotelsPicture']['picture'];
+				  	$path=$value['Hotel']['id']."/".$value['Hotel']['logo'];
 		    ?>
 			<?php ?>
 			<div class="imgbox"><img src="<?php echo $this->Html->webroot;?>uploads/hotels/<?=$path;?>" class="img" /></div>
         </div>
-		<div class="clr"></div>
+		
 	
 	<?php }?>
-	
-
-
+	<div class="clr"></div>
+	<!-- Shows the page numbers -->
+	<?php echo $paginator->numbers(); ?>
+	<!-- Shows the next and previous links -->
+	<?php
+		echo $paginator->prev('« Previous ', null, null, array('class' => 'disabled'));
+		echo $paginator->next(' Next »', null, null, array('class' => 'disabled'));
+	?> 
+	<!-- prints X of Y, where X is current page and Y is number of pages -->
+	<?php echo $paginator->counter(); ?>
+	<div class="clr"></div>
 </div> 
+

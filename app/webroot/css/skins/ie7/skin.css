@@ -69,12 +69,19 @@
  */
 .jcarousel-skin-ie7 .jcarousel-next-horizontal {
     position: absolute;
-    top: 43px;
-    right: 5px;
+/*    top: 43px;
+   
     width: 32px;
     height: 32px;
     cursor: pointer;
-    background: transparent url(next-horizontal.gif) no-repeat 0 0;
+    background: transparent url(next-horizontal.gif) no-repeat 0 0;*/
+	background: none repeat scroll 0 0 #538136;
+    cursor: pointer;
+    height: 140px;
+  	right: 5px;
+    position: absolute;
+    top: 21px;
+    width: 32px;
 }
 
 .jcarousel-skin-ie7 .jcarousel-direction-rtl .jcarousel-next-horizontal {
@@ -102,12 +109,19 @@
 
 .jcarousel-skin-ie7 .jcarousel-prev-horizontal {
     position: absolute;
-    top: 43px;
+    /*top: 43px;
     left: 5px;
     width: 32px;
     height: 32px;
+    
+    background: transparent url(prev-horizontal.gif) no-repeat 0 0;*/
+	background: none repeat scroll 0 0 #538136;
     cursor: pointer;
-    background: transparent url(prev-horizontal.gif) no-repeat 0 0;
+    height: 140px;
+    left: 5px;
+    position: absolute;
+    top: 21px;
+    width: 32px;
 }
 
 .jcarousel-skin-ie7 .jcarousel-direction-rtl .jcarousel-prev-horizontal {

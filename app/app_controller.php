@@ -156,7 +156,8 @@ class AppController extends Controller {
 	public function getSubdomain() {
 		$domain = parse_url($_SERVER['HTTP_HOST']);
 		$domain = explode('.',$domain['path']);
-		if(count($domain)==3 and !empty($domain[0])) {
+		
+		if(count($domain)==3 and !empty($domain[0]) and $domain[0] !="demo-hotelms") {
 		return $domain[0];
 		}
 		return '';
