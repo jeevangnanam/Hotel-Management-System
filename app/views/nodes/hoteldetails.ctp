@@ -78,13 +78,17 @@ function submitform(frm){
 	margin:5px;
 	color:#538136;
 	font-size:14px;
-	background:#CCC;
+	background:#E7E7E9;
 }
 .gallerystopic{
 	margin:1px 5px -8px;
 	color:#538136;
 	font-size:14px;
-	background:#CCC;
+	background:#E7E7E9;
+}
+.img {
+    height: 78px;
+    width: 276px;
 }
 </style>
 <?php

@@ -22,11 +22,12 @@
 				<div class="hotelphone"><span class="htllbl">Phone :</span><span class="htldet"><?=$value['Hotel']['phone'];?></span></div>
 				<div class="hotelweb"><span class="htllbl">Web :</span><span class="htldet"><?=$value['Hotel']['email'];?></span></div>
 				<div class="hotelweb"><span class="htllbl">Email :</span><span class="htldet"><?=$value['Hotel']['web'];?></span></div>
-				<div class="hotelweb"><span class="htllbl">&nbsp;</span><span class="htldet more">
+				<!--<div class="hotelweb"><span class="htllbl">&nbsp;</span><span class="htldet more">
 					<?=$this->Form->create(array('id'=>'htminf','class'=>'moreinfo','action'=>'/hoteldetails')); ?>
 					<?=$this->Form->input('hotelid',array('type'=>'hidden','label'=>'','value'=>$value['Hotel']['id']));?>
-				 	<?php echo $this->Form->end('More Details...'); ?></span>
-				</div>
+				 	<?php echo $this->Form->end('More Details...'); ?>
+					</span>
+				</div>-->
 			</div>
 			<?php $path='';
 				 if(empty($value['Hotel']['logo']))
@@ -35,7 +36,16 @@
 				  	$path=$value['Hotel']['id']."/".$value['Hotel']['logo'];
 		    ?>
 			<?php ?>
-			<div class="imgbox"><img src="<?php echo $this->Html->webroot;?>uploads/hotels/<?=$path;?>" class="img" /></div>
+			<div class="imgbox">
+			<img src="<?php echo $this->Html->webroot;?>uploads/hotels/<?=$path;?>" class="img" />
+			<div class="clr"></div>
+			<div class="moredets">
+					<?=$this->Form->create(array('id'=>'htminf','class'=>'moreinfo','action'=>'/hoteldetails')); ?>
+					<?=$this->Form->input('hotelid',array('type'=>'hidden','label'=>'','value'=>$value['Hotel']['id']));?>
+				 	<?php echo $this->Form->end('More Details...'); ?>
+			</div>
+			</div>
+			
         </div>
 		
 	
