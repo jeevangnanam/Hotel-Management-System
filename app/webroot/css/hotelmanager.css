@@ -11,7 +11,9 @@
 }
 .holelList{
 	float:left;
-	width:35%;
+	width:50%;
+	font-size:16px;
+	
 }
 .roomtypediv{
 	float:left;

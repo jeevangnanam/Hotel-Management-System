@@ -37,7 +37,7 @@
 	font-size:14px;
 	color:#FFFFFF;
 	cursor:pointer;
-	font-style:italic;
+	font-style:normal;
 }
 .normalbtn{
 	float:right;
@@ -66,24 +66,26 @@
 	margin:5px 0;
 }
 .img{
-	width:150px;
-	height:150px;
+	/*padding-top:20px;*/
+	width:182px;
+	height:48px;
+	
 }
 .hoteldets{
 	padding-left:10px;
 	float:left;
-	width:73%;
+	width:68%;
 	height:30px;
 	background:#F7FAF6;
 }
 .hotelname{
 	color:#72A946;
 	font-size:15px;
-	/*border-bottom:1px dashed #72A946;*/
-	background:#C0C0C0;
+	/*border-bottom:1px dashed #72A946;font-style:oblique;*/
+	background:#E7E7E9;
 	margin-left:-8px;
 	padding-left:5px;
-	font-style:oblique;
+	
 }
 .hoteladdress,.hotelphone,.hotelweb{
 	color:#72A946;
@@ -92,7 +94,7 @@
 }
 .imgbox{
 	float:left;
-	width:25%;
+	width:30%;
 	height:150px;
 }
 .htllbl{
@@ -105,6 +107,9 @@
 }
 .more{
 	 text-align: right;
+}
+.moredets{
+	margin-top:60px;
 }
 .moreinfo div input{
 	background: none repeat scroll 0 0 transparent;
