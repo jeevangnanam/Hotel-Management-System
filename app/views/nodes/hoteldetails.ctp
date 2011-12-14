@@ -90,6 +90,13 @@ function submitform(frm){
     height: 78px;
     width: 276px;
 }
+.cap{
+	color:#538136;
+	border:dashed 1px #538136;
+}
+.roomtypedes{
+	border:dashed 1px #538136;
+}
 </style>
 <?php
 	foreach($hoteldets as $key=>$value){ ?>
@@ -241,15 +248,17 @@ function loadfancybox(obj) {
 	<div id="popupContact" class="popupContact">
 		<a id="popupContactClose"><?=$html->image('/img/icons/close.png',array('width'=>'20px'));?></a>
 		
-        <div style="" id="cap"><h1>Room Details</h1></div>
+        <div style="" class="cap">Room Details</div>
         <div class="clr"></div>
         
 		<p id="contactArea" class="contactArea">
 		<div class="searchformdet">
         	<?=$this->Form->create('Nodes', array('type' => 'post','id'=>'frm','action' => '/stepone/'));?>
-        	<div class="lbl">Room Types</div>
-            <div class="lbl">Date From</div>
+            <div style="background:#F7F7F7;height: 20px;width: 300px;">
+        	<div class="lbl" style="width:120px;">Room Types</div>
+            <div class="lbl" style="width:80px;">Date From</div>
             <div class="lbl">Data To</div>
+            </div>
             <div class="clr"></div>
             <div class="lbl">
 				<?=$this->Form->input('roomtypes', array('type'=>'select','options'=>$roomopt ,'empty'=>'','class'=>'cmb','label'=>'','id'=>'roomtypes'));?>
