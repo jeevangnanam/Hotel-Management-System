@@ -278,9 +278,7 @@ class UsersController extends AppController {
     }
 
     public function login() {
-        $this->set('title_for_layout', __('Log in', true));
-        
-        
+        $this->set('title_for_layout', __('Log in', true)); 
     }
 
     public function logout() {

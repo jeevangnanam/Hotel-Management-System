@@ -35,7 +35,7 @@ class NodesController extends AppController {
  * @access public
  */
     public $uses = array(
-        'Node','Hotel','HotelsPicture','Users','HotelsRoomType','HotelsRoomCapacities','Booking','Coupon','HotelsCategoryList'
+        'Node','Hotel','HotelsPicture','Users','HotelsRoomType','HotelsRoomCapacities','Booking','Coupon','HotelsCategoryList','User'
     );
     
 	
@@ -735,6 +735,11 @@ class NodesController extends AppController {
 	/* booking steps */
 	/* booking step one */
 	function stepone(){
+		//debug($this->Auth->user('id'));
+		/*if(!$this->Auth->isAuthorized()){
+			$this->redirect("/users/login/");
+			//die('hi');
+		}*/
 	$domain=$this->getSubdomain();
        if(!empty($domain)){
         $this->setLogo($domain);
@@ -840,7 +845,8 @@ class NodesController extends AppController {
 		$p=$det[0]['HotelsRoomType']['price'];
 		
 		$estimated_price=((($nofr*$p)+($aacp*$aac)+($accp*$acc))*$noofdays)*((100-$cd)/100);
-		$this->data['Booking']['user_id'] = '2';
+		$user=$this->Auth->user('id');
+		$this->data['Booking']['user_id'] = $user;
 		$this->data['Booking']['hotel_id'] = $this->Session->read('hotelId');
         $this->data['Booking']['room_type_id'] = $this->params['data']['Nodes']['room_type'];
         $this->data['Booking']['from_date'] = $this->params['data']['Nodes']['dateFrom']; 
@@ -852,7 +858,19 @@ class NodesController extends AppController {
         $this->data['Booking']['status'] = "PROCESSING";
          
         if($this->Booking->save($this->data)){
+        	 $username=$this->User->find('all',array(
+        	 'fields'=>array('User.first_name,User.last_name,User.email'),
+        	 'conditions'=>array("User.id ='$user'"),
+        	 ));
+        	 $this->data['Booking']['username']=$username[0]['User']['first_name']." ".$username[0]['User']['last_name'] ;
+        	 $this->data['Booking']['email']=$username[0]['User']['email'];
+        	 /*$manageremail=$username=$this->User->find('all',array(
+        	 'fields'=>array('User.first_name,User.last_name,User.email'),
+        	 'joins'=>array(
         	 
+        	 ),
+        	 'conditions'=>array("User.id ='$user'"),
+        	 ));*/
 		$this->_sendNewUserMail( $this->data);
         	
         }
@@ -872,10 +890,10 @@ class NodesController extends AppController {
 	function _sendNewUserMail($data) {
 		
 	   // $User = $this->User->read(null,$id);
-	    $this->Email->to = 'ssk8323@gmail.com';
-	    $this->Email->bcc = array('ssk8323@yahoo.co.in');  
+	    $this->Email->to = $data['Booking']['email'];
+	    $this->Email->bcc = array($data['Booking']['email']);  
 	    $this->Email->subject = 'Welcome to our really cool thing';
-	    $this->Email->replyTo = 'ssk8323@gmail.com';
+	    $this->Email->replyTo = 'lasantha@loooops.com';
 	    $this->Email->from = 'Cool Web App <lasantha@loooops.com>';
 	    $this->Email->template = 'simple_message'; // note no '.ctp'
 	    //Send as 'html', 'text' or 'both' (default is 'text')
