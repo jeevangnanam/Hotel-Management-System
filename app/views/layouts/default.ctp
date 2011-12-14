@@ -136,7 +136,7 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
   </div>
   <div class="footer">
     <div class="footer_resize">
-      <p class="lf">&copy; Copyright <a href="#">MyWebSite</a>. Layout by [Z] <a href="http://www.freewebsitetemplatez.com/">Website Templates</a></p>
+      <p class="lf">&copy; Copyright <a href="#">Loooops Selects</a><!--. Layout by [Z] <a href="http://www.freewebsitetemplatez.com/">Website Templates</a>--></p>
       <ul class="fmenu">
         <li class="active"><a href="index.html">Home</a></li>
         <li><a href="support.html">Support</a></li>
