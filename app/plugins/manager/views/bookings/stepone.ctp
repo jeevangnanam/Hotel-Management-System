@@ -142,7 +142,7 @@ $coupon=$value['Coupon']['reduce_percentage'];
             <div class="inactiveArrow"></div>
 	      </div>
 	      <div id="step3" class="inactiveDiv">        	
-            <div class="stepFont">Step Three : Paymants</div>
+            <div class="stepFont">Step Three : Ticket</div>
             <div class="inactiveArrow"></div>
 	      </div>
 	      <div id="step4" class="inactiveDiv">

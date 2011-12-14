@@ -39,6 +39,11 @@
     margin-right: 10px;
     width: 90px;
 }
+.holelList {
+    float: left;
+    font-size: 16px;
+    width: 35%;
+}
 </style>
 <script>
 
@@ -46,8 +51,9 @@
  $(document).ready(function(){ 
 
  
-	$('.hotelLinks').click(function() {
-		var hotelid=this.id;
+	//$('.hotelLinks').click(function() {
+		//var hotelid=this.id;
+		var hotelid=<?=$hotelid; ?>;
 		$('#rt').load('/manager/Index/setroomtypes/'+hotelid);
   		/*
 			$.post("/manager/Index/setroomtypes/", { hotelid: hotelid},
@@ -56,7 +62,7 @@
 			 alert(data);
 			  
 		   });*/
-	});
+	//});
 	
 	
 }
@@ -79,7 +85,9 @@ function showRoomSearch(obj){
 		document.getElementById("roomtypesearch"+rtid).innerHTML=htm;
 }
 function getRoomtypes(obj){
+	
     var rtid=$(obj).attr('id');
+	$('#book'+rtid).val(0);
 	var dateFrom=$("#dateFrom"+rtid).val();
 	var dateTo=$("#dateTo"+rtid).val();
 	if(dateFrom==""){
@@ -137,29 +145,26 @@ function loadbookings(obj,hotelId,rtId){
 <div class="container">
 	
 	<div class="holelList">
-   	 	<h2>Hotels </h2>
+   	 	<h2>Hotel </h2>
     	
         	<?php foreach($getHotels as $key=>$value){ ?>
             <div class="dv">
-            <div class="hlink"><?=$this->Html->link($value['Hotel']['name'], '#', array('class' => 'hotelLinks','id'=>$value['Hotel']['id'])); ?></div>
+            <div class="hlink"><?=$value['Hotel']['name']; ?></div>
+            
             <div class="btn" align="center">
 			<?php echo $this->Form->create('',array("action" => "/stathome/".$value['Hotel']['id'] ));?>
 			<?=$this->Form->end('Booking Info');?>
             </div>
-            <div class="btn" align="center">
-			<?=$this->Form->create('',array("action" => "/bookingindex/" ));?>
-            <?=$this->Form->input('hotelid',array('type'=>'hidden','value'=>$value['Hotel']['id']));?>
-			<?=$this->Form->end('Booking');?></div>
             </div>
             <?php }?>
         
     </div>
-   <!-- <div class="roomTypes">
+    <div class="roomTypes">
     	<h2>Room Types </h2>
         <div id='rt'>
         
         </div>
-    </div>-->
+    </div>
 </div>
 	<div id="popupContact">
 		<a id="popupContactClose"><?=$html->image('/img/icons/close.png',array('width'=>'20px'));?></a>

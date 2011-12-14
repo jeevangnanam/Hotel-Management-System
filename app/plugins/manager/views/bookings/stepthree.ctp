@@ -47,21 +47,46 @@
 	
 }
 .detailLables{
-	width:auto;
+	width:100px;
 	height:20px;
 	float:left;
 }
 .detailFields{
-	width:auto;
+	width:200px;
 	height:20px;
 	float:left;
 }
+.welcomenote{
+	margin:0 0 5px 5px;
+	width:210px;
+	height:20px;
+	float:left;
+	color:#538136;
+	font-size:16px;
+}
+.thanks{
+	margin:0 0 5px 5px;
+	width:210px;
+	height:20px;
+	float:left;
+	color:#538136;
+	font-size:12px;
+}
+.ticket{
+	margin:0 0 5px 5px;
+	width:310px;
+	height:20px;
+	float:left;
+	color:#538136;
+	font-size:12px;	
+}
 </style>
 <?php
-$hotelName=$roomType=$maxAdults=$maxChildren=$additionalAdultCharge=$additionalChildCharge='';
+$hotelName=$roomType=$maxAdults=$maxChildren=$additionalAdultCharge=$additionalChildCharge=$usename='';
 foreach($dets as $key=>$value){
 $hotelName = $value['Hotel']['name'];
 $roomType  = $value['HotelsRoomType']['name'];
+$usename   = $value['User']['first_name']." ".$value['User']['last_name'];
 }
 
 ?>
@@ -96,25 +121,29 @@ $roomType  = $value['HotelsRoomType']['name'];
 
  
 <div style="width:500px;margin:50px 150px;">
+	<div class="ticket" align="right"><span> Ticket No. :<?=$rID;?></span></div>
+    <div class="clr"></div>
+	<div class="welcomenote" align="center">Welecome to <?=$hotelName;?></div>
 	<div class="clr"></div>
-    <div class="detailLables">Hotel Name :</div>
-    <div class="detailFields"><?=$hotelName;?></div>
+    <div class="detailLables">Customer Name :</div>
+    <div class="detailFields"><?=$usename;?></div>
 	<div class="clr"></div>
-	<div class="detailLables">Room Type</div>
+	<div class="detailLables">Room Type :</div>
 	<div class="detailFields"><?=$roomType;?></div>
 	<div class="clr"></div>
-	<div class="detailLables">Date From</div>
+	<div class="detailLables">Date From :</div>
 	<div class="detailFields"><?=$dFrom;?></div>
 	<div class="clr"></div>
-	<div class="detailLables">Date To</div>
+	<div class="detailLables">Date To :</div>
 	<div class="detailFields"><?=$dTo;?></div>
 	<div class="clr"></div>
-	<div class="detailLables">Duration</div>
+	<div class="detailLables">Duration :</div>
 	<div class="detailFields"><?=$noofdays;?> Day(s)</div>
 	<div class="clr"></div>
-	<div class="detailLables">Total Amount</div>
+	<div class="detailLables">Total Amount :</div>
 	<div class="detailFields"><?=$estimated_price;?></div>
 	<div class="clr"></div>
+    <div class="thanks" align="center"><span >Thank you!</span></div>
 
  
 </div>

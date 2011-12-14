@@ -135,7 +135,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
             <div class="activeArrow"></div>
 	      </div>
 	      <div id="step3" class="inactiveDiv">        	
-            <div class="stepFont">Step Three : Paymants</div>
+            <div class="stepFont">Step Three : Ticket</div>
             <div class="inactiveArrow"></div>
 	      </div>
 	      <div id="step4" class="inactiveDiv">
@@ -196,7 +196,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 	<div class="detailFields"><?=$couponDeduction;?><?=$this->Form->input('Booking.coupondeduction',array('type'=>'hidden','value'=>$cd))?><?=$this->Form->input('Booking.couponid',array('type'=>'hidden','value'=>$cid))?></div>
 	<div class="clr"></div>
 	<div class="detailLables">Total Price</div>
-    <?php $total=(($price*$noOfSelectedRooms)+$addC+$addAd)-$couponDeduction; ?>
+    <?php $total=((($price*$noOfSelectedRooms)+$addC+$addAd)*$days)-$couponDeduction; ?>
 	<div class="detailFields"><?=$total?><?=$this->Form->input('Booking.total',array('type'=>'hidden','value'=>$total))?></div>
     <div class="clr"></div>
 <?=$this->Form->end('Submit');?>

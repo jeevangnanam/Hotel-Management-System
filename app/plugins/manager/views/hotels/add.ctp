@@ -206,6 +206,7 @@
 		<div style="clear:both;"></div>
 		<div style="float:left;width:100px;">Contactperson :</div>
 		<div style="float:left;">	
+		<?php //debug($contactperson); ?>
 		    <?=$this->Form->input('Hotel.contactperson',array('options'=>$contactperson, 'label'=>'', 'empty'=>''));?>
 		</div>
 		<div style="clear:both;"></div>
