@@ -131,11 +131,17 @@ class BookingsController extends ManagerAppController{
         $this->data['Booking']['estimated_price'] = $estimated_price;
         $this->data['Booking']['coupon_id'] = $this->params['data']['Booking']['couponid']; 
         $this->data['Booking']['notes'] = 'n';
-        $this->data['Booking']['status'] = "PROCESSING";
-         
+        $this->data['Booking']['status'] = "APPROVED";
+       /* debug($this->Session);
+        die();
+         if(isset($this->Session)){
+         	$this->Session->setFlash(__('Ticket already generated,please go back to home and start gain,thank you.', true));
+         }*/
         if($this->Booking->save($this->data)){
+        	$rID=$this->Booking->getInsertID();
+        	$this->Session->write('ticket',$rID);
         	$dets=$this->Hotel->find('all', array(
-        			   		'fields'=>array('DISTINCT Hotel.`name`','HotelsRoomType.`name`'),
+        			   		'fields'=>array('DISTINCT Hotel.`name`','HotelsRoomType.`name`','User.first_name','User.last_name'),
         					'joins'=>array(
         					array(
 			                        'table' => 'bookings',
@@ -151,13 +157,20 @@ class BookingsController extends ManagerAppController{
 			                        'foreignKey'    => false,
 			                        'conditions'    => array('HotelsRoomType.hotel_id = Booking.hotel_id AND HotelsRoomType.id=Booking.room_type_id'),
 			                        ),
-        					
+        					array(
+			                        'table' => 'users',
+			                        'alias' => 'User',
+			                        'type'  => 'INNER',
+			                        'foreignKey'    => false,
+			                        'conditions'    => array('User.id = Booking.user_id'),
+			                        ),
         					),
         					'conditions'=>array("Booking.hotel_id=$hotel AND HotelsRoomType.id=$rtype"),
         			   )
         		);
         			   
-        	$this->set(compact('dets','dFrom','dTo','noofdays','estimated_price'));
+        	$this->set(compact('dets','dFrom','dTo','noofdays','estimated_price','rID'));
+        
         	
         }
         else{

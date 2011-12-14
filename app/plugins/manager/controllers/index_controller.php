@@ -14,11 +14,21 @@ class IndexController extends ManagerAppController{
         $this->Auth->loginRedirect = array( 'controller' => 'index', 'action' => 'index');
     }
     function index(){
-        
+        $hotelId='';
        //$this->Auth->user('id');
        $ses=$this -> Session -> read();
        $userid=$ses['Auth']['User']['id'];
-       $getHotels=$this->getHotels($userid);
+       $getHotels=$this->getHotels($userid,$hotelId);
+       $this->set(compact('getHotels'));
+       
+    }
+    
+    function bookingindex(){
+       $ses=$this -> Session -> read();
+       $userid=$ses['Auth']['User']['id'];
+       $hotelId=$this->data['Hotel']['hotelid'];     
+       $getHotels=$this->getHotels($userid,$hotelId);
+       $this->set('hotelid',$hotelId);
        $this->set(compact('getHotels'));
        
     }
@@ -40,7 +50,12 @@ class IndexController extends ManagerAppController{
 		
 	}
 	
-	function getHotels($userid=NULL){
+	function getHotels($userid=NULL,$hotelId=NULL){
+		$ht='';
+		if(!empty($hotelId)){
+			$ht=" AND Hotel.id=$hotelId";
+		}
+		
 		$hotels=$this->Hotel->find('all',array(			
 			 'fields' => array(
      				'Hotel.id',
@@ -63,7 +78,7 @@ class IndexController extends ManagerAppController{
                     ),
 		 	
 		  	),
-		  	'conditions' =>array("User.id=$userid" ),
+		  	'conditions' =>array("User.id=$userid $ht"),
 		  )
 		);
 		return $hotels;
@@ -91,7 +106,7 @@ class IndexController extends ManagerAppController{
 			$res.="<div class=\"roomtype\">".$value['HotelsRoomType']['name']."</div>";
 			$res.="<div class=\"roomtypesearch\" onclick='showRoomSearch(this)'  id=\"". $value['HotelsRoomType']['id']."\"></div>";
 			$res.="<div class=\"roomdests\" onclick=\"loadPopUp('".$value['HotelsRoomType']['id']."');\"></div>";
-			$res.="<div class=\"roomcap\" align=\"center\"><input type=\"text\" value=\"0\" id=\"book".$value['HotelsRoomType']['id']."\" name=\"data[bookings][nsr]\"/></div>";
+			$res.="<div class=\"roomcap\" align=\"center\"><input type=\"text\" value=\"0\" id=\"book".$value['HotelsRoomType']['id']."\" name=\"data[bookings][nsr]\" readonly=\"readonly\"/></div>";
 			$res.="<input type=\"hidden\" value=\"".$value['HotelsRoomType']['id']."\" id=\"rtype".$value['HotelsRoomType']['id']."\" name=\"data[bookings][roomtype]\"/></div>";		
 			$res.="<div class=\"clr\"></div>";	
 			$res.="<div class=\"roomtypesearch".$value['HotelsRoomType']['id']."\"  id=\"roomtypesearch". $value['HotelsRoomType']['id']."\"></div>";

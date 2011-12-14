@@ -5,7 +5,7 @@ class HotelsController extends ManagerAppController {
     var $name = 'Hotels';
     var $components = array('upload','Autocomplete');
     var $helpers = array('Html', 'Javascript', 'Ajax');
-	var $uses = array('Hotel','HotelsManager','HotelsPicture','HotelsRoomCapacity','HotelsRoomType','HotelsCategoryList');
+	var $uses = array('Hotel','HotelsManager','HotelsPicture','HotelsRoomCapacity','HotelsRoomType','HotelsCategoryList','User');
     //public $uses = array('User');
     function beforeFilter() {
 
@@ -76,7 +76,7 @@ class HotelsController extends ManagerAppController {
 
             $this->Hotel->create();
 
-            //debug($this->Hotel);
+           
 
             if (isset($this->data['Hotel']['name'])) {
             	$imgName='';
@@ -84,7 +84,7 @@ class HotelsController extends ManagerAppController {
 					
 						if(!empty($this->data['Hotel']['logo']['name'])){
 								
-								$uploadPath = "webroot\uploads\hotels\\";
+								$uploadPath = "webroot/uploads/hotels//";
 								$root=APP; 
 								$hotelId=$this->Session->read('eid');
 								$tmpName=$this->data['Hotel']['logo']['tmp_name'];
@@ -92,8 +92,12 @@ class HotelsController extends ManagerAppController {
 								$this->data['Hotel']['logo']=$this->data['Hotel']['logo']['name'];
 								
 						}
+						else {
+							$this->data['Hotel']['logo']='';
+						}
             		}
-            		
+					/*debug($this->data);
+					die();*/
                 if ($this->Hotel->save($this->data)) {
                     $this->Session->write("id", $this->Hotel->getInsertID());
                     $hotelId=$this->Hotel->getInsertID();
@@ -107,6 +111,11 @@ class HotelsController extends ManagerAppController {
 			             				
 			                	
 								}
+					$this->data['HotelsManager']['hotel_id']=$hotelId;
+					$this->data['HotelsManager']['user_id']=$this->data['Hotel']['contactperson'];
+					if($this->HotelsManager->save($this->data)){
+						
+					}
                     $this->Session->setFlash(__('The hotel has been saved', true));
 
                     $this->set('tab', '1');
@@ -123,7 +132,7 @@ class HotelsController extends ManagerAppController {
 
                 // $this->upload->data = $this->data;
                 //$root = "D:\webroot\HotelMS\app\webroot";
-                $uploadPath = "webroot\uploads\hotels\\";
+                $uploadPath = "webroot/uploads/hotels/";
                 $id = $this->Session->read("id");
 				$root=APP; 
 				
@@ -223,24 +232,18 @@ class HotelsController extends ManagerAppController {
         }
 
         //$contactperson = $this->HotelsManager->find('all');
-        $contactperson = $this->HotelsManager->find('all', array(
+        $contactperson = $this->User->find('all', array(
                 'fields' => array(
         			'DISTINCT User.id',
-        			'User.`name`'),
-                'joins' => array(
-                    array(
-                        'table' => 'users',
-                        'alias' => 'User',
-                        'type'  => 'INNER',
-                        'foreignKey'    => false,
-                        'conditions'    => array('User.id = HotelsManager.user_id'),
-                        ),
-                ),
+        			'User.`first_name`'),
+                'conditions'=>array('User.role_id=2'),
             )
         );
+
+        
     	$contact=array();
 	      foreach ($contactperson as $key=>$value){
-	      	$contact[$value['User']['id']]=$value['User']['name'];
+	      	$contact[$value['User']['id']]=$value['User']['first_name'];
 	      
 	      }
        
@@ -457,7 +460,7 @@ class HotelsController extends ManagerAppController {
 					
 						if(!empty($this->data['Hotel']['logo']['name'])){
 								
-								$uploadPath = "webroot\uploads\hotels\\";
+								$uploadPath = "webroot/uploads/hotels//";
 								$root=APP; 
 								$hotelId=$this->Session->read('eid');
 								$tmpName=$this->data['Hotel']['logo']['tmp_name'];
@@ -515,7 +518,7 @@ class HotelsController extends ManagerAppController {
 		   if($this->data['Hotel']['act']=='uploadNewImage' ){
 			  	$this->Hotel->create();	  
 				if (isset($this->data['HotelsPicture']['picture']['name'])) {
-				 $uploadPath = "webroot\uploads\hotels\\";
+				 $uploadPath = "webroot/uploads/hotels//";
 				 $root=APP; 
 				 $hotelId=$this->Session->read('eid');
 				 $tmpName=$this->data['HotelsPicture']['picture']['tmp_name'];
