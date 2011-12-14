@@ -37,7 +37,7 @@ class IndexController extends ManagerAppController{
             $this->layout = "limejungle_manger_login";
           
            if($this->Auth->isAuthorized()){
-                $this->redirect("/manager/index/dashboard");
+                $this->redirect("/manager/index/");
            }
 	}
  	function dashboard(){}
