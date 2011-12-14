@@ -93,11 +93,11 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
       <div class="clr"></div>
       <div class="menu_nav">
         <ul>
-          <li class="active"><a href="index.html">Home</a></li>
-          <li><a href="support.html">Users</a></li>
-          <li><a href="about.html">HotelManagers</a></li>
-          <li><a href="blog.html">Promotions</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
+          <li class="active"><a href="index">Home</a></li>
+          <li><a href="support">Users</a></li>
+          <li><a href="about">HotelManagers</a></li>
+          <li><a href="blog">Promotions</a></li>
+          <li><a href="contact">Contact Us</a></li>
         </ul>
         <div class="searchform">
           <form id="formsearch" name="formsearch" method="post" action="">
