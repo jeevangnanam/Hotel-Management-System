@@ -100,32 +100,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 <div class="clr"></div>
 <?=$this->Form->create('Bookings', array('controller'=>'bookings' ,'action' => '/steptwo/','type' => 'post','id'=>'cupon_check'));?>
  
-<div style="width:500px;margin:50px 150px;">
-	<div class="clr"></div>
-	<div class="detailLables">Room Type</div>
-	<div class="detailFields"><?=$roomType;?></div>
-	<div class="clr"></div>
-	<div class="detailLables">Date From</div>
-	<div class="detailFields"><?=$fromDate;?></div>
-	<div class="clr"></div>
-	<div class="detailLables">Date To</div>
-	<div class="detailFields"><?=$toDate;?></div>
-	<div class="clr"></div>
-	<div class="detailLables">Max Adults</div>
-	<div class="detailFields"><?=$maxAdults;?></div>
-	<div class="clr"></div>
-	<div class="detailLables">Max Children</div>
-	<div class="detailFields"><?=$maxChildren;?></div>
-	<div class="clr"></div>
-	<div class="detailLables">Max Adult Charge</div>
-	<div class="detailFields"><?=$additionalAdultCharge;?></div>
-	<div class="clr"></div>
-	<div class="detailLables">Max Child Charge</div>
-	<div class="detailFields"><?=$additionalChildCharge;?></div>
-	<div class="clr"></div>
-	<div class="detailLables">No of Selected Rooms</div>
-	<div class="detailFields"><?=$nsr;?></div>
-	<div class="clr"></div>
+<?php debug($data);?>
 <?=$this->Form->end('Submit');?>
  
 </div>

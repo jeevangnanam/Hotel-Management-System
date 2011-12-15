@@ -105,7 +105,55 @@
 	text-align:center;
 	margin-left: 325px;
 }
+#BookingName,#BookingEmail {
+	height: 14px;
+    width: 350px;
+}
+#BookingContactno{
+	height: 14px;
+    width: 100px !important;
+}
+.submitbtn {
+    background: url("/img/icons/book_bg.png") repeat-x scroll 0 0 transparent;
+    color: #FFFFFF;
+    cursor: pointer;
+    float: left;
+    height: 20px;
+    margin-left: 325px;
+    text-align: center;
+    width: 58px;
+}
+.submit{
+	display:none;
+}
+.msg{
+	margin-left:350px;
+	color:#F00;
+}
 </style>
+<script>
+ function submitform(){
+	 var chk=0;
+	 var flow='<ul>';
+	 if($('#BookingName').val()==''){
+		 flow+='<li>*Please enter your name.</li>';
+		 chk=1;
+	 }
+	 if($('#BookingEmail').val()==''){
+		 flow+='<li>*Please enter your email.</li>';
+		  chk=1;
+	 }
+	 if($('#BookingContactno').val()==''){
+		flow+='<li>*Please enter your contact number.</li>';		
+		 chk=1;
+	 }
+	 flow+='</ul>';
+	 $('.msg').html(flow);
+	 if(chk==0){
+		 $('#cupon_check').submit();
+	 }
+ }
+</script>
 <?php
 
 $hotelName=$roomType=$roomTypeId=$price=$maxAdults=$maxChildren=$additionalAdultCharge=$additionalChildCharge='';
@@ -179,9 +227,13 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 	<div class="detailFields"><?=$addC;?><?=$this->Form->input('maxchildren',array('type'=>'hidden','value'=>$additionalChildren))?></div>
 	<div class="clr"></div>
     <?php 
-		$date1 = $dateFrom;
+		/*$date1 = $dateFrom;
 		$date2 = $dateTo;
 		
+   $dateDiff    = $date1 - $date2;
+   
+   echo "Differernce is $fullDays days, $fullHours hours and $fullMinutes minutes.";   
+
 		$diff = abs(strtotime($date2) - strtotime($date1));
 		
 		$years = floor($diff / (365*60*60*24));
@@ -192,7 +244,15 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 		else{
 			$months = floor(($diff -   365*60*60*24) / (30*60*60*24));
 			$days = floor(($diff -  365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
-		}
+		}*/
+		$date1 = $dateFrom;
+		$date2 = $dateTo;
+		
+		$diff = abs(strtotime($date2) - strtotime($date1));
+		
+		$years = floor($diff / (365*60*60*24));
+		$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+		$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
 	?>
     <div class="detailLables">Cost for <?=$days;?> day(s)  <?=(($price*$noOfSelectedRooms)+$addC+$addAd);?>*<?=$days;?></div>
 	<div class="detailFields"><?=(($price*$noOfSelectedRooms)+$addC+$addAd)*$days;?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>$days))?></div>
@@ -206,6 +266,18 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
     <?php $total=((($price*$noOfSelectedRooms)+$addC+$addAd)*$days)-$couponDeduction; ?>
 	<div class="detailFields"><?=$total?><?=$this->Form->input('total',array('type'=>'hidden','value'=>$total))?></div>
     <div class="clr"></div>
+    <div class="msg"></div>
+    <div class="clr"></div>
+    <div class="detailLables">Enter Your Name</div>
+	<div class="detailFields"><?=$this->Form->input('Booking.name',array('type'=>'text','value'=>'','class'=>'BookingName','label'=>''))?></div>
+    <div class="clr"></div>
+    <div class="detailLables">Enter Your Email</div>
+	<div class="detailFields"><?=$this->Form->input('Booking.email',array('type'=>'text','value'=>'','class'=>'BookingEmail','label'=>''))?></div>
+    <div class="clr"></div>
+    <div class="detailLables">Enter Your Contact Number</div>
+	<div class="detailFields"><?=$this->Form->input('Booking.contactno',array('type'=>'text','value'=>'','class'=>'BookingContact','label'=>''))?></div>
+    <div class="clr"></div>
+    <?=$this->Form->button('Submit',array('onclick'=>'submitform()','type'=>'button','class'=>"submitbtn"));?>
 <?=$this->Form->end('Submit');?>
  
 </div>

@@ -61,6 +61,33 @@
 
 ?>
 <div class="container">
+<div class="clr"></div>
+<div class="cap">Hotel Name : <?=$hotelName;?></div>
+<div class="clr"></div>
+<div>
+      <div id="step1" class="inactiveDiv">
+      	 <div class="stepFont">Step One : Details</div>
+         <div id="s1Arrow" class="inactiveArrow"></div>
+        </div>
+      
+	      <div id="step2" class="inactiveDiv">
+        	<div class="stepFont">Step Two : Book</div>
+            <div class="inactiveArrow"></div>
+	      </div>
+	      <div id="step3" class="activeDiv">        	
+            <div class="stepFont">Step Three : Paymants</div>
+            <div class="activeArrow"></div>
+	      </div>
+	      <div id="step4" class="inactiveDiv">
+            <div class="stepFont">Step 4</div>
+            <div class="inactiveArrow"></div>
+        	
+	      </div>
+	      <div id="step5" class="inactiveDiv">
+        	<div class="stepFont">Step 5</div>
+            <div class="inactiveArrow"></div>	
+	      </div>
+</div>
 
-
+<h1>Thank you !</h1>
 </div>

@@ -19,7 +19,8 @@ function loadPopup(str){
 		$("#backgroundPopup").fadeIn("slow");
 		$("#popupContact").fadeIn("slow");
 		popupStatus = 1;
-		$("#cap").html(str);
+		
+		$(".cap").html(str);
 	}
 }
 
@@ -30,7 +31,9 @@ function disablePopup(){
 		$("#backgroundPopup").fadeOut("slow");
 		$("#popupContact").fadeOut("slow");
 		popupStatus = 0;
+		
 	}
+	
 }
 
 //centering popup

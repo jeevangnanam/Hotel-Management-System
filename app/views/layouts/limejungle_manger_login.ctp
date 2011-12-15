@@ -61,15 +61,7 @@
       </div>
       <div class="sidebar">
         <div class="gadget">
-          <h2 class="star"><span>Help topics</span></h2><div class="clr"></div>
-          <ul class="sb_menu">
-            <li><a href="#">Who can register?</a></li>
-            <li><a href="#">Registration faq</a></li>
-            <li><a href="#">Quick contact regarding registration</a></li>
-            <li><a href="#">Travel blog</a></li>
-            <li><a href="#">Tourism stats</a></li>
-            <li><a href="http://www.dreamtemplate.com/">Customer testimonials</a></li>
-          </ul>
+          
         </div>
       </div>
       <div class="clr"></div>
@@ -77,39 +69,19 @@
   </div>
 
   <div class="fbg">
-    <div class="fbg_resize">
-      <div class="col c1">
-        <h2><span>Image Gallery</span></h2>
-        <a href="#"><img src="/templates/limejungle/images/pix1.jpg" width="58" height="58" alt="pix" /></a>
-        <a href="#"><img src="/templates/limejungle/images/pix2.jpg" width="58" height="58" alt="pix" /></a>
-        <a href="#"><img src="/templates/limejungle/images/pix3.jpg" width="58" height="58" alt="pix" /></a>
-        <a href="#"><img src="/templates/limejungle/images/pix4.jpg" width="58" height="58" alt="pix" /></a>
-        <a href="#"><img src="/templates/limejungle/images/pix5.jpg" width="58" height="58" alt="pix" /></a>
-        <a href="#"><img src="/templates/limejungle/images/pix6.jpg" width="58" height="58" alt="pix" /></a>
-      </div>
-      <div class="col c2">
-        <h2><span>Lorem Ipsum</span></h2>
-        <p>Lorem ipsum dolor<br />Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec libero. Suspendisse bibendum. Cras id urna. <a href="#">Morbi tincidunt, orci ac convallis aliquam</a>, lectus turpis varius lorem, eu posuere nunc justo tempus leo. Donec mattis, purus nec placerat bibendum, dui pede condimentum odio, ac blandit ante orci ut diam.</p>
-      </div>
-      <div class="col c3">
-        <h2><span>Contact</span></h2>
-        <p>Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue.</p>
-        <p><a href="mailto:support@yoursite.com">support@yoursite.com</a></p>
-        <p>+1 (123) 444-5677<br />+1 (123) 444-5678</p>
-        <p>Address: 123 TemplateAccess Rd1</p>
-      </div>
-      <div class="clr"></div>
+    
+      <div class="clr">&nbsp;</div>
     </div>
   </div>
   <div class="footer">
     <div class="footer_resize">
-      <p class="lf">&copy; Copyright <a href="#">Loooops 2011</a><a href="http://www.freewebsitetemplatez.com/"></a></p>
+      <p class="lf">&copy; Copyright <a href="#">Loooops 2011</a><a href="#"></a></p>
       <ul class="fmenu">
-        <li class="active"><a href="index.html">Home</a></li>
-        <li><a href="support.html">Support</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contacts</a></li>
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">Support</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contacts</a></li>
       </ul>
       <div class="clr"></div>
     </div>

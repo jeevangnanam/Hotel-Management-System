@@ -97,6 +97,9 @@ function submitform(frm){
 .roomtypedes{
 	border:dashed 1px #538136;
 }
+.cmb{
+	width:120px;
+}
 </style>
 <?php
 	foreach($hoteldets as $key=>$value){ ?>
@@ -254,10 +257,12 @@ function loadfancybox(obj) {
 		<p id="contactArea" class="contactArea">
 		<div class="searchformdet">
         	<?=$this->Form->create('Nodes', array('type' => 'post','id'=>'frm','action' => '/stepone/'));?>
-            <div style="background:#F7F7F7;height: 20px;width: 300px;">
+            <div style="background:#F7F7F7;height: 20px;width: 420px;">
         	<div class="lbl" style="width:120px;">Room Types</div>
             <div class="lbl" style="width:80px;">Date From</div>
-            <div class="lbl">Data To</div>
+            <div class="lbl" style="width:80px;">Data To</div>
+            <div class="lbl"><input type="button" style="background:#000033;border:none;color:#FFF;width:62px;" value="Allocated" /></div>
+             <div class="lbl"><input type="button" style="background:#0066CC;border:none;color:#000033;width:65px;" value="Alvailable" /></div>
             </div>
             <div class="clr"></div>
             <div class="lbl">

@@ -810,6 +810,16 @@ class NodesController extends AppController {
 	/* booking step stepthree */
 
 	function stepthree(){
+		/*debug($this->data);
+		if(isset($this->data['Booking']['name'])){
+			$this->Session->setFlash(__( 'Please enter your name.', true));     
+		}
+		else if(isset($this->data['Booking']['email'])){
+			$this->Session->setFlash(__( 'Please enter your email.', true));     
+		}
+		else if(isset($this->data['Booking']['contactno'])){
+			$this->Session->setFlash(__( 'Please enter your contact number.', true));     
+		}*/
 	$domain=$this->getSubdomain();
        if(!empty($domain)){
         $this->setLogo($domain);
@@ -834,7 +844,7 @@ class NodesController extends AppController {
 		$accp=$accp[0]['HotelsRoomCapacities']['additional_child_charge'];
 		
 		$det=$this->HotelsRoomType->find('all',array(
-			'fields'=>array('HotelsRoomType.price',
+			'fields'=>array('HotelsRoomType.price','HotelsRoomType.name'
 							),
 			
 					 'conditions' =>array("HotelsRoomType.hotel_id='$hotel'","HotelsRoomType.id='$rt';" ),
@@ -843,10 +853,11 @@ class NodesController extends AppController {
 		/*debug($det);
 		die();*/
 		$p=$det[0]['HotelsRoomType']['price'];
+		$rname=$det[0]['HotelsRoomType']['name'];
 		
 		$estimated_price=((($nofr*$p)+($aacp*$aac)+($accp*$acc))*$noofdays)*((100-$cd)/100);
 		$user=$this->Auth->user('id');
-		$this->data['Booking']['user_id'] = $user;
+		$this->data['Booking']['user_id'] = 0 ;
 		$this->data['Booking']['hotel_id'] = $this->Session->read('hotelId');
         $this->data['Booking']['room_type_id'] = $this->params['data']['Nodes']['room_type'];
         $this->data['Booking']['from_date'] = $this->params['data']['Nodes']['dateFrom']; 
@@ -856,14 +867,17 @@ class NodesController extends AppController {
         $this->data['Booking']['coupon_id'] = $this->params['data']['Nodes']['couponid'];
         $this->data['Booking']['notes'] = 'n';
         $this->data['Booking']['status'] = "PROCESSING";
+        $this->data['Booking']['rtype'] = $rname;
+        $this->data['Booking']['adchrg']=$aacp*$aac;
+        $this->data['Booking']['acchrg']=$accp*$acc;
          
         if($this->Booking->save($this->data)){
-        	 $username=$this->User->find('all',array(
+        	 /*$username=$this->User->find('all',array(
         	 'fields'=>array('User.first_name,User.last_name,User.email'),
         	 'conditions'=>array("User.id ='$user'"),
         	 ));
         	 $this->data['Booking']['username']=$username[0]['User']['first_name']." ".$username[0]['User']['last_name'] ;
-        	 $this->data['Booking']['email']=$username[0]['User']['email'];
+        	 $this->data['Booking']['email']=$username[0]['User']['email'];*/
         	 /*$manageremail=$username=$this->User->find('all',array(
         	 'fields'=>array('User.first_name,User.last_name,User.email'),
         	 'joins'=>array(
@@ -871,6 +885,15 @@ class NodesController extends AppController {
         	 ),
         	 'conditions'=>array("User.id ='$user'"),
         	 ));*/
+        	$ht=$this->Hotel->find('all',array(
+			'fields'=>array('Hotel.name',
+							),
+			
+					 'conditions' =>array("Hotel.id='$hotel'" ),
+			)
+			);
+			$ht=$ht[0]['Hotel']['name'];
+		$this->set('hotelName',$ht);
 		$this->_sendNewUserMail( $this->data);
         	
         }
@@ -891,15 +914,34 @@ class NodesController extends AppController {
 		
 	   // $User = $this->User->read(null,$id);
 	    $this->Email->to = $data['Booking']['email'];
-	    $this->Email->bcc = array($data['Booking']['email']);  
-	    $this->Email->subject = 'Welcome to our really cool thing';
+	    $this->Email->bcc = array('lasantha@loooops.com');  
+	    $this->Email->subject = 'Welcome to Hotel Management System';
 	    $this->Email->replyTo = 'lasantha@loooops.com';
-	    $this->Email->from = 'Cool Web App <lasantha@loooops.com>';
+	    $this->Email->from = 'HotelMS <lasantha@loooops.com>';
 	    $this->Email->template = 'simple_message'; // note no '.ctp'
 	    //Send as 'html', 'text' or 'both' (default is 'text')
-	    $this->Email->sendAs = 'text'; // because we like to send pretty mail
+	    $this->Email->sendAs = 'html'; // because we like to send pretty mail
 	    //Set view variables as normal
-	    $this->set('User', 'lasantha@loooops.com');
+	    
+	    $this->set('User', $data['Booking']['name']);
+	    $em=$data['Booking']['email'];
+	    $this->set('cemail',$em);
+	    $phone=$data['Booking']['contactno'];
+	    $this->set('phone',$phone);
+	    $rtype=$data['Booking']['rtype'];
+	    $this->set('rtype',$rtype);
+	    $fdate=$data['Booking']['from_date'];
+	    $this->set('fdate',$fdate);
+	    $edate=$data['Booking']['end_date'];
+	    $this->set('edate',$edate);
+	    $rooms=$data['Booking']['number_of_rooms'];
+	    $this->set('rooms',$rooms);
+	    $aac=$data['Booking']['adchrg'];
+	    $this->set('aac',$aac);
+	    $acc=$data['Booking']['acchrg'];
+	    $this->set('aac',$acc);
+	    $estprice=$data['Booking']['estimated_price'];
+	    $this->set('estprice',$estprice);
 	    //Do not pass any args to send()
 	    $this->Email->send();
 	 }

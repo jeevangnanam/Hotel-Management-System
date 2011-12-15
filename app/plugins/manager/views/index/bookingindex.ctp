@@ -44,6 +44,12 @@
     font-size: 16px;
     width: 35%;
 }
+.detailFields {
+    width: 250px;
+}
+.detailLables {
+    width: 100px;
+}
 </style>
 <script>
 

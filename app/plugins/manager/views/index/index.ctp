@@ -135,7 +135,8 @@ function loadbookings(obj,hotelId,rtId){
 }
 </script>
 <div class="container">
-	
+	<div class=""></div>
+    <div class="clr"></div>
 	<div class="holelList">
    	 	<h2>Hotels </h2>
     	

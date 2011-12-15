@@ -138,11 +138,11 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
     <div class="footer_resize">
       <p class="lf">&copy; Copyright <a href="#">Loooops Selects</a><!--. Layout by [Z] <a href="http://www.freewebsitetemplatez.com/">Website Templates</a>--></p>
       <ul class="fmenu">
-        <li class="active"><a href="index.html">Home</a></li>
-        <li><a href="support.html">Support</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contacts</a></li>
+        <li class="active"><a href="index">Home</a></li>
+        <li><a href="#">Support</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contacts</a></li>
       </ul>
       <div class="clr"></div>
     </div>
