@@ -1,6 +1,6 @@
 <style>
 .stepFont{
-	width:147px;
+	width:247px;
 	float:left;
 	padding-top: 5px;
     text-align: center;
@@ -8,7 +8,7 @@
 .inactiveDiv{
 	background:url(<?php echo $html->webroot;?>img/booking_steps/stepsbg.png) repeat-x;
 	height:35px;
-	width:180px;
+	width:280px;
 	color:#360;
 	float:left;
 }
@@ -17,12 +17,13 @@
 	background:url(<?php echo $html->webroot;?>img/booking_steps/activestep.png) repeat-x;
 	height:35px;
 	color:#FFF;
-	width:180px;
+	width:325px;
 	float:left;
 	
 }
 .activeArrow{
 	background:url(<?php echo $html->webroot;?>img/booking_steps/stepsarrowactiveright.png) no-repeat;
+	margin-left:45px;
 	float:left;
 	height:35px;
 	width:33px;
@@ -52,7 +53,7 @@
 	float:left;
 }
 .detailFields{
-	width:200px;
+	width:300px;
 	height:20px;
 	float:left;
 }
@@ -74,7 +75,7 @@
 }
 .ticket{
 	margin:0 0 5px 5px;
-	width:310px;
+	width:370px;
 	height:20px;
 	float:left;
 	color:#538136;
@@ -107,7 +108,7 @@ $usename   = $value['User']['first_name']." ".$value['User']['last_name'];
             <div class="stepFont">Step Three : Ticket</div>
             <div class="activeArrow"></div>
 	      </div>
-	      <div id="step4" class="inactiveDiv">
+	     <!-- <div id="step4" class="inactiveDiv">
             <div class="stepFont">Step 4</div>
             <div class="inactiveArrow"></div>
         	
@@ -115,12 +116,12 @@ $usename   = $value['User']['first_name']." ".$value['User']['last_name'];
 	      <div id="step5" class="inactiveDiv">
         	<div class="stepFont">Step 5</div>
             <div class="inactiveArrow"></div>	
-	      </div>
+	      </div>-->
 </div>
 <div class="clr"></div>
 
  
-<div style="width:500px;margin:50px 150px;">
+<div style="width:450px;margin:10px 150px;border:dotted #CCC 1px;background:#F7FAF6;">
 	<div class="ticket" align="right"><span> Ticket No. :<?=$rID;?></span></div>
     <div class="clr"></div>
 	<div class="welcomenote" align="center">Welecome to <?=$hotelName;?></div>
@@ -142,10 +143,14 @@ $usename   = $value['User']['first_name']." ".$value['User']['last_name'];
 	<div class="clr"></div>
 	<div class="detailLables">Total Amount :</div>
 	<div class="detailFields"><?=$estimated_price;?></div>
-	<div class="clr"></div>
-    <div class="thanks" align="center"><span >Thank you!</span></div>
-
- 
+	<!--<div class="clr"></div>
+    <div class="thanks" align="center"><span >Thank you!</span></div>-->
+    <div class="clr"></div>
 </div>
-
+<div style="width:450px;margin:10px 150px;border:dotted #CCC 1px;background:#F7FAF6;height:30px;margin: 10px 150px;padding-top: 5px;">
+<?=$this->Form->create('Booking',array('action'=>'/edit/'));?>
+<?=$this->Form->input('Booking.ticket',array('type'=>'hidden','value'=>$rID));?>
+<span style="color:#333;font-size:11px;width:auto;float:left">*If you want to edit/change/cancel your booking,please select edit option.</span>
+<?=$this->Form->end('Edit');?>
+</div>
 </div>

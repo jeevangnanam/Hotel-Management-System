@@ -39,6 +39,23 @@
     margin-right: 10px;
     width: 90px;
 }
+
+.hotelname{
+	float:left;
+	width:55%;
+	height:30px;
+	background:#F7FAF6;
+	margin:2px;
+}
+
+.btns{
+	float:left;
+	width:13%;
+	height:30px;
+	text-align:center;
+	background:#F7FAF6;
+	margin:2px;
+}
 </style>
 <script>
 
@@ -135,23 +152,34 @@ function loadbookings(obj,hotelId,rtId){
 }
 </script>
 <div class="container">
-	<div class=""></div>
-    <div class="clr"></div>
-	<div class="holelList">
-   	 	<h2>Hotels </h2>
-    	
-        	<?php foreach($getHotels as $key=>$value){ ?>
-            <div class="dv">
-            <div class="hlink"><?=$this->Html->link($value['Hotel']['name'], '#', array('class' => 'hotelLinks','id'=>$value['Hotel']['id'])); ?></div>
-            <div class="btn" align="center">
+
+   	 	
+    		<div class="hotelname">Hotels</div><div class="btns">Room Types</div><div class="btns">Booking Info</div><div class="btns">Booking</div>
+        	<div class="clr"></div>
+			<?php foreach($getHotels as $key=>$value){ ?>
+            
+            <div class="hotelname">
+			<?=$value['Hotel']['name']; ?>
+            </div>
+            
+            <div class="btns" align="center">
+			<?=$this->Form->create('',array("action" => "/roomtypes/" ));?>
+            <?=$this->Form->input('hotelid',array('type'=>'hidden','value'=>$value['Hotel']['id']));?>
+			<?=$this->Form->end('Room Types');?>
+            </div>
+            
+            <div class="btns" align="center">
 			<?php echo $this->Form->create('',array("action" => "/stathome/".$value['Hotel']['id'] ));?>
 			<?=$this->Form->end('Booking Info');?>
             </div>
-            <div class="btn" align="center">
-			<?=$this->Form->create('',array("action" => "/bookingindex/" ));?>
+            
+            <div class="btns" align="center">
+			<?=$this->Form->create('',array("action" => "/bookingindex/".$value['Hotel']['id'] ));?>
             <?=$this->Form->input('hotelid',array('type'=>'hidden','value'=>$value['Hotel']['id']));?>
-			<?=$this->Form->end('Booking');?></div>
+			<?=$this->Form->end('Booking');?>
             </div>
+            <div class="clr"></div>
+           
             <?php }?>
         
     </div>
@@ -161,7 +189,7 @@ function loadbookings(obj,hotelId,rtId){
         
         </div>
     </div>-->
-</div>
+<!--</div>
 	<div id="popupContact">
 		<a id="popupContactClose"><?=$html->image('/img/icons/close.png',array('width'=>'20px'));?></a>
 		
@@ -171,3 +199,4 @@ function loadbookings(obj,hotelId,rtId){
 		</p>
 	</div>
 	<div id="backgroundPopup"></div>
+-->

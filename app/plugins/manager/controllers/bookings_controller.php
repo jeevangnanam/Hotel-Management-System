@@ -132,15 +132,43 @@ class BookingsController extends ManagerAppController{
         $this->data['Booking']['coupon_id'] = $this->params['data']['Booking']['couponid']; 
         $this->data['Booking']['notes'] = 'n';
         $this->data['Booking']['status'] = "APPROVED";
-       /* debug($this->Session);
-        die();
-         if(isset($this->Session)){
-         	$this->Session->setFlash(__('Ticket already generated,please go back to home and start gain,thank you.', true));
-         }*/
-        if($this->Booking->save($this->data)){
-        	$rID=$this->Booking->getInsertID();
-        	$this->Session->write('ticket',$rID);
-        	$dets=$this->Hotel->find('all', array(
+
+
+        $ticket=$this->Session->read('ticket');
+        $ticketavl='';
+       // echo $hotel.$ticket;
+        if(!empty($ticket)){
+        	$ticketavl=$this->Booking->find('all',array(
+        	'fields'=>array('count(*) as c'),
+        	'conditions'=>array("Booking.id=$ticket"),
+        	));
+        	
+        	if($ticketavl[0][0]['c'] > 0){
+        	 	$dets=$this->getticketdet($hotel,$rtype);	
+        	 	$this->set('rID',$ticket);	   
+	        	$this->set(compact('dets','dFrom','dTo','noofdays','estimated_price','rtype'));
+	        	$this->Session->setFlash(__( 'Your already have a ticket.', true)); 
+        	}
+        }
+        else{
+        	if($this->Booking->save($this->data)){
+	        	$bID=$this->Booking->getInsertID();
+	        	$this->Session->write('ticket',$bID);
+	        	$dets=$this->getticketdet($hotel,$rtype);		   
+	        	$this->set(compact('dets','dFrom','dTo','noofdays','estimated_price','rtype'));
+	        }
+	        else{
+	        	
+	        }
+        }        
+        
+	}
+	
+	function stepfour(){
+		
+	}
+	function getticketdet($hotel=NULL,$rtype=NULL){
+		$dets=$this->Hotel->find('all', array(
         			   		'fields'=>array('DISTINCT Hotel.`name`','HotelsRoomType.`name`','User.first_name','User.last_name'),
         					'joins'=>array(
         					array(
@@ -168,14 +196,8 @@ class BookingsController extends ManagerAppController{
         					'conditions'=>array("Booking.hotel_id=$hotel AND HotelsRoomType.id=$rtype"),
         			   )
         		);
-        			   
-        	$this->set(compact('dets','dFrom','dTo','noofdays','estimated_price','rID'));
-        
-        	
-        }
-        else{
-        	
-        }
+        		
+        		return $dets;
 	}
 	function getRoomTypeDetails($hotelId=NULL,$rtId=NULL){
 		$roomdets=$this->HotelsRoomCapacities->find('all',array(
@@ -219,6 +241,18 @@ class BookingsController extends ManagerAppController{
 			)
 		);
 		return $roomdets;
+	}
+	
+	//edit option
+	function edit(){
+		
+		if($this->data['Booking']['ticket']==$this->Session->read('ticket')){
+			debug($this->data['Booking']['ticket']);
+		}	
+		$ticket= $this->Session->read('ticket');
+		$user  = $this->Auth->user('id');
+		$hotel = $this->Session->read('hotelId');
+	
 	}
 }
 ?>

@@ -1,6 +1,6 @@
 <style>
 .stepFont{
-	width:147px;
+	width:247px;
 	float:left;
 	padding-top: 5px;
     text-align: center;
@@ -8,7 +8,7 @@
 .inactiveDiv{
 	background:url(<?php echo $html->webroot;?>img/booking_steps/stepsbg.png) repeat-x;
 	height:35px;
-	width:180px;
+	width:280px;
 	color:#360;
 	float:left;
 }
@@ -17,12 +17,13 @@
 	background:url(<?php echo $html->webroot;?>img/booking_steps/activestep.png) repeat-x;
 	height:35px;
 	color:#FFF;
-	width:180px;
+	width:325px;
 	float:left;
 	
 }
 .activeArrow{
 	background:url(<?php echo $html->webroot;?>img/booking_steps/stepsarrowactiveright.png) no-repeat;
+	margin-left:45px;
 	float:left;
 	height:35px;
 	width:33px;
@@ -145,7 +146,7 @@ $coupon=$value['Coupon']['reduce_percentage'];
             <div class="stepFont">Step Three : Ticket</div>
             <div class="inactiveArrow"></div>
 	      </div>
-	      <div id="step4" class="inactiveDiv">
+	      <!--<div id="step4" class="inactiveDiv">
             <div class="stepFont">Step 4</div>
             <div class="inactiveArrow"></div>
         	
@@ -153,7 +154,7 @@ $coupon=$value['Coupon']['reduce_percentage'];
 	      <div id="step5" class="inactiveDiv">
         	<div class="stepFont">Step 5</div>
             <div class="inactiveArrow"></div>	
-	      </div>
+	      </div>-->
 </div>
 
  

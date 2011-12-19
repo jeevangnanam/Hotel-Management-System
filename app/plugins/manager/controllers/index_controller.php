@@ -23,15 +23,74 @@ class IndexController extends ManagerAppController{
        
     }
     
-    function bookingindex(){
+    function bookingindex($hotel=NULL){
+       $hotelId=$this->params['pass'][0];
        $ses=$this -> Session -> read();
        $userid=$ses['Auth']['User']['id'];
-       $hotelId=$this->data['Hotel']['hotelid'];     
+       
+      
+	       if(empty($hotel))     
+	        	$hotelId=$this->Session->read('hotelId');
+	       
+
+      
        $getHotels=$this->getHotels($userid,$hotelId);
        $this->set('hotelid',$hotelId);
        $this->set(compact('getHotels'));
+       $roomtypes=$this->getroomtypes($hotelId);
+       $rtyp='';
+       $x=$y='';$noofrooms=0;
+       foreach ($roomtypes as $key=>$value){
+       	$rtyp[$value['HotelsRoomType']['id']]=$value['HotelsRoomType']['name'];
+       }
+       $rt=$dfrom=$dto=$roomavl='';
+    	if(isset($this->data['Hotel']['tag']) && $this->data['Hotel']['tag']==1){  		
+    		$rt=$this->data['Hotel']['roomtype'];
+    		$dfrom=$this->data['Hotel']['dateFrom'];
+    		$dto=$this->data['Hotel']['dateTo'];
+    		//$roomavl=$this->setroomavalability($rt,$hotelId,$dfrom,$dto);	
+    		$rooms=$this->HotelsRoomCapacities->find('all',array(			
+			 'fields' => array(
+     				'HotelsRoomCapacities.id',
+                    'HotelsRoomCapacities.room_type_id',
+					'HotelsRoomCapacities.total_rooms'),
+		  	'conditions' =>array("HotelsRoomCapacities.room_type_id=$rt AND HotelsRoomCapacities.hotel_id=$hotelId" ),
+		  )
+		);
+		$rTypestatus=$this->roomstatus($hotelId,$rt,$dfrom,$dto);
+		$this->set(compact('rTypestatus'));
+		$noofroomsset=0;
+		if(count($rooms) > 0){
+			$noofroomsset=$rooms[0]['HotelsRoomCapacities']['total_rooms'];
+		}
+		
+			$this->set(compact('noofroomsset'));
+    	}
+    	else{
+    		$this->set('rTypestatus',0);
+    		$this->set('noofroomsset',0);
+    	}
+        
+       $this->set(compact('rtyp'));
+       $this->set('rt',$rt);
+       $this->set('dfrom',$dfrom);
+       $this->set(compact('roomavl'));
+       $this->set('dto',$dto);
        
     }
+    
+    function getroomtypes($hotelId=NULL){
+    	$roomtypes = $this->HotelsRoomType->find('all',array(			
+    
+			 'fields' => array(
+     				'HotelsRoomType.id',
+                    'HotelsRoomType.`name`'),
+		  	'conditions' =>array("HotelsRoomType.hotel_id=$hotelId" ),
+		  )
+		);
+		return $roomtypes;
+	}
+	
     function login()
 	{
             $this->layout = "limejungle_manger_login";
@@ -45,10 +104,7 @@ class IndexController extends ManagerAppController{
 	    $this->Session->setFlash('Logout');
 	    $this->redirect($this->Auth->logout());
 	}
-	/*to get all room types-14-11-2011*/
-	function getRoomTypes($userid=NULL){
-		
-	}
+
 	
 	function getHotels($userid=NULL,$hotelId=NULL){
 		$ht='';
@@ -139,11 +195,11 @@ class IndexController extends ManagerAppController{
 	}';
 	echo $json;
 	}
-	function setroomavalability($rtId=NULL,$hotelId=NULL){
-		$hotelId=$this->Session->read('hotelId');
-		$rtId=$this->params['form']['rtid'];
-		$dateFrom=$this->params['form']['dateFrom'];
-		$dateTo=$this->params['form']['dateTo'];
+	function setroomavalability($rtId=NULL,$hotelId=NULL,$dateFrom=NULL,$dateTo=NULL){
+		//$hotelId=$this->Session->read('hotelId');
+		//$rtId=$this->params['form']['rtid'];
+		//$dateFrom=$this->params['form']['dateFrom'];
+		//$dateTo=$this->params['form']['dateTo'];
 		$rooms=$this->HotelsRoomCapacities->find('all',array(			
 			 'fields' => array(
      				'HotelsRoomCapacities.id',
@@ -236,7 +292,7 @@ class IndexController extends ManagerAppController{
 			}
 			$roomDiv= $x;
 		}
-		echo $roomDiv."<div class=\"clr\"></div><div class=\"bookdiv\"><input type=\"submit\" value=\"Book\" class=\"bookimg\" /></div>";
+		return $roomDiv."<div class=\"clr\"></div><div class=\"bookdiv\"><input type=\"submit\" value=\"Book\" class=\"bookimg\" /></div>";
 	}
 	
 	function roomstatus($hotelId=NULL,$roomtypeid=NULL,$dateFrom=NULL,$dateTo=NULL){
