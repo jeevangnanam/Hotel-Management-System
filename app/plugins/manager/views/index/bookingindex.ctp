@@ -31,12 +31,19 @@
     float: left;
     font-size: 16px;
     width: 35%;
+	background:#F7FAF6;
 }
 .detailFields {
     width: 250px;
 }
 .detailLables {
     width: 100px;
+}
+#HotelRoomtype{
+	width:243px;
+}
+#HotelDateFrom,#HotelDateTo{
+	width:100px;
 }
 button  {
     background: none repeat scroll 0 0 #72A946;
@@ -51,9 +58,9 @@ button  {
     width: auto;
 	padding: 0 10px;
 }
-/*.submit{
+#dsubmit{
 	display:none;
-}*/
+}
 form label {
     display: block;
 	font-weight: normal;
@@ -64,6 +71,29 @@ form label {
     margin-left: 20px;
     padding-left: 20px;
     width: 60%;
+	background:#F7FAF6;
+}
+#frmsearchavl div {
+	float:left;
+	margin-left:10px;
+}
+#frmsearch {
+	background:#F7FAF6;
+}
+.rnr{
+	border:0; color:#f6931f; font-weight:bold;width:100px;
+}
+.ui-slider-horizontal {
+    height: 0.8em;
+    width: 250px;
+	margin-left:0px;
+}
+#amount{
+	width:100px;
+}
+.rng{
+	margin-left:0px;
+	height:30px;
 }
 </style>
 <script>
@@ -158,19 +188,46 @@ function loadbookings(obj,hotelId,rtId){
 	window.location.href = 'http://hotelms-dev.com/manager/index/booking/'+rtId;
 	//$.ajax({url:"/manager/Index/booking",async:false})
 }
+
+$(function() {
+		$( "#slider-range" ).slider({
+			range: true,
+			min: 1,
+			max: 100,
+			values: [ 1, 100 ],
+			slide: function( event, ui ) {
+				$( "#amount" ).val(ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+			}
+		});
+		$( "#amount" ).val($( "#slider-range" ).slider( "values", 0 ) +
+			" - " + $( "#slider-range" ).slider( "values", 1 ) );
+	});
 </script>
+
+
+
+
 <div class="container">
 	<div> Hotel <?=$getHotels[0]['Hotel']['name']; ?></div>
     <div class="clr"></div>
 	<div class="searchroomsavl">
      <?php //$rt=$dfrom=$dto=$roomavl=''?>
-   	 <?php echo $this->Form->create('',array('action'=>'/bookingindex/'.$getHotels[0]['Hotel']['id']));?>
+   	 <?php echo $this->Form->create('',array('id'=>'frmsearch','action'=>'/bookingindex/'.$getHotels[0]['Hotel']['id']));?>
      <div class="heading">Search Room Availability</div>
+     <div id="frmsearchavl">
      <?=$this->Form->input('tag',array('type'=>'hidden','value'=>'1'));?>
      <?=$this->Form->input('roomtype',array('type'=>'select','options'=>$rtyp,'label'=>'Room Type','empty'=>'','selected'=>$rt));?>
      <?=$this->Form->input('dateFrom',array('type'=>'text','label'=>'Date From','value'=>$dfrom));?>
      <?=$this->Form->input('dateTo',array('type'=>'text','label'=>'Date To','value'=>$dto));?>
-     <?php //$this->Form->button('Search',array('type'=>'button','onclick'=>'getRoomtypes()'));?>
+
+
+    <?=$this->Form->input('amount',array('id'=>'amount','class'=>'rnr','type'=>'text','label'=>'Room Number range','value'=>0,'readonly'=>"readonly"));?>
+    <div class="rng">
+    	<div id="slider-range"></div>
+    </div>
+     
+     </div>
+     <div class="clr">&nbsp;</div>
 	 <?=$this->Form->end('Search');?>	
     	
         	<!--<?foreach($getHotels as $key=>$value){ ?>
@@ -184,7 +241,15 @@ function loadbookings(obj,hotelId,rtId){
             <?}?>-->
         
     </div>
-    <div class="roomTypes" style="background:#FFF;height:200px;">
+    
+    <div class="roomTypes" style="height:250px;">
+    
+    <div class="caps">
+		<?=$this->Form->button('Available',array('type'=>'button','id'=>'ravlilable','class'=>'ravlilable'));?>
+        <?=$this->Form->button('Processing',array('type'=>'button','id'=>'rprocessing','class'=>'rprocessing'));?>
+		<?=$this->Form->button('Selected',array('type'=>'button','id'=>'rselected','class'=>'rselected'));?>
+    </div>
+    <div class="clr"></div>
         <?php
 		$pages=1;
 		$noofrooms=$noofroomsset;
@@ -269,11 +334,13 @@ function loadbookings(obj,hotelId,rtId){
 	
         ?>
     </div>
-    <div>
+    <div class="bookfrm">
 	<?=$this->Form->create('Booking',array('action'=>'/stepone/'));?>
     <?=$this->Form->input('book',array('id'=>'book','label'=>'','value'=>'0','readonly'=>'readonly'));?>
-     <?=$this->Form->button('Book',array('type'=>'button'));?>
-    <?=$this->Form->end('Book');?>
+    <?=$this->Form->button('Book',array('type'=>'button','id'=>'bookbtn'));?>
+        <div id="dsubmit">
+        <?=$this->Form->end('Book',array());?>
+        </div>
     </div>
 </div>
 	<div id="popupContact">

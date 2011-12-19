@@ -2,7 +2,7 @@
 
 class IndexController extends ManagerAppController{
     
-    var $uses = array('Hotel','HotelsRoomType','HotelsRoomCapacities','Booking','HotelsManager');
+    var $uses = array('Hotel','HotelsRoomType','HotelsRoomCapacities','Booking','HotelsManager','Room');
     var $helpers = array('Lightbox');
     
     function beforeFilter(){

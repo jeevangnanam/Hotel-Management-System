@@ -1,7 +1,7 @@
 <?php
 
 class RoomsController extends ManagerAppController{
-    var $uses   =   array();
+    var $uses   =   array('Rooms');
   
     
     function beforeFilter(){

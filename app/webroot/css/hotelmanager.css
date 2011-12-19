@@ -76,46 +76,91 @@
 	width:100px;
 	height:20px;
 }
+.roundcorners{
+	-moz-border-radius: 35px;
+	border-radius: 35px;
+}
 
 .xdiv{
 	float:left;
-	width:90%;
+	width:100%;
 	background:#FFF;
 	/*border:solid 1px #999;*/
 }
 .adiv{
 	float:left;
 	width:9%;
+	height:30px;
 	background:#003;
 	border:solid 1px #FF0;
 	text-align:center;
 	cursor:pointer;
+	margin:1px;
+	-moz-border-radius: 35px;
+	border-radius: 35px;
 }
 .pdiv{
 	float:left;
 	width:9%;
+	height:30px;
 	background:#393;
 	border:solid 1px #FF0;
 	text-align:center;
 	cursor:pointer;
+	margin:1px;
+	-moz-border-radius: 35px;
+	border-radius: 35px;
 }
 .ediv{
 	float:left;
 	width:9%;
+	height:30px;
 	background:#06C;
 	border:solid 1px #FF0;
 	text-align:center;
 	cursor:pointer;
+	margin:1px;
+	-moz-border-radius: 35px;
+	border-radius: 35px;
 }
 
 .roomselected{
 	background:url(../img/icons/roomselect.png) no-repeat;
-	background-color:#F7FAF6;
+	background-color:#89B136;
 	float:left;
 	width:9%;
 	border:solid 1px #FF0;
 	text-align:center;
 	cursor:pointer;
+	height:30px;
+	margin:1px;
+	-moz-border-radius: 35px;
+	border-radius: 35px;
+}
+
+.ravlilable{
+	background:#0066CC;
+}
+.rselected{
+	background:#000033;
+}
+.rprocessing{
+	background:#89B136;
+}
+.caps{
+	float:left;
+	margin:10px 5px;
+}
+.caps div{
+	float:left;
+}
+.bookfrm{
+	float:right;
+	width:150px;
+}
+#book{
+	float:left;
+	
 }
 
 .bookimg{
@@ -130,6 +175,11 @@
 	
 }
 
+form .input #book{
+    float: left;
+    margin: 0 0 10px;
+	width:50px;
+}
 .detailLables{
 	padding-left:10px;
 	width:300px;
@@ -150,4 +200,4 @@
 	margin:5px ;
 	color:#360;
 }
-
+#demo-frame > div.roomrange { padding: 10px !important; };

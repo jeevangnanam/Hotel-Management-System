@@ -5,7 +5,7 @@ class HotelsController extends ManagerAppController {
     var $name = 'Hotels';
     var $components = array('upload','Autocomplete');
     var $helpers = array('Html', 'Javascript', 'Ajax');
-	var $uses = array('Hotel','HotelsManager','HotelsPicture','HotelsRoomCapacity','HotelsRoomType','HotelsCategoryList','User');
+	var $uses = array('Hotel','HotelsManager','HotelsPicture','HotelsRoomCapacity','HotelsRoomType','HotelsCategoryList','User','Rooms');
     //public $uses = array('User');
     function beforeFilter() {
 
@@ -191,6 +191,49 @@ class HotelsController extends ManagerAppController {
                 $HotelsRoomCapacity = new HotelsRoomCapacity();
 
                 if($HotelsRoomCapacity->save($this->data)){
+                	//=================
+         
+               		
+               		if($this->data['HotelsRoomCapacity']['total_rooms'] > 0){
+               			
+               			App::import('Model', 'Manager.Rooms');
+                        $Rooms = new Rooms();
+                        $tr=$this->data['HotelsRoomCapacity']['total_rooms'];
+                       
+                		$hotel_id=$this->data['HotelsRoomCapacity']['hotel_id'];
+                		$room_type_id=$this->data['HotelsRoomCapacity']['room_type_id'];	
+                		
+                		 $rn=1;
+                		 $arrF=array();
+                		for($i=0;$i < ($tr);$i++){
+                		    $arrF[$i]=$rn;
+                			$chk=$this->Rooms->find('all',
+                						array(
+                						'fields'=>array('count(*) AS C'),
+                						'conditions'=>array('Rooms.hotel_id'=>"$hotel_id",'rooms.room_type_id'=>"$room_type_id","rooms.roomname"=>"$rn"),
+                						)
+                						);
+                			
+                			
+                			if($chk[0][0]['C'] > 0){
+                					$this->Rooms->query("update rooms set roomname='$rn' where rooms.roomname='$rn' AND rooms.hotel_id='$hotel_id' AND rooms.room_type_id='$room_type_id'");
+                			}
+                				
+                			else{
+                					$this->Rooms->query("insert into rooms(roomname,hotel_id,room_type_id) values('$rn','$hotel_id','$room_type_id')");
+                			}
+                			$rn++;
+                		}
+                		$arrF=implode(',', $arrF);
+               			if($tr > 0){
+                			 $this->Rooms->query("DELETE from rooms where rooms.hotel_id='$hotel_id' AND rooms.room_type_id='$room_type_id' AND roomname NOT IN($arrF);");
+                		}
+                	}
+                	
+                	
+                	
+                	
+                	//====================
                 	$this->Session->setFlash(__('The Room Capacity has been successfully saved.', true));
                 	$this->set('tab', '4');
                 }
@@ -625,6 +668,43 @@ class HotelsController extends ManagerAppController {
 				
                	if ($HotelsRoomCapacity->save($this->data)) {
                		
+               		if($this->data['HotelsRoomCapacity']['total_rooms'] > 0){
+               			
+               			App::import('Model', 'Manager.Rooms');
+                        $Rooms = new Rooms();
+                        $tr=$this->data['HotelsRoomCapacity']['total_rooms'];
+                       
+                		$hotel_id=$this->data['HotelsRoomCapacity']['hotel_id'];
+                		$room_type_id=$this->data['HotelsRoomCapacity']['room_type_id'];	
+                		
+                		 $rn=1;
+                		 $arrF=array();
+                		for($i=0;$i < ($tr);$i++){
+                		    $arrF[$i]=$rn;
+                			$chk=$this->Rooms->find('all',
+                						array(
+                						'fields'=>array('count(*) AS C'),
+                						'conditions'=>array('Rooms.hotel_id'=>"$hotel_id",'rooms.room_type_id'=>"$room_type_id","rooms.roomname"=>"$rn"),
+                						)
+                						);
+                			
+                			
+                			if($chk[0][0]['C'] > 0){
+                					$this->Rooms->query("update rooms set roomname='$rn' where rooms.roomname='$rn' AND rooms.hotel_id='$hotel_id' AND rooms.room_type_id='$room_type_id'");}
+                				
+                			else{
+                					$this->Rooms->query("insert into rooms(roomname,hotel_id,room_type_id) values('$rn','$hotel_id','$room_type_id')");
+                			}
+                			$rn++;
+                		}
+                		
+                	}
+                	$arrF=implode(',', $arrF);
+               		if($tr > 0){
+                		 $this->Rooms->query("DELETE from rooms where rooms.hotel_id='$hotel_id' AND rooms.room_type_id='$room_type_id' AND roomname NOT IN($arrF);");
+                	}
+                		
+                		
                		$this->Session->setFlash(__('The room capacity has been updated', true));
                		$records=$this->loadhotelinfo($this->Session->read("eid"),$userId);
 					$hotelname=$records[0]['Hotel']['name'];
