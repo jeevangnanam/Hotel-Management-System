@@ -57,8 +57,20 @@ class IndexController extends ManagerAppController{
 		  	'conditions' =>array("HotelsRoomCapacities.room_type_id=$rt AND HotelsRoomCapacities.hotel_id=$hotelId" ),
 		  )
 		);
-		$rTypestatus=$this->roomstatus($hotelId,$rt,$dfrom,$dto);
-		$this->set(compact('rTypestatus'));
+		$rTypestatusApp=$this->roomstatus($hotelId,$rt,$dfrom,$dto,'APPROVED');
+		$rTypestatusAproved=$this->room_status_wise_roomnumbers($hotelId,$rt,$dfrom,$dto,'APPROVED');
+		$appRoomNumbs='';
+		$appRoomNumbsSet=array();
+		
+		foreach ($rTypestatusAproved as $key=>$value){
+			
+			$appRoomNumbs.=$value['Booking']['rooms'].',';
+			
+		}
+		$appRoomNumbsSet= explode(',',$appRoomNumbs);
+		$this->set(compact('rTypestatusApp'));
+		$this->set(compact('appRoomNumbsSet'));
+		//debug($appRoomNumbsSet);
 		$noofroomsset=0;
 		if(count($rooms) > 0){
 			$noofroomsset=$rooms[0]['HotelsRoomCapacities']['total_rooms'];
@@ -67,7 +79,7 @@ class IndexController extends ManagerAppController{
 			$this->set(compact('noofroomsset'));
     	}
     	else{
-    		$this->set('rTypestatus',0);
+    		$this->set('rTypestatusApp',0);
     		$this->set('noofroomsset',0);
     	}
         
@@ -295,18 +307,28 @@ class IndexController extends ManagerAppController{
 		return $roomDiv."<div class=\"clr\"></div><div class=\"bookdiv\"><input type=\"submit\" value=\"Book\" class=\"bookimg\" /></div>";
 	}
 	
-	function roomstatus($hotelId=NULL,$roomtypeid=NULL,$dateFrom=NULL,$dateTo=NULL){
+	function roomstatus($hotelId=NULL,$roomtypeid=NULL,$dateFrom=NULL,$dateTo=NULL,$status=NULL){
 		$roomStatus=$this->Booking->find('all',
 			array(
 			'fields' => array(
      				'sum(Booking.number_of_rooms) AS S',
                     'Booking.status'),
-			'conditions' =>array(" Booking.hotel_id = $hotelId AND Booking.room_type_id = $roomtypeid AND Booking.from_date >= '".$dateFrom."' AND Booking.end_date <= '".$dateTo."' GROUP BY Booking.`status` ORDER BY Booking.`status` DESC;" ),
+			'conditions' =>array(" Booking.hotel_id = $hotelId AND Booking.room_type_id = $roomtypeid AND Booking.from_date >= '".$dateFrom."' AND Booking.end_date <= '".$dateTo."' AND Booking.`status`='".$status."' GROUP BY Booking.`status` ORDER BY Booking.`status` DESC;" ),
 			)
 		);
 		return $roomStatus;
 	}
-	
+    function room_status_wise_roomnumbers($hotelId=NULL,$roomtypeid=NULL,$dateFrom=NULL,$dateTo=NULL,$status=NULL){
+		$roomNumbs=$this->Booking->find('all',
+			array(
+			'fields' => array(
+     				'Booking.rooms',
+                    'Booking.status'),
+			'conditions' =>array(" Booking.hotel_id = $hotelId AND Booking.room_type_id = $roomtypeid AND Booking.from_date >= '".$dateFrom."' AND Booking.end_date <= '".$dateTo."' AND Booking.`status`='".$status."' ORDER BY Booking.`status` DESC;" ),
+			)
+		);
+		return $roomNumbs;
+	}
 	function booking($hotelId=NULL,$rtId=NULL){
 		$hotelId= $this->Session->read('hotelId');
 		

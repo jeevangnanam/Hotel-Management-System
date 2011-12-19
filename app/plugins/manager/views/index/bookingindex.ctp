@@ -247,7 +247,7 @@ $(function() {
     <div class="caps">
 		<?=$this->Form->button('Available',array('type'=>'button','id'=>'ravlilable','class'=>'ravlilable'));?>
         <?=$this->Form->button('Processing',array('type'=>'button','id'=>'rprocessing','class'=>'rprocessing'));?>
-		<?=$this->Form->button('Selected',array('type'=>'button','id'=>'rselected','class'=>'rselected'));?>
+		<?=$this->Form->button('Booked',array('type'=>'button','id'=>'rselected','class'=>'rselected'));?>
     </div>
     <div class="clr"></div>
         <?php
@@ -261,7 +261,8 @@ $(function() {
 			$rest=$noofrooms%10;
 		$start="<div class=\"xdiv\">";
 		$end="</div>";
-		$rType=$rTypestatus;
+		$rType=$rTypestatusApp;
+		
 		$aCount=$pCount=0;
 		if(count($rType) > 0){
 			$aCount=$rType[0][0]['S'];
@@ -276,6 +277,7 @@ $(function() {
 		if($y==1){
 			for($i=1; $i<11; $i++ ){
 				if($aCount >= $a){
+					$approved=$appRoomNumbsSet[$i-1];
 					$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rt."');\" id=\"\">$approved</div>";
 					$a++;
 				}
@@ -293,6 +295,7 @@ $(function() {
 		else if($noofrooms < 10 && $noofrooms <> 0){
 			for($i=1; $i<10; $i++ ){
 				if($aCount >= $a ){
+						$approved=$appRoomNumbsSet[$i-1];
 						$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rt."');\">$approved</div>";
 						$a++;
 					}
@@ -313,6 +316,7 @@ $(function() {
 					$x.=$start;
 				}
 					if($aCount >= $a){
+						$approved=$appRoomNumbsSet[$i-1];
 						$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rt."');\">$approved</div>";
 						$a++;
 					}
