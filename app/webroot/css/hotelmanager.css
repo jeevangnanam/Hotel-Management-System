@@ -85,6 +85,7 @@
 	float:left;
 	width:100%;
 	background:#FFF;
+	overflow-y: scroll;
 	/*border:solid 1px #999;*/
 }
 .adiv{
@@ -103,13 +104,19 @@
 	float:left;
 	width:9%;
 	height:30px;
-	background:#393;
+	background:#89B136;
 	border:solid 1px #FF0;
 	text-align:center;
 	cursor:pointer;
 	margin:1px;
 	-moz-border-radius: 35px;
 	border-radius: 35px;
+}
+.rdiv{
+	float:left;width:30px;
+	border: 1px solid #FFFF00;
+	border-radius: 35px 35px 35px 35px;
+	background:#89B136;
 }
 .ediv{
 	float:left;
@@ -155,8 +162,8 @@
 	float:left;
 }
 .bookfrm{
-	float:right;
-	width:150px;
+    float: right;
+    width: 560px;
 }
 #book{
 	float:left;
@@ -201,3 +208,4 @@ form .input #book{
 	color:#360;
 }
 #demo-frame > div.roomrange { padding: 10px !important; };
+
