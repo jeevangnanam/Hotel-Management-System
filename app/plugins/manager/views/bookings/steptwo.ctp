@@ -166,7 +166,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 	<div class="detailFields"><?=$dateTo;?><?=$this->Form->input('Booking.dateTo',array('type'=>'hidden','value'=>$dateTo))?></div>
     <div class="clr"></div>
 	<div class="detailLables">No of Selected Rooms</div>
-	<div class="detailFields"><?=$noOfSelectedRooms?><?=$this->Form->input('Booking.nofselectedrooms',array('type'=>'hidden','value'=>$noOfSelectedRooms))?></div>
+	<div class="detailFields"><?=$noOfSelectedRooms?><?=$this->Form->input('Booking.nofselectedrooms',array('type'=>'hidden','value'=>$noOfSelectedRooms))?><?=$this->Form->input('Booking.selectedrooms',array('type'=>'hidden','value'=>$selectedrooms))?></div>
 
     <div class="clr"></div>
 	<div class="detailLables">Additional Adults Charges <?=$additionalAdultCharge; ?> * <?=$additionalAdults;?></div>

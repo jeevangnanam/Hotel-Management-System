@@ -95,6 +95,16 @@ form label {
 	margin-left:0px;
 	height:30px;
 }
+.srooms{
+	border:dotted 1px;
+    float: left;
+    overflow:scrol;
+    width: 400px;
+	height:50px;	
+}
+#roomnos{
+	display:none;
+}
 </style>
 <script>
 
@@ -115,28 +125,21 @@ form label {
 			  
 		   });*/
 	//});
-	
+	$('#bookbtn').click(function() {
+		if($('#book').val() > 0){
+			var ids='';
+			$(".srooms div").each(function() {
+				  var pid=($(this).attr('id')+',').split('RP-');
+				  ids += pid[1];
+			})
+			$('#roomnos').val(ids);
+ 		 	$('#frmbook').submit();
+		}
+	});
 	
 }
 )
 
-/*function showRoomDetails(obj){
-	 var rtid=$(obj).attr('id');
-	$(".roomtypesearch"+rtid).slideToggle("slow");
-		$(".roomtypesearch"+rtid).html("<div>From  <input type=\"text\" style=\"width: 70px;\" id=\"dateFrom\" name=\"data[bookingi][dateFrom]\" /> </div><div>To </div><div class='searcdiv'></div>");
-}
-
-function showRoomSearch(obj){	
-
-	 var rtid=$(obj).attr('id');
-	 var htm ="<div class=\"sdate\">Date From  </div>";
-	 htm+="<div class=\"idate\"><input type=\"text\" style=\"width: 70px;\" id=\"dateFrom"+rtid+"\" name=\"data[bookings][dateFrom]\" onclick=\"loadCalander(this)\"/> </div>";
-	 htm+="<div class=\"sdate\">Date To  </div>";
-	 htm+="<div class=\"idate\"><input type=\"text\" style=\"width: 70px;\" id=\"dateTo"+rtid+"\" name=\"data[bookings][dateT0]\"  onclick=\"loadCalander(this)\" /> </div>";
-	 htm+="<div class='searcdiv' id=\""+rtid+"\" onclick=\"getRoomtypes(this)\"></div>";
-	//$(".roomtypesearch"+rtid).slideToggle("slow");
-		document.getElementById("roomtypesearch"+rtid).innerHTML=htm;
-}*/
 function getRoomtypes(obj){
 	//alert(obj);
     var rtid=$('#HotelRoomtype').val();
@@ -152,12 +155,9 @@ function getRoomtypes(obj){
 		return false;
 	}
 	else{
-		//$(".roomtypedes"+rtid).slideToggle("slow");
 		$.post("/manager/Index/setroomavalability/", { rtid: rtid,dateFrom:dateFrom,dateTo:dateTo},
 		   function(data) {
 			 $(".roomtypedes").html(data);
-			// alert(data);
-			  
 		   });
 	}
 
@@ -172,6 +172,8 @@ function selectDiv(obj,id){
 		$(obj).addClass('roomselected');
 			sr=$('#book').val();
 			$('#book').val(parseInt(sr)+1);
+			$('.srooms').append("<div id=\"RP-"+obj.id+"\" align=\"center\" class=\"rdiv\">"+obj.id+"</div>");
+			
 	}
 	else{
 		if($(obj).is('.roomselected')){
@@ -179,6 +181,8 @@ function selectDiv(obj,id){
 			$(obj).addClass('ediv');
 			   sr=$('#book').val();
 			   $('#book').val(parseInt(sr)-1);
+			   var id=$(obj).id;
+			   $('#RP-'+obj.id).remove();
 		}			
 	}
 }
@@ -186,7 +190,6 @@ function selectDiv(obj,id){
 
 function loadbookings(obj,hotelId,rtId){
 	window.location.href = 'http://hotelms-dev.com/manager/index/booking/'+rtId;
-	//$.ajax({url:"/manager/Index/booking",async:false})
 }
 
 $(function() {
@@ -202,6 +205,10 @@ $(function() {
 		$( "#amount" ).val($( "#slider-range" ).slider( "values", 0 ) +
 			" - " + $( "#slider-range" ).slider( "values", 1 ) );
 	});
+	
+
+
+
 </script>
 
 
@@ -229,16 +236,6 @@ $(function() {
      </div>
      <div class="clr">&nbsp;</div>
 	 <?=$this->Form->end('Search');?>	
-    	
-        	<!--<?foreach($getHotels as $key=>$value){ ?>
-            <div class="dv">
-            
-            <div class="btn" align="center">
-			<?$this->Form->create('',array("action" => "/stathome/".$value['Hotel']['id'] ));?>
-			<?$this->Form->end('Booking Info');?>
-            </div>
-            </div>
-            <?}?>-->
         
     </div>
     
@@ -251,108 +248,67 @@ $(function() {
     </div>
     <div class="clr"></div>
         <?php
-		$pages=1;
-		$noofrooms=$noofroomsset;
-			if($noofrooms > 100){
-				$pages=$noofrooms/100;
-			}
-			$x='';
-			$y=$noofrooms/10;
-			$rest=$noofrooms%10;
 		$start="<div class=\"xdiv\">";
 		$end="</div>";
-		$rType=$rTypestatusApp;
-		
-		$aCount=$pCount=0;
-		if(count($rType) > 0){
-			$aCount=$rType[0][0]['S'];
-			//$pCount=$rType[1][0]['S'];
-		}
-		
 		$empty='&nbsp';
 		$approved='&nbsp';
 		$proccessing='&nbsp';
-		$a=$p=1;
 		$roomDiv='';
-		if($y==1){
-			for($i=1; $i<11; $i++ ){
-				if($aCount >= $a){
-					$approved=$appRoomNumbsSet[$i-1];
-					$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rt."');\" id=\"\">$approved</div>";
-					$a++;
+		$x='';
+		$appStr=$proStr='';
+		$appStatus='';
+		$aArray=$pArray=array();
+		if(isset($data_in_booking_tblApp) && count($data_in_booking_tblApp) > 0){
+			$i=0;
+			foreach($data_in_booking_tblApp as $key => $value){
+				$appStr	   .= $value['Booking']['rooms'].',';
+			}
+			$aArray = explode(',',substr($appStr,0,(strlen($appStr)-1)));
+		}
+		if(isset($data_in_booking_tblPro) && count($data_in_booking_tblPro) > 0){
+			$i=0;
+			foreach($data_in_booking_tblPro as $key => $value){
+				$proStr	   .= $value['Booking']['rooms'].',';
+			}
+			$pArray = explode(',',substr($proStr,0,(strlen($proStr)-1)));
+		}
+		
+		if(isset($hotel_room_numbs) && count($hotel_room_numbs) > 0 && $hotel_room_numbs != 0){
+			for($i=0;$i < count($hotel_room_numbs); $i++ ){
+				
+				if(in_array($hotel_room_numbs[$i],$aArray)){
+					$approved=$hotel_room_numbs[$i];
+					$x.="<div id='".$hotel_room_numbs[$i]."' class=\"adiv\" onclick=\"selectDiv(this,'".$rt."');\" id=\"\">$approved</div>";
 				}
-				else if ($pCount >= $p){
-					$x.="<div class=\"pdiv\" onclick=\"selectDiv(this,'".$rt."');\">$proccessing</div>";
-					$p++;
+				else if(in_array($hotel_room_numbs[$i],$pArray)){
+					$proccessing=$hotel_room_numbs[$i];
+					$x.="<div id='".$hotel_room_numbs[$i]."' class=\"pdiv\" onclick=\"selectDiv(this,'".$rt."');\">$proccessing</div>";
 				}
 				else{
-					$x.="<div class=\"ediv\" onclick=\"selectDiv(this,'".$rt."');\">$empty</div>";
+					$empty=$hotel_room_numbs[$i];
+					$x.="<div id='".$hotel_room_numbs[$i]."' class=\"ediv\" onclick=\"selectDiv(this,'".$rt."');\">$empty</div>";
 				}
-				
 			}
-			$roomDiv= $start.$x.$end;
+			echo $roomDiv=$start.$x.$end;
 		}
-		else if($noofrooms < 10 && $noofrooms <> 0){
-			for($i=1; $i<10; $i++ ){
-				if($aCount >= $a ){
-						$approved=$appRoomNumbsSet[$i-1];
-						$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rt."');\">$approved</div>";
-						$a++;
-					}
-				else if ($pCount >= $p){
-						$x.="<div class=\"pdiv\" onclick=\"selectDiv(this,'".$rt."');\">$proccessing</div>";
-						$p++;
-					}
-				else{
-						$x.="<div class=\"ediv\" onclick=\"selectDiv(this,'".$rt."');\">$empty</div>";
-					}
-				
-			}
-				$roomDiv= $start.$x.$end;
-		}
-		else{
-			for($i=1; $i<$noofrooms+1; $i++ ){
-				if($i%10 == 1){
-					$x.=$start;
-				}
-					if($aCount >= $a){
-						$approved=$appRoomNumbsSet[$i-1];
-						$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rt."');\">$approved</div>";
-						$a++;
-					}
-					else if ($pCount >= $p){
-						$x.="<div class=\"pdiv\" onclick=\"selectDiv(this,'".$rt."');\">$proccessing</div>";
-						$p++;
-					}
-					else{
-						$x.="<div class=\"ediv\" onclick=\"selectDiv(this,'".$rt."');\">$empty</div>";
-					}
-				if($i%10 == 0){
-					$x.=$end;
-				}
-				
-			}
-			$roomDiv= $x;
-		}
-		echo $roomDiv."<div class=\"clr\"></div><div class=\"bookdiv\"></div>";
-	
+       
         ?>
     </div>
     <div class="bookfrm">
-	<?=$this->Form->create('Booking',array('action'=>'/stepone/'));?>
+    <div class="srooms">
+    
+    </div>
+	<?=$this->Form->create('Booking',array('id'=>'frmbook','action'=>'/stepone/'));?>
     <?=$this->Form->input('book',array('id'=>'book','label'=>'','value'=>'0','readonly'=>'readonly'));?>
+    <?=$this->Form->input('fromDate',array('type'=>'hidden','id'=>'fromDate','label'=>'','value'=>$dfrom));?>
+    <?=$this->Form->input('toDate',array('type'=>'hidden','id'=>'toDate','label'=>'','value'=>$dto));?>
+    <?=$this->Form->input('rtype',array('type'=>'hidden','id'=>'rtype','label'=>'','value'=>$rt));?>
+    <?=$this->Form->input('roomnos',array('type'=>'text','id'=>'roomnos','label'=>''));?>
     <?=$this->Form->button('Book',array('type'=>'button','id'=>'bookbtn'));?>
         <div id="dsubmit">
         <?=$this->Form->end('Book',array());?>
         </div>
     </div>
+    <div class="clr"></div>
+    
 </div>
-	<div id="popupContact">
-		<a id="popupContactClose"><?=$html->image('/img/icons/close.png',array('width'=>'20px'));?></a>
-		<p id="contactArea">
-			
-		</p>
-	</div>
-	<div id="backgroundPopup"></div>
-<!--<?$this->Form->create('',array("action" => "/stathome/".$value['Hotel']['id'] ));?>
-			<?$this->Form->end('Booking Info');?>-->

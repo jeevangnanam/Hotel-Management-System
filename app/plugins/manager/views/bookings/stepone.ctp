@@ -187,6 +187,9 @@ $coupon=$value['Coupon']['reduce_percentage'];
 	<div class="clr"></div>
 	<div class="detailLables">No of Selected Rooms</div>
 	<div class="detailFields"><?=$nsr;?><?=$this->Form->input('bookings.nofselectedrooms',array('type'=>'hidden','value'=>$nsr))?></div>
+    <div class="clr"></div>
+	<div class="detailLables">Selected Rooms</div>
+	<div class="detailFields"><?=$nsrooms;?><?=$this->Form->input('bookings.selectedrooms',array('type'=>'hidden','value'=>$nsrooms))?></div>
 	<div class="clr"></div>
     <div class="detailLables">Coupon</div>
 	<div class="detailFields"><?=$this->Form->input('bookings.coupon',array('type'=>'text','value'=>'','label'=>''))?></div>

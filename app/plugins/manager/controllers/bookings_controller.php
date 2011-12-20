@@ -29,16 +29,17 @@ class BookingsController extends ManagerAppController{
 	}
 	
 	function stepone() {
-		$params=$this->params;
 		$hotelId=$this->Session->read('hotelId');
-		$noOfRooms=$params['url']['data']['bookings']['nsr'];
-		$fromDate=$params['url']['data']['bookings']['dateFrom'];
-		$toDate=$params['url']['data']['bookings']['dateT0'];
-		$rtId=$params['url']['data']['bookings']['roomtype'];
+		$noOfRooms=$this->data['Booking']['book'];
+		$selectedroomnos=$this->data['Booking']['roomnos'];
+		$fromDate=$this->data['Booking']['fromDate'];
+		$toDate=$this->data['Booking']['toDate'];
+		$rtId=$this->data['Booking']['rtype'];
 		$roomDes=$this->getRoomTypeDetails($hotelId,$rtId);
 		$this->set('fromDate',$fromDate);
 		$this->set('toDate',$toDate);
 		$this->set('nsr',$noOfRooms);
+		$this->set('nsrooms',substr($selectedroomnos,0,strlen($selectedroomnos)-1));		
 		$this->set(compact('roomDes'));
 	
 	}
@@ -50,6 +51,7 @@ class BookingsController extends ManagerAppController{
 		$dateFrom=$params['data']['bookings']['fromdate'];
 		$dateTo=$params['data']['bookings']['todate'];
 		$noOfSelectedRooms=$params['data']['bookings']['nofselectedrooms'];
+		$selectedrooms=$params['data']['bookings']['selectedrooms'];
 		$additionalAdults=$params['data']['bookings']['max_adults'];
 		$additionalChildren=$params['data']['bookings']['max_children'];
 		$coupon=$params['data']['bookings']['coupon'];
@@ -81,6 +83,8 @@ class BookingsController extends ManagerAppController{
 		$this->set('dateFrom',$dateFrom);
 		$this->set('dateTo',$dateTo);
 		$this->set('noOfSelectedRooms',$noOfSelectedRooms);
+		$this->set('selectedrooms',$selectedrooms);
+		
 		$this->set('additionalAdults',$additionalAdults);		
 		$this->set('additionalChildren',$additionalChildren);	
 		$roomDes=$this->getRoomTypeDetails($hotelId,$rtId);
@@ -92,13 +96,12 @@ class BookingsController extends ManagerAppController{
 			$this->Auth->allow('login');
 		}
 		
-		
 		$nofr=$this->params['data']['Booking']['nofselectedrooms'];
 		$noofdays=$this->params['data']['Booking']['nofselecteddays'];
 		$dFrom=$this->params['data']['Booking']['dateFrom'];
 		$dTo=$this->params['data']['Booking']['dateTo'];
 		$cd=$this->params['data']['Booking']['coupondeduction']; 
-		
+		$selectedrooms=$this->params['data']['Booking']['selectedrooms'];
 		$rt=$this->params['data']['Booking']['room_type'];
 		$hotel=$this->Session->read('hotelId');
 		$det=$this->HotelsRoomType->find('all',array(
@@ -132,12 +135,14 @@ class BookingsController extends ManagerAppController{
         $this->data['Booking']['coupon_id'] = $this->params['data']['Booking']['couponid']; 
         $this->data['Booking']['notes'] = 'n';
         $this->data['Booking']['status'] = "APPROVED";
+        $this->data['Booking']['rooms']=$this->params['data']['Booking']['selectedrooms'];
 
-
+			
         $ticket=$this->Session->read('ticket');
         $ticketavl='';
-       // echo $hotel.$ticket;
+        //echo $hotel.$ticket;
         if(!empty($ticket)){
+        	
         	$ticketavl=$this->Booking->find('all',array(
         	'fields'=>array('count(*) as c'),
         	'conditions'=>array("Booking.id=$ticket"),
@@ -154,7 +159,8 @@ class BookingsController extends ManagerAppController{
         	if($this->Booking->save($this->data)){
 	        	$bID=$this->Booking->getInsertID();
 	        	$this->Session->write('ticket',$bID);
-	        	$dets=$this->getticketdet($hotel,$rtype);		   
+	        	$dets=$this->getticketdet($hotel,$rtype);
+	        	$this->set('rID',$ticket);	 		   
 	        	$this->set(compact('dets','dFrom','dTo','noofdays','estimated_price','rtype'));
 	        }
 	        else{

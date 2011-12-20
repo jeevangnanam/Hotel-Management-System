@@ -2,7 +2,7 @@
 
 class IndexController extends ManagerAppController{
     
-    var $uses = array('Hotel','HotelsRoomType','HotelsRoomCapacities','Booking','HotelsManager','Room');
+    var $uses = array('Hotel','HotelsRoomType','HotelsRoomCapacities','Booking','HotelsManager','Rooms');
     var $helpers = array('Lightbox');
     
     function beforeFilter(){
@@ -25,6 +25,7 @@ class IndexController extends ManagerAppController{
     
     function bookingindex($hotel=NULL){
        $hotelId=$this->params['pass'][0];
+       $this->Session->write('hotelId',$hotelId);
        $ses=$this -> Session -> read();
        $userid=$ses['Auth']['User']['id'];
        
@@ -45,42 +46,64 @@ class IndexController extends ManagerAppController{
        }
        $rt=$dfrom=$dto=$roomavl='';
     	if(isset($this->data['Hotel']['tag']) && $this->data['Hotel']['tag']==1){  		
-    		$rt=$this->data['Hotel']['roomtype'];
-    		$dfrom=$this->data['Hotel']['dateFrom'];
-    		$dto=$this->data['Hotel']['dateTo'];
-    		//$roomavl=$this->setroomavalability($rt,$hotelId,$dfrom,$dto);	
-    		$rooms=$this->HotelsRoomCapacities->find('all',array(			
-			 'fields' => array(
-     				'HotelsRoomCapacities.id',
-                    'HotelsRoomCapacities.room_type_id',
-					'HotelsRoomCapacities.total_rooms'),
-		  	'conditions' =>array("HotelsRoomCapacities.room_type_id=$rt AND HotelsRoomCapacities.hotel_id=$hotelId" ),
-		  )
-		);
-		$rTypestatusApp=$this->roomstatus($hotelId,$rt,$dfrom,$dto,'APPROVED');
-		$rTypestatusAproved=$this->room_status_wise_roomnumbers($hotelId,$rt,$dfrom,$dto,'APPROVED');
-		$appRoomNumbs='';
-		$appRoomNumbsSet=array();
-		
-		foreach ($rTypestatusAproved as $key=>$value){
-			
-			$appRoomNumbs.=$value['Booking']['rooms'].',';
-			
-		}
-		$appRoomNumbsSet= explode(',',$appRoomNumbs);
-		$this->set(compact('rTypestatusApp'));
-		$this->set(compact('appRoomNumbsSet'));
-		//debug($appRoomNumbsSet);
-		$noofroomsset=0;
-		if(count($rooms) > 0){
-			$noofroomsset=$rooms[0]['HotelsRoomCapacities']['total_rooms'];
-		}
-		
-			$this->set(compact('noofroomsset'));
+		    		$rt=$this->data['Hotel']['roomtype'];
+		    		$dfrom=$this->data['Hotel']['dateFrom'];
+		    		$dto=$this->data['Hotel']['dateTo'];
+		    		//$roomavl=$this->setroomavalability($rt,$hotelId,$dfrom,$dto);	
+			    		$rooms=$this->HotelsRoomCapacities->find('all',array(			
+						 	'fields' => array(
+			     				'HotelsRoomCapacities.id',
+			                    'HotelsRoomCapacities.room_type_id',
+								'HotelsRoomCapacities.total_rooms'),
+					  		'conditions' =>array("HotelsRoomCapacities.room_type_id=$rt AND HotelsRoomCapacities.hotel_id=$hotelId" ),
+					  		)
+						);
+				$rTypestatusApp=$this->roomstatus($hotelId,$rt,$dfrom,$dto,'APPROVED');
+				$rTypestatusAproved=$this->room_status_wise_roomnumbers($hotelId,$rt,$dfrom,$dto,'APPROVED');
+				
+				$rTypestatusPro=$this->roomstatus($hotelId,$rt,$dfrom,$dto,'PROCESSING');
+				$rTypestatusProcessed=$this->room_status_wise_roomnumbers($hotelId,$rt,$dfrom,$dto,'PROCESSING');
+				
+				$appRoomNumbs=$proRoomNumbs='';
+				$appRoomNumbsSet=$proRoomNumbsSet=array();
+				
+				foreach ($rTypestatusAproved as $key=>$value){
+					
+					$appRoomNumbs.=$value['Booking']['rooms'].',';
+					
+				}
+					$appRoomNumbsSet= explode(',',$appRoomNumbs);
+					$this->set(compact('rTypestatusApp'));
+					$this->set(compact('appRoomNumbsSet'));
+				
+					foreach ($rTypestatusProcessed as $key=>$value){
+						
+						$proRoomNumbs.=$value['Booking']['rooms'].',';
+						
+					}
+				$proRoomNumbsSet= explode(',',$proRoomNumbs);
+				$this->set(compact('rTypestatusPro'));
+				$this->set(compact('proRoomNumbsSet'));
+				
+				$noofroomsset=0;
+				if(count($rooms) > 0){
+					$noofroomsset=$rooms[0]['HotelsRoomCapacities']['total_rooms'];
+				}
+				
+					$this->set(compact('noofroomsset'));
+					$data_in_booking_tblApp=$this->getbookingdetails($hotelId,$rt,$dfrom,$dto,'APPROVED');
+					$data_in_booking_tblPro=$this->getbookingdetails($hotelId,$rt,$dfrom,$dto,'PROCESSING');
+			        $hotel_room_numbs=$this->getroomnumbers($hotelId,$rt);
+			        $this->set(compact('data_in_booking_tblApp'));
+			        $this->set(compact('data_in_booking_tblPro'));
+			        $this->set(compact('hotel_room_numbs'));
     	}
     	else{
+    		$this->set('rTypestatusPro',0);
     		$this->set('rTypestatusApp',0);
     		$this->set('noofroomsset',0);
+    		$this->set('data_in_booking_tbl',0);
+	        $this->set('hotel_room_numbs',0);
     	}
         
        $this->set(compact('rtyp'));
@@ -88,6 +111,8 @@ class IndexController extends ManagerAppController{
        $this->set('dfrom',$dfrom);
        $this->set(compact('roomavl'));
        $this->set('dto',$dto);
+       $this->Session->write('ticket','');
+       
        
     }
     
@@ -103,6 +128,29 @@ class IndexController extends ManagerAppController{
 		return $roomtypes;
 	}
 	
+	function getbookingdetails($hotelId=NULL,$rt=NULL,$dfrom=NULL,$dto=NULL,$status=NULL){
+		$tbl=$this->Booking->find('all',array(
+			'fields'    => array('`Booking`.`status`','`Booking`.`rooms`'),
+		    'conditions' => array("`Booking`.`hotel_id`='$hotelId'","Booking.room_type_id='$rt'","Booking.from_date >= '$dfrom'","Booking.end_date <= '$dto'","Booking.status = '$status'"),
+		));
+		
+		return $tbl;
+	}
+	function getroomnumbers($hotelId=NULL,$rt=NULL){
+		$roomnums=array();
+		$i=0;
+		$rnmbs=$this->Rooms->find('all',array(
+			'fields'=>array('Rooms.roomname'),
+		    'conditions' =>array("Rooms.hotel_id='$hotelId'","Rooms.room_type_id='$rt';" ),
+		));	
+			
+		foreach ($rnmbs as $key=>$value){
+			$roomnums[$i]=$value['Rooms']['roomname'];
+			$i++;
+		}
+		
+		return $roomnums;
+	}
     function login()
 	{
             $this->layout = "limejungle_manger_login";
