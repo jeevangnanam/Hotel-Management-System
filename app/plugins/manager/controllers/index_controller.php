@@ -203,7 +203,7 @@ class IndexController extends ManagerAppController{
 		
 	}
 	
-	function setroomtypes($hotelId=NULL){
+	/*function setroomtypes($hotelId=NULL){
 		
 		$hotelId=$this->params['pass'][0];
 		$this->Session->write('hotelId',$hotelId);
@@ -234,13 +234,45 @@ class IndexController extends ManagerAppController{
 		}
 		echo $res;
 		
+	}*/
+	function roomtypes(){
+		$ph_id=$this->params['pass'][0];
+		/*$fh_id=$this->data['Hotel']['hotelid'];
+		if($ph_id==$fh_id){
+			
+		}*/
+		$this->paginate = array(
+        				'fields'=>array('Hotel.`name`',
+        								'HotelsRoomType.`name`',
+									    'HotelsRoomType.price','HotelsRoomType.size',
+									    'HotelsRoomType.info',
+									    'HotelsRoomType.`view`',
+									    'HotelsRoomType.cooling'),
+        				'joins'=>array(
+        						
+                       	 		array(
+		                       		'table' => 'hotels',
+		                        	'alias' => 'Hotel',
+		                        	'type'  => 'INNER',
+		                        	'foreignKey'    => false,
+                        			'conditions'    => array('Hotel.id = HotelsRoomType.hotel_id'),
+                       	 		),
+        								
+        							   ),
+        				'conditions'=>array("Hotel.id=$ph_id "),
+        				
+        				'order'    => array('HotelsRoomType.id'    => 'asc'),
+        				'limit' =>2
+        							   
+        			);
+        		$loadHotelsRoomType=$this->paginate('HotelsRoomType');
+      			$this->set(compact('loadHotelsRoomType'));
 	}
-	
 	function popuproomdetails($hotelId=NULL,$roomtype=NULL){
 		$hotelId=$this->Session->read('hotelId'); 
 		$roomtype=$this->params['pass'][0];
 		$roomTypeDetails=$this->getroomtypedetails($hotelId,$roomtype);
-	//	debug($roomTypeDetails[0]['HotelsRoomType']['name']);
+
 		
 		$json = '{
 		"uroomdetails": [ 
