@@ -334,8 +334,6 @@ class NodesController extends AppController {
     }
 
     public function index() {
-    	//debug($this->params['data']);
-    	//die();
        $hotelname=$location=$starclass=$hotelId=$subdomain=$category='';
        $domain=$this->getSubdomain();
        if(!empty($domain) && $domain!='demo-hotelms'){
@@ -520,7 +518,7 @@ class NodesController extends AppController {
 		return $cat;
 	}
 	function setLogo($domain=NULL){
-		if($domain != 'demo-hotelms'){
+		if($domain != 'demo-hotelms' && $domain==''){
 		$logoDets=$this->Hotel->find('all',array(
         		'fields'=>array('Hotel.subdomain','Hotel.logo','Hotel.id'),
         		'conditions'=>array("Hotel.subdomain='$domain'"),)
@@ -574,7 +572,7 @@ class NodesController extends AppController {
 		else if(!empty($hotelId)) {
 			$hw=" AND Hotel.id='$hotelId'";
 		}
-		else if(!empty($subdomain)){
+		else if(!empty($subdomain) && $subdomain!="www"){
 			$hw=" AND Hotel.subdomain='$subdomain' ";
 		}
 		 $this->paginate = array(
