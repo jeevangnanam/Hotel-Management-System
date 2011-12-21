@@ -35,7 +35,7 @@ class NodesController extends AppController {
  * @access public
  */
     public $uses = array(
-        'Node','Hotel','HotelsPicture','Users','HotelsRoomType','HotelsRoomCapacities','Booking','Coupon','HotelsCategoryList','User'
+        'Node','Hotel','HotelsPicture','Users','HotelsRoomType','HotelsRoomCapacities','Booking','Coupon','HotelsCategoryList','User','Rooms'
     );
     
 	
@@ -364,6 +364,144 @@ class NodesController extends AppController {
        $this->set(compact('hotelDets','catego'));
     }
     
+    function bookingindex(){
+    	
+    	$hotelId=$this->params['pass'][0];
+    	$getHotels=$this->getHotels($hotelId);
+        $this->set('hotelid',$hotelId);
+        $this->set(compact('getHotels'));
+        $roomtypes=$this->getroomtypes($hotelId);
+       $rtyp=array();
+       foreach ($roomtypes as $key=>$value){
+       	$rtyp[$value['HotelsRoomType']['id']]=$value['HotelsRoomType']['name'];
+       }
+       $rt=$dfrom=$dto=$roomavl='';
+    	if(isset($this->data['Node']['tag']) && $this->data['Node']['tag']==1){  		
+    		
+		    		$rt=$this->data['Node']['roomtype'];
+		    		$dfrom=$this->data['Node']['dateFrom'];
+		    		$dto=$this->data['Node']['dateTo'];
+		    		
+			    		$rooms=$this->HotelsRoomCapacities->find('all',array(			
+						 	'fields' => array(
+			     				'HotelsRoomCapacities.id',
+			                    'HotelsRoomCapacities.room_type_id',
+								'HotelsRoomCapacities.total_rooms'),
+					  		'conditions' =>array("HotelsRoomCapacities.room_type_id=$rt AND HotelsRoomCapacities.hotel_id=$hotelId" ),
+					  		)
+						);
+				$rTypestatusApp=$this->roomstatus($hotelId,$rt,$dfrom,$dto,'APPROVED');
+				$rTypestatusAproved=$this->room_status_wise_roomnumbers($hotelId,$rt,$dfrom,$dto,'APPROVED');
+				
+				$rTypestatusPro=$this->roomstatus($hotelId,$rt,$dfrom,$dto,'PROCESSING');
+				$rTypestatusProcessed=$this->room_status_wise_roomnumbers($hotelId,$rt,$dfrom,$dto,'PROCESSING');
+				
+				$appRoomNumbs=$proRoomNumbs='';
+				$appRoomNumbsSet=$proRoomNumbsSet=array();
+				
+				foreach ($rTypestatusAproved as $key=>$value){
+					
+					$appRoomNumbs.=$value['Booking']['rooms'].',';
+					
+				}
+					$appRoomNumbsSet= explode(',',$appRoomNumbs);
+					$this->set(compact('rTypestatusApp'));
+					$this->set(compact('appRoomNumbsSet'));
+				
+					foreach ($rTypestatusProcessed as $key=>$value){
+						
+						$proRoomNumbs.=$value['Booking']['rooms'].',';
+						
+					}
+				$proRoomNumbsSet= explode(',',$proRoomNumbs);
+				$this->set(compact('rTypestatusPro'));
+				$this->set(compact('proRoomNumbsSet'));
+				
+				$noofroomsset=0;
+				if(count($rooms) > 0){
+					$noofroomsset=$rooms[0]['HotelsRoomCapacities']['total_rooms'];
+				}
+				
+					$this->set(compact('noofroomsset'));
+					$data_in_booking_tblApp=$this->getbookingdetails($hotelId,$rt,$dfrom,$dto,'APPROVED');
+					$data_in_booking_tblPro=$this->getbookingdetails($hotelId,$rt,$dfrom,$dto,'PROCESSING');
+			        $hotel_room_numbs=$this->getroomnumbers($hotelId,$rt);
+			        $this->set(compact('data_in_booking_tblApp'));
+			        $this->set(compact('data_in_booking_tblPro'));
+			        $this->set(compact('hotel_room_numbs'));
+    	}
+    	else{
+    		$this->set('rTypestatusPro',0);
+    		$this->set('rTypestatusApp',0);
+    		$this->set('noofroomsset',0);
+    		$this->set('data_in_booking_tbl',0);
+	        $this->set('hotel_room_numbs',0);
+    	}
+        
+       $this->set(compact('rtyp'));
+       $this->set('rt',$rt);
+       $this->set('dfrom',$dfrom);
+       $this->set(compact('roomavl'));
+       $this->set('dto',$dto);
+       $this->Session->write('ticket','');
+       
+    	
+    }
+    
+	function getHotels($hotelId=NULL){
+		$ht='';
+		if(!empty($hotelId)){
+			$ht="Hotel.id=$hotelId";
+		}
+		
+		$hotels=$this->Hotel->find('all',array(			
+			 'fields' => array(
+     				'Hotel.id',
+                    'Hotel.`name`'),
+		  	'conditions' =>array("$ht"),
+		  )
+		);
+		return $hotels;
+		
+	}
+	
+	function getbookingdetails($hotelId=NULL,$rt=NULL,$dfrom=NULL,$dto=NULL,$status=NULL){
+		$tbl=$this->Booking->find('all',array(
+			'fields'    => array('`Booking`.`status`','`Booking`.`rooms`'),
+		    'conditions' => array("`Booking`.`hotel_id`='$hotelId'","Booking.room_type_id='$rt'","Booking.from_date >= '$dfrom'","Booking.end_date <= '$dto'","Booking.status = '$status'"),
+		));
+		
+		return $tbl;
+	}
+	
+	function room_status_wise_roomnumbers($hotelId=NULL,$roomtypeid=NULL,$dateFrom=NULL,$dateTo=NULL,$status=NULL){
+		$roomNumbs=$this->Booking->find('all',
+			array(
+			'fields' => array(
+     				'Booking.rooms',
+                    'Booking.status'),
+			'conditions' =>array(" Booking.hotel_id = $hotelId AND Booking.room_type_id = $roomtypeid AND Booking.from_date >= '".$dateFrom."' AND Booking.end_date <= '".$dateTo."' AND Booking.`status`='".$status."' ORDER BY Booking.`status` DESC;" ),
+			)
+		);
+		return $roomNumbs;
+	}
+	
+	function getroomnumbers($hotelId=NULL,$rt=NULL){
+		$roomnums=array();
+		$i=0;
+		$rnmbs=$this->Rooms->find('all',array(
+			'fields'=>array('Rooms.roomname'),
+		    'conditions' =>array("Rooms.hotel_id='$hotelId'","Rooms.room_type_id='$rt';" ),
+		));	
+			
+		foreach ($rnmbs as $key=>$value){
+			$roomnums[$i]=$value['Rooms']['roomname'];
+			$i++;
+		}
+		
+		return $roomnums;
+	}
+	
 	function getSubdomain() {
 		$domain = parse_url($_SERVER['HTTP_HOST']);
 		$domain = explode('.',$domain['path']);
@@ -730,16 +868,14 @@ class NodesController extends AppController {
 		  	'conditions' =>array("HotelsRoomType.hotel_id=$hotelId" ),
 		  )
 		);
+		return $roomtypes;
 	}
 	
 	/* booking steps */
 	/* booking step one */
 	function stepone(){
-		//debug($this->Auth->user('id'));
-		/*if(!$this->Auth->isAuthorized()){
-			$this->redirect("/users/login/");
-			//die('hi');
-		}*/
+		//debug($this->data);
+		//die();
 	$domain=$this->getSubdomain();
        if(!empty($domain)){
         $this->setLogo($domain);
@@ -747,14 +883,16 @@ class NodesController extends AppController {
 		//debug($this->params);
 		$params=$this->params;
 		$hotelId=$this->Session->read('hotelId');
-		$noOfRooms=$params['data']['Nodes']['roomcount'];
-		$fromDate=$params['data']['Nodes']['datefrom'];
-		$toDate=$params['data']['Nodes']['dateto'];
-		$rtId=$params['data']['Nodes']['roomtypes'];
+		$noOfRooms=$this->data['Nodes']['roomcount'];
+		$fromDate=$this->data['Nodes']['fromDate'];
+		$toDate=$this->data['Nodes']['toDate'];
+		$selectedroomnos=$this->data['Nodes']['roomnos'];
+		$rtId=$this->data['Nodes']['rtype'];
 		$roomDes=$this->getRoomTypeDets($hotelId,$rtId);
 		$this->set('fromDate',$fromDate);
 		$this->set('toDate',$toDate);
 		$this->set('nsr',$noOfRooms);
+		$this->set('nsrooms',substr($selectedroomnos,0,strlen($selectedroomnos)-1));
 		$this->set(compact('roomDes'));
 		
 	}
@@ -771,6 +909,7 @@ class NodesController extends AppController {
 		$dateFrom=$params['data']['Nodes']['fromdate'];
 		$dateTo=$params['data']['Nodes']['todate'];
 		$noOfSelectedRooms=$params['data']['Nodes']['nofselectedrooms'];
+		$selectedrooms=$params['data']['Nodes']['selectedrooms'];
 		$additionalAdults=$params['data']['Nodes']['max_adults'];
 		$additionalChildren=$params['data']['Nodes']['max_children'];
 		$coupon=$params['data']['Nodes']['coupon'];
@@ -799,6 +938,7 @@ class NodesController extends AppController {
 		$this->set('dateFrom',$dateFrom);
 		$this->set('dateTo',$dateTo);
 		$this->set('noOfSelectedRooms',$noOfSelectedRooms);
+		$this->set('selectedrooms',$selectedrooms);
 		$this->set('additionalAdults',$additionalAdults);		
 		$this->set('additionalChildren',$additionalChildren);
 		$this->set('cd',$cd);	
@@ -810,16 +950,6 @@ class NodesController extends AppController {
 	/* booking step stepthree */
 
 	function stepthree(){
-		/*debug($this->data);
-		if(isset($this->data['Booking']['name'])){
-			$this->Session->setFlash(__( 'Please enter your name.', true));     
-		}
-		else if(isset($this->data['Booking']['email'])){
-			$this->Session->setFlash(__( 'Please enter your email.', true));     
-		}
-		else if(isset($this->data['Booking']['contactno'])){
-			$this->Session->setFlash(__( 'Please enter your contact number.', true));     
-		}*/
 	$domain=$this->getSubdomain();
        if(!empty($domain)){
         $this->setLogo($domain);
@@ -828,6 +958,7 @@ class NodesController extends AppController {
 		
 		$nofr=$this->params['data']['Nodes']['nofselectedrooms'];
 		$noofdays=$this->params['data']['Nodes']['nofselecteddays'];
+		$selectedrooms=$this->params['data']['Nodes']['selectedrooms'];
 		$cd=$this->params['data']['Nodes']['coupondeduction']; 
 		$aac=$this->params['data']['Nodes']['maxadults']; 
 		
@@ -850,11 +981,10 @@ class NodesController extends AppController {
 					 'conditions' =>array("HotelsRoomType.hotel_id='$hotel'","HotelsRoomType.id='$rt';" ),
 			)
 		);
-		/*debug($det);
-		die();*/
+
 		$p=$det[0]['HotelsRoomType']['price'];
 		$rname=$det[0]['HotelsRoomType']['name'];
-		
+		$rtype=$this->params['data']['Nodes']['room_type'];
 		$estimated_price=((($nofr*$p)+($aacp*$aac)+($accp*$acc))*$noofdays)*((100-$cd)/100);
 		$user=$this->Auth->user('id');
 		$this->data['Booking']['user_id'] = 0 ;
@@ -870,39 +1000,88 @@ class NodesController extends AppController {
         $this->data['Booking']['rtype'] = $rname;
         $this->data['Booking']['adchrg']=$aacp*$aac;
         $this->data['Booking']['acchrg']=$accp*$acc;
-         
-        if($this->Booking->save($this->data)){
-        	 /*$username=$this->User->find('all',array(
-        	 'fields'=>array('User.first_name,User.last_name,User.email'),
-        	 'conditions'=>array("User.id ='$user'"),
-        	 ));
-        	 $this->data['Booking']['username']=$username[0]['User']['first_name']." ".$username[0]['User']['last_name'] ;
-        	 $this->data['Booking']['email']=$username[0]['User']['email'];*/
-        	 /*$manageremail=$username=$this->User->find('all',array(
-        	 'fields'=>array('User.first_name,User.last_name,User.email'),
-        	 'joins'=>array(
-        	 
-        	 ),
-        	 'conditions'=>array("User.id ='$user'"),
-        	 ));*/
-        	$ht=$this->Hotel->find('all',array(
-			'fields'=>array('Hotel.name',
-							),
-			
-					 'conditions' =>array("Hotel.id='$hotel'" ),
-			)
-			);
-			$ht=$ht[0]['Hotel']['name'];
-		$this->set('hotelName',$ht);
-		$this->_sendNewUserMail( $this->data);
+        $this->data['Booking']['rooms']=$selectedrooms;
+         $ticket=$this->Session->read('ticket');
+        $ticketavl='';
+        //echo $hotel.$ticket;
+        if(!empty($ticket)){
         	
+        	$ticketavl=$this->Booking->find('all',array(
+        	'fields'=>array('count(*) as c'),
+        	'conditions'=>array("Booking.id=$ticket"),
+        	));
+        	
+        	if($ticketavl[0][0]['c'] > 0){
+        	 	$dets=$this->getticketdet($hotel,$rtype);	
+        	 	$this->set('rID',$ticket);	   
+	        	$this->set(compact('dets','dFrom','dTo','noofdays','estimated_price','rtype'));
+	        	 $ht=$this->Hotel->find('all',array(
+				'fields'=>array('Hotel.name',
+								),
+				
+						 'conditions' =>array("Hotel.id='$hotel'" ),
+				)
+				);
+				$ht=$ht[0]['Hotel']['name'];
+				$this->set('hotelName',$ht);
+	        	$this->Session->setFlash(__( 'Your already have a ticket.', true)); 
+        	}
         }
         else{
+        	if($this->Booking->save($this->data)){
+        		$bID=$this->Booking->getInsertID();
+	        	$this->Session->write('ticket',$bID);
+        	    $ht=$this->Hotel->find('all',array(
+				'fields'=>array('Hotel.name',
+								),
+				
+						 'conditions' =>array("Hotel.id='$hotel'" ),
+				)
+				);
+			$ht=$ht[0]['Hotel']['name'];
+			$this->set('hotelName',$ht);
+			$this->_sendNewUserMail( $this->data);
         	
-        }
+        	}
+        	else{}
+        }        
+        
+         
+        
 		
 	}
-	
+	function getticketdet($hotel=NULL,$rtype=NULL){
+		$dets=$this->Hotel->find('all', array(
+        			   		'fields'=>array('DISTINCT Hotel.`name`','HotelsRoomType.`name`','User.first_name','User.last_name'),
+        					'joins'=>array(
+        					array(
+			                        'table' => 'bookings',
+			                        'alias' => 'Booking',
+			                        'type'  => 'INNER',
+			                        'foreignKey'    => false,
+			                        'conditions'    => array('Hotel.id = Booking.hotel_id'),
+			                  ),
+			                  array(
+			                        'table' => 'hotels_room_types',
+			                        'alias' => 'HotelsRoomType',
+			                        'type'  => 'INNER',
+			                        'foreignKey'    => false,
+			                        'conditions'    => array('HotelsRoomType.hotel_id = Booking.hotel_id AND HotelsRoomType.id=Booking.room_type_id'),
+			                        ),
+        					array(
+			                        'table' => 'users',
+			                        'alias' => 'User',
+			                        'type'  => 'INNER',
+			                        'foreignKey'    => false,
+			                        'conditions'    => array('User.id = Booking.user_id'),
+			                        ),
+        					),
+        					'conditions'=>array("Booking.hotel_id=$hotel AND HotelsRoomType.id=$rtype"),
+        			   )
+        		);
+        		
+        		return $dets;
+	}
 	function getAddChages($hotelId=NULL,$rt=NULL,$col=NULL){
 		$chr=$this->HotelsRoomCapacities->find('all',array(
 		'fields'=>array("HotelsRoomCapacities.`$col`"),
