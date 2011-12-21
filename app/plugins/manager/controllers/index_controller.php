@@ -426,10 +426,13 @@ class IndexController extends ManagerAppController{
 		if(isset($this->data['Hotel'])){
 			$dfrom=$this->data['Hotel']['fromdate'];
 			$dto=$this->data['Hotel']['dateto'];
+			$dfromd=$dfrom;
+			$dtod=$dto;
 		}
 		
 		if(empty($dfrom)){
 			$dfrom=$dto='now()';
+			$dfromd=$dtod=date('Y-m-d');
 		}
 		
 		//die();
@@ -447,6 +450,7 @@ class IndexController extends ManagerAppController{
 	    	'HotelsRoomType.name',
 	    	'Booking.`status`',
 	    	'Sum(Booking.number_of_rooms) as noOfRooms',
+	    	'sum(Booking.estimated_price) as estimated_price',
 	    	'Booking.room_type_id',
 			'Booking.estimated_price'),
 	    	'joins'=>array(
@@ -460,7 +464,7 @@ class IndexController extends ManagerAppController{
 						),
 	        'conditions' => array("HotelsRoomType.hotel_id" => "$hotelId","Booking.from_date >= '$dfrom'" ,"Booking.end_date <= '$dto'"),
 			'group'=>array('HotelsRoomType.id,Booking.`status`'),
-	        'limit' => 5
+	        'limit' => 4
 	    );
 	    $HotelsRoomType = $this->paginate('HotelsRoomType');
 	    $totRooms=$this->getTotRoom($hotelId);
@@ -497,6 +501,8 @@ class IndexController extends ManagerAppController{
 	    $this->set('processPrc',$processPrc);
 	    $this->set('income',($bookedPrc+$processPrc));
 	    $this->set(compact('HotelsRoomType'));
+	    $this->set('dfrom',$dfromd);
+	    $this->set('dto',$dtod);
 	    
 	}
 	
