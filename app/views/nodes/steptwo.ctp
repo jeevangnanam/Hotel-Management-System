@@ -214,7 +214,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 	<div class="detailFields"><?=$dateTo;?><?=$this->Form->input('dateTo',array('type'=>'hidden','value'=>$dateTo))?></div>
     <div class="clr"></div>
 	<div class="detailLables">No of Selected Rooms</div>
-	<div class="detailFields"><?=$noOfSelectedRooms?><?=$this->Form->input('nofselectedrooms',array('type'=>'hidden','value'=>$noOfSelectedRooms))?></div>
+	<div class="detailFields"><?=$noOfSelectedRooms?><?=$this->Form->input('nofselectedrooms',array('type'=>'hidden','value'=>$noOfSelectedRooms))?><?=$this->Form->input('selectedrooms',array('type'=>'hidden','value'=>$selectedrooms))?></div>
 
     <div class="clr"></div>
 	<div class="detailLables">Additional Adults Charges <?=$additionalAdultCharge; ?> * <?=$additionalAdults;?></div>
@@ -227,32 +227,20 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 	<div class="detailFields"><?=$addC;?><?=$this->Form->input('maxchildren',array('type'=>'hidden','value'=>$additionalChildren))?></div>
 	<div class="clr"></div>
     <?php 
-		/*$date1 = $dateFrom;
-		$date2 = $dateTo;
-		
-   $dateDiff    = $date1 - $date2;
-   
-   echo "Differernce is $fullDays days, $fullHours hours and $fullMinutes minutes.";   
-
-		$diff = abs(strtotime($date2) - strtotime($date1));
-		
-		$years = floor($diff / (365*60*60*24));
-		if($years!=0){
-			$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
-			$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
-		}
-		else{
-			$months = floor(($diff -   365*60*60*24) / (30*60*60*24));
-			$days = floor(($diff -  365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
-		}*/
 		$date1 = $dateFrom;
 		$date2 = $dateTo;
 		
 		$diff = abs(strtotime($date2) - strtotime($date1));
-		
+		$s=(strlen($dateFrom)-2);
+		$e=strlen($dateTo);
+		$m=(substr($dateTo,$s,$e));
+		$mc=30;
+		if($m==31){
+			$mc=$m;
+		}
 		$years = floor($diff / (365*60*60*24));
-		$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
-		$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+		$months = floor(($diff - $years * 365*60*60*24) / ($mc*60*60*24));
+		$days = floor(($diff - $years * 365*60*60*24 - $months*$mc*60*60*24)/ (60*60*24));
 	?>
     <div class="detailLables">Cost for <?=$days;?> day(s)  <?=(($price*$noOfSelectedRooms)+$addC+$addAd);?>*<?=$days;?></div>
 	<div class="detailFields"><?=(($price*$noOfSelectedRooms)+$addC+$addAd)*$days;?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>$days))?></div>

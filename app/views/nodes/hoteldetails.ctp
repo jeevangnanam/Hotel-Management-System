@@ -62,7 +62,7 @@ function submitform(frm){
 	float:left;
 }
 .submit{
-	display:none;
+	/*display:none;*/
 }
 #datefrom,#dateto{
 	margin-left:2px;
@@ -100,6 +100,9 @@ function submitform(frm){
 .cmb{
 	width:120px;
 }
+.submit input {
+    width: 150px;
+}
 </style>
 <?php
 	foreach($hoteldets as $key=>$value){ ?>
@@ -126,6 +129,8 @@ function submitform(frm){
 		    ?>
 			<?php ?>
 			<div class="imgbox"><img src="<?php echo $this->Html->webroot;?>uploads/hotels/<?=$path;?>" class="img" /></div>
+            <?=$this->Form->create('Nodes',array('action'=>"/bookingindex/$hotelid"));?>
+            <?=$this->Form->submit('Booking Process');?>
         </div>
 		<div class="clr"></div>
 		<div class="roomdets">
@@ -148,7 +153,8 @@ function submitform(frm){
 		<div class="clr"></div>
 		</div>
 		<div class="clr"></div>
-        	<?=$this->Form->button('Booking Process', array('type'=>'button','class'=>'normalbtn','onclick'=>"loadRoomAvailability('".$hotelid."')"));?>
+        	
+            
         <div class="clr"></div>
         <div class="gallerystopic">Hotel Images</div>        
 <?php }?>

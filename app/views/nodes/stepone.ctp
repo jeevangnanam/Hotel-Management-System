@@ -183,14 +183,24 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 	<div class="detailFields"><?=$additionalAdultCharge;?></div>
 	<div class="clr"></div>
     <?php 
+		
+		
 		$date1 = $fromDate;
 		$date2 = $toDate;
 		
 		$diff = abs(strtotime($date2) - strtotime($date1));
-		
+		$s=(strlen($toDate)-2);
+		$e=strlen($toDate);
+		$m=(substr($toDate,$s,$e));
+		$mc=30;
+		if($m==31){
+			$mc=$m;
+		}
 		$years = floor($diff / (365*60*60*24));
-		$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
-		$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+		$months = floor(($diff - $years * 365*60*60*24) / ($mc*60*60*24));
+		$days = floor(($diff - $years * 365*60*60*24 - $months*$mc*60*60*24)/ (60*60*24));
+		
+		
 	?>
     <div class="detailLables">Number of days</div>
 	<div class="detailFields"><?=$days;?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>$days))?></div>
@@ -200,6 +210,9 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 	<div class="clr"></div>
 	<div class="detailLables">No of Selected Rooms</div>
 	<div class="detailFields"><?=$nsr;?><?=$this->Form->input('nofselectedrooms',array('type'=>'hidden','value'=>$nsr))?></div>
+	<div class="clr"></div>
+    <div class="detailLables">Selected Rooms</div>
+	<div class="detailFields"><?=$nsrooms;?><?=$this->Form->input('Nodes.selectedrooms',array('type'=>'hidden','value'=>$nsrooms))?></div>
 	<div class="clr"></div>
     <div class="detailLables">Coupon</div>
 	<div class="detailFields"><?=$this->Form->input('coupon',array('type'=>'text','value'=>'','label'=>''))?></div>
