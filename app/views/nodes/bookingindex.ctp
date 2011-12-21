@@ -1,4 +1,15 @@
 <style>
+.cap {
+    background: url("/img/booking_steps/box.png") repeat-x scroll 0 0 transparent;
+    color: #336600;
+    float: left;
+    height: 40px;
+    margin-bottom: 1px;
+    padding-left: 10px;
+    padding-top: 10px;
+    text-align: left;
+    width: 98.5%;
+}
 	.detailLables{
 		width:200px;
 	}
@@ -32,10 +43,10 @@
 .detailLables {
     width: 100px;
 }
-#HotelRoomtype{
+#NodeRoomtype{
 	width:243px;
 }
-#HotelDateFrom,#HotelDateTo{
+#NodeDateFrom,#NodeDateTo{
 	width:100px;
 }
 button  {
@@ -98,7 +109,9 @@ form label {
 #roomnos{
 	display:none;
 }
-
+#errormsg {
+    color: #D55E35;
+}
 
 </style>
 <script>
@@ -118,6 +131,19 @@ form label {
  		 	$('#frmbook').submit();
 		}
 	});
+	
+	$('#searchroomavl').click(function() {
+		var HotelDateFrom =  $('#NodeDateFrom').val().length;
+		var HotelDateTo = $('#NodeDateTo').val().length;
+
+		$('.xdiv').html("");
+		if($('#HotelRoomtype').val() == '' || HotelDateFrom == '0' || HotelDateTo == '0' ){
+             $('#errormsg').html("* Required fields can not be empty.!");
+		}
+		else{
+			$('#frmsearch').submit();
+		}
+	})
 	
 }
 )
@@ -197,13 +223,14 @@ $(function() {
 
 
 <div class="container">
-	<div> Hotel <?=$getHotels[0]['Hotel']['name']; ?></div>
+	<div class="cap"> Hotel <?=$getHotels[0]['Hotel']['name']; ?></div>
     <div class="clr"></div>
 	<div class="searchroomsavl">
      <?php //$rt=$dfrom=$dto=$roomavl=''?>
    	 <?php echo $this->Form->create('',array('id'=>'frmsearch','action'=>'/bookingindex/'.$getHotels[0]['Hotel']['id']));?>
      <div class="heading">Search Room Availability</div>
      <div id="frmsearchavl">
+	 <div id="errormsg"></div>
      <?=$this->Form->input('tag',array('type'=>'hidden','value'=>'1'));?>
      <?=$this->Form->input('roomtype',array('type'=>'select','options'=>$rtyp,'label'=>'Room Type','empty'=>'','selected'=>$rt));?>
      <?=$this->Form->input('dateFrom',array('type'=>'text','label'=>'Date From','value'=>$dfrom));?>
@@ -217,8 +244,10 @@ $(function() {
      
      </div>
      <div class="clr">&nbsp;</div>
-	 <?=$this->Form->end('Search');?>	
-        
+	 <?=$this->Form->button('Search',array('type'=>'button','id'=>'searchroomavl'));?>
+	 <div id="dsubmit">
+	 	<?=$this->Form->end('Search');?>	
+     </div>
     </div>
     
     <div class="roomTypes" style="height:250px;">
