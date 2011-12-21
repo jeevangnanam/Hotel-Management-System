@@ -163,7 +163,7 @@ function loadbookings(obj,hotelId,rtId){
             </div>
             
             <div class="btns" align="center">
-			<?=$this->Form->create('',array("action" => "/roomtypes/" ));?>
+			<?=$this->Form->create('',array("action" => "/roomtypes/".$value['Hotel']['id'] ));?>
             <?=$this->Form->input('hotelid',array('type'=>'hidden','value'=>$value['Hotel']['id']));?>
 			<?=$this->Form->end('Room Types');?>
             </div>
@@ -183,20 +183,4 @@ function loadbookings(obj,hotelId,rtId){
             <?php }?>
         
     </div>
-   <!-- <div class="roomTypes">
-    	<h2>Room Types </h2>
-        <div id='rt'>
-        
-        </div>
-    </div>-->
-<!--</div>
-	<div id="popupContact">
-		<a id="popupContactClose"><?=$html->image('/img/icons/close.png',array('width'=>'20px'));?></a>
-		
-        <div id="cap"><h1>Room Details</h1></div>
-		<p id="contactArea">
-			
-		</p>
-	</div>
-	<div id="backgroundPopup"></div>
--->
+   

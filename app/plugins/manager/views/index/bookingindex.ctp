@@ -98,6 +98,9 @@ form label {
 #roomnos{
 	display:none;
 }
+#errormsg{
+color:#D55E35;
+}
 </style>
 <script>
 
@@ -116,6 +119,19 @@ form label {
  		 	$('#frmbook').submit();
 		}
 	});
+	$('#searchroomavl').click(function() {
+		var HotelDateFrom =  $('#HotelDateFrom').val().length;
+		var HotelDateTo = $('#HotelDateTo').val().length;
+
+		$('.xdiv').html("");
+		if($('#HotelRoomtype').val() == '' || HotelDateFrom == '0' || HotelDateTo == '0' ){
+             $('#errormsg').html("* Required fields can not be empty.!");
+		}
+		else{
+			$('#frmsearch').submit();
+		}
+	})
+	
 	
 }
 )
@@ -202,10 +218,11 @@ $(function() {
    	 <?php echo $this->Form->create('',array('id'=>'frmsearch','action'=>'/bookingindex/'.$getHotels[0]['Hotel']['id']));?>
      <div class="heading">Search Room Availability</div>
      <div id="frmsearchavl">
+	 <div id="errormsg"></div>
      <?=$this->Form->input('tag',array('type'=>'hidden','value'=>'1'));?>
-     <?=$this->Form->input('roomtype',array('type'=>'select','options'=>$rtyp,'label'=>'Room Type','empty'=>'','selected'=>$rt));?>
-     <?=$this->Form->input('dateFrom',array('type'=>'text','label'=>'Date From','value'=>$dfrom));?>
-     <?=$this->Form->input('dateTo',array('type'=>'text','label'=>'Date To','value'=>$dto));?>
+     <?=$this->Form->input('roomtype',array('type'=>'select','options'=>$rtyp,'label'=>'Room Type *','empty'=>'','selected'=>$rt));?>
+     <?=$this->Form->input('dateFrom',array('type'=>'text','label'=>'Date From *','value'=>$dfrom));?>
+     <?=$this->Form->input('dateTo',array('type'=>'text','label'=>'Date To *','value'=>$dto));?>
 
 
     <?=$this->Form->input('amount',array('id'=>'amount','class'=>'rnr','type'=>'text','label'=>'Room Number range','value'=>0,'readonly'=>"readonly"));?>
@@ -215,8 +232,10 @@ $(function() {
      
      </div>
      <div class="clr">&nbsp;</div>
+	 <?=$this->Form->button('Search',array('type'=>'button','id'=>'searchroomavl'));?>
+	 <div id="dsubmit">
 	 <?=$this->Form->end('Search');?>	
-        
+     </div>   
     </div>
     
     <div class="roomTypes" style="height:250px;">
