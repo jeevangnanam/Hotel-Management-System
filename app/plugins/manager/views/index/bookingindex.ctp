@@ -1,4 +1,15 @@
 <style>
+.cap {
+    background: url("/img/booking_steps/box.png") repeat-x scroll 0 0 transparent;
+    color: #336600;
+    float: left;
+    height: 40px;
+    margin-bottom: 1px;
+    padding-left: 10px;
+    padding-top: 10px;
+    text-align: left;
+    width: 98.5%;
+}
 	.detailLables{
 		width:200px;
 	}
@@ -211,7 +222,7 @@ $(function() {
 
 
 <div class="container">
-	<div> Hotel <?=$getHotels[0]['Hotel']['name']; ?></div>
+	<div class="cap"> Hotel <?=$getHotels[0]['Hotel']['name']; ?></div>
     <div class="clr"></div>
 	<div class="searchroomsavl">
      <?php //$rt=$dfrom=$dto=$roomavl=''?>
