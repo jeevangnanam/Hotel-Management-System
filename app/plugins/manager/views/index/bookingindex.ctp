@@ -1,10 +1,3 @@
-<?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-?>
 <style>
 	.detailLables{
 		width:200px;
@@ -98,7 +91,7 @@ form label {
 .srooms{
 	border:dotted 1px;
     float: left;
-    overflow:scrol;
+    overflow-y:scroll;
     width: 400px;
 	height:50px;	
 }
@@ -112,19 +105,6 @@ form label {
  $(document).ready(function(){ 
  $('#HotelDateFrom').datepicker({ dateFormat: 'yy-mm-dd' });
  $('#HotelDateTo').datepicker({ dateFormat: 'yy-mm-dd' });
- 
-	//$('.hotelLinks').click(function() {
-		//var hotelid=this.id;
-		/*var hotelid=<?=$hotelid; ?>;
-		$('#rt').load('/manager/Index/setroomtypes/'+hotelid);*/
-  		/*
-			$.post("/manager/Index/setroomtypes/", { hotelid: hotelid},
-		   function(data) {
-			 $("#tabs").html(data);
-			 alert(data);
-			  
-		   });*/
-	//});
 	$('#bookbtn').click(function() {
 		if($('#book').val() > 0){
 			var ids='';

@@ -183,10 +183,16 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 		$date2 = $dateTo;
 		
 		$diff = abs(strtotime($date2) - strtotime($date1));
-		
+		$s=(strlen($toDate)-2);
+		$e=strlen($toDate);
+		$m=(substr($toDate,$s,$e));
+		$mc=30;
+		if($m==31){
+			$mc=$m;
+		}
 		$years = floor($diff / (365*60*60*24));
-		$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
-		$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+		$months = floor(($diff - $years * 365*60*60*24) / (30*$mc*60*24));
+		$days = floor(($diff - $years * 365*60*60*24 - $months*$mc*60*60*24)/ (60*60*24));
 	?>
     <div class="detailLables">Cost for <?=$days;?> day(s)  <?=(($price*$noOfSelectedRooms)+$addC+$addAd);?>*<?=$days;?></div>
 	<div class="detailFields"><?=(($price*$noOfSelectedRooms)+$addC+$addAd)*$days;?><?=$this->Form->input('Booking.nofselecteddays',array('type'=>'hidden','value'=>$days))?></div>

@@ -39,8 +39,8 @@ class IndexController extends ManagerAppController{
        $this->set('hotelid',$hotelId);
        $this->set(compact('getHotels'));
        $roomtypes=$this->getroomtypes($hotelId);
-       $rtyp='';
-       $x=$y='';$noofrooms=0;
+       /*$rtyp='';
+       $x=$y='';$noofrooms=0;*/
        foreach ($roomtypes as $key=>$value){
        	$rtyp[$value['HotelsRoomType']['id']]=$value['HotelsRoomType']['name'];
        }
@@ -49,7 +49,7 @@ class IndexController extends ManagerAppController{
 		    		$rt=$this->data['Hotel']['roomtype'];
 		    		$dfrom=$this->data['Hotel']['dateFrom'];
 		    		$dto=$this->data['Hotel']['dateTo'];
-		    		//$roomavl=$this->setroomavalability($rt,$hotelId,$dfrom,$dto);	
+		    		
 			    		$rooms=$this->HotelsRoomCapacities->find('all',array(			
 						 	'fields' => array(
 			     				'HotelsRoomCapacities.id',
@@ -136,6 +136,7 @@ class IndexController extends ManagerAppController{
 		
 		return $tbl;
 	}
+	
 	function getroomnumbers($hotelId=NULL,$rt=NULL){
 		$roomnums=array();
 		$i=0;
@@ -151,6 +152,7 @@ class IndexController extends ManagerAppController{
 		
 		return $roomnums;
 	}
+	
     function login()
 	{
             $this->layout = "limejungle_manger_login";
@@ -254,105 +256,6 @@ class IndexController extends ManagerAppController{
 		]
 	}';
 	echo $json;
-	}
-	function setroomavalability($rtId=NULL,$hotelId=NULL,$dateFrom=NULL,$dateTo=NULL){
-		//$hotelId=$this->Session->read('hotelId');
-		//$rtId=$this->params['form']['rtid'];
-		//$dateFrom=$this->params['form']['dateFrom'];
-		//$dateTo=$this->params['form']['dateTo'];
-		$rooms=$this->HotelsRoomCapacities->find('all',array(			
-			 'fields' => array(
-     				'HotelsRoomCapacities.id',
-                    'HotelsRoomCapacities.room_type_id',
-					'HotelsRoomCapacities.total_rooms'),
-		  	'conditions' =>array("HotelsRoomCapacities.room_type_id=$rtId AND HotelsRoomCapacities.hotel_id=$hotelId" ),
-		  )
-		);
-		$noofrooms=0;
-		if(count($rooms) > 0){
-			$noofrooms=$rooms[0]['HotelsRoomCapacities']['total_rooms'];
-		}
-		
-		$pages=1;
-		if($noofrooms > 100){
-			$pages=$noofrooms/100;
-		}
-		$x='';
-		$y=$noofrooms/10;
-		$rest=$noofrooms%10;
-		
-		$start="<div class=\"xdiv\">";
-		$end="</div>";
-		$rType=$this->roomstatus($hotelId,$rtId,$dateFrom,$dateTo);
-		$aCount=$pCount=0;
-		if(count($rType) > 0){
-			$aCount=$rType[0][0]['S'];
-			//$pCount=$rType[1][0]['S'];
-		}
-		
-		$empty='&nbsp';
-		$approved='&nbsp';
-		$proccessing='&nbsp';
-		$a=$p=1;
-		$roomDiv='';
-		if($y==1){
-			for($i=1; $i<11; $i++ ){
-				if($aCount >= $a){
-					$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rtId."');\" id=\"\">$approved</div>";
-					$a++;
-				}
-				else if ($pCount >= $p){
-					$x.="<div class=\"pdiv\" onclick=\"selectDiv(this,'".$rtId."');\">$proccessing</div>";
-					$p++;
-				}
-				else{
-					$x.="<div class=\"ediv\" onclick=\"selectDiv(this,'".$rtId."');\">$empty</div>";
-				}
-				
-			}
-			$roomDiv= $start.$x.$end;
-		}
-		else if($noofrooms < 10 && $noofrooms <> 0){
-			for($i=1; $i<10; $i++ ){
-				if($aCount >= $a ){
-						$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rtId."');\">$approved</div>";
-						$a++;
-					}
-				else if ($pCount >= $p){
-						$x.="<div class=\"pdiv\" onclick=\"selectDiv(this,'".$rtId."');\">$proccessing</div>";
-						$p++;
-					}
-				else{
-						$x.="<div class=\"ediv\" onclick=\"selectDiv(this,'".$rtId."');\">$empty</div>";
-					}
-				
-			}
-				$roomDiv= $start.$x.$end;
-		}
-		else{
-			for($i=1; $i<$noofrooms+1; $i++ ){
-				if($i%10 == 1){
-					$x.=$start;
-				}
-					if($aCount >= $a){
-						$x.="<div class=\"adiv\" onclick=\"selectDiv(this,'".$rtId."');\">$approved</div>";
-						$a++;
-					}
-					else if ($pCount >= $p){
-						$x.="<div class=\"pdiv\" onclick=\"selectDiv(this,'".$rtId."');\">$proccessing</div>";
-						$p++;
-					}
-					else{
-						$x.="<div class=\"ediv\" onclick=\"selectDiv(this,'".$rtId."');\">$empty</div>";
-					}
-				if($i%10 == 0){
-					$x.=$end;
-				}
-				
-			}
-			$roomDiv= $x;
-		}
-		return $roomDiv."<div class=\"clr\"></div><div class=\"bookdiv\"><input type=\"submit\" value=\"Book\" class=\"bookimg\" /></div>";
 	}
 	
 	function roomstatus($hotelId=NULL,$roomtypeid=NULL,$dateFrom=NULL,$dateTo=NULL,$status=NULL){
