@@ -102,6 +102,7 @@ class BookingsController extends ManagerAppController{
 		$dTo=$this->params['data']['Booking']['dateTo'];
 		$cd=$this->params['data']['Booking']['coupondeduction']; 
 		$selectedrooms=$this->params['data']['Booking']['selectedrooms'];
+	
 		$rt=$this->params['data']['Booking']['room_type'];
 		$hotel=$this->Session->read('hotelId');
 		$det=$this->HotelsRoomType->find('all',array(
@@ -136,8 +137,9 @@ class BookingsController extends ManagerAppController{
         $this->data['Booking']['notes'] = 'n';
         $this->data['Booking']['status'] = "APPROVED";
         $this->data['Booking']['rooms']=$this->params['data']['Booking']['selectedrooms'];
-
-			
+		$aacn=$this->params['data']['Booking']['aac'];
+		$accn=$this->params['data']['Booking']['acc'];
+		
         $ticket=$this->Session->read('ticket');
         $ticketavl='';
         //echo $hotel.$ticket;
@@ -151,7 +153,7 @@ class BookingsController extends ManagerAppController{
         	if($ticketavl[0][0]['c'] > 0){
         	 	$dets=$this->getticketdet($hotel,$rtype);	
         	 	$this->set('rID',$ticket);	   
-	        	$this->set(compact('dets','dFrom','dTo','noofdays','estimated_price','rtype'));
+	        	$this->set(compact('dets','dFrom','dTo','noofdays','estimated_price','rtype','aacn','accn','rtype'));
 	        	$this->Session->setFlash(__( 'Your already have a ticket.', true)); 
         	}
         }
@@ -161,13 +163,13 @@ class BookingsController extends ManagerAppController{
 	        	$this->Session->write('ticket',$bID);
 	        	$dets=$this->getticketdet($hotel,$rtype);
 	        	$this->set('rID',$ticket);	 		   
-	        	$this->set(compact('dets','dFrom','dTo','noofdays','estimated_price','rtype'));
+	        	$this->set(compact('dets','dFrom','dTo','noofdays','estimated_price','rtype','aacn','accn','rtype'));
 	        }
 	        else{
 	        	
 	        }
         }        
-        
+        $this->set('rID',$ticket);	 
 	}
 	
 	function stepfour(){
@@ -249,15 +251,56 @@ class BookingsController extends ManagerAppController{
 		return $roomdets;
 	}
 	
-	//edit option
-	function edit(){
+	function getbookingDets($ticket=NULL){
+		return $this->Booking->find('all',array(
+			'fields'=>array('Booking.number_of_rooms'),
+			'conditions'=>array('Booking.id'=>$ticket),
+		));
 		
+	}
+	
+	function getHotelName($hotelID=NULL){
+		return $this->Hotel->find('all',array(
+			'fields'=>array('Hotel.`name`','Hotel.id'),
+			'conditions'=>array('Hotel.id'=>$hotelID),
+		));
+	}
+	//edit option
+	function edit($hotelId=NULL,$rtId=NULL){
+		//debug($this->data);
 		if($this->data['Booking']['ticket']==$this->Session->read('ticket')){
-			debug($this->data['Booking']['ticket']);
+			
 		}	
+		$fromdate=$this->data['Booking']['fromdate'];
+		$todate=$this->data['Booking']['todate'];
+		$aadult=$this->data['Booking']['aadult'];
+		$achild=$this->data['Booking']['achild'];
+		$rtid=$this->data['Booking']['rtid'];
+		
 		$ticket= $this->Session->read('ticket');
 		$user  = $this->Auth->user('id');
 		$hotel = $this->Session->read('hotelId');
+		$roomDes=$this->getRoomTypeDetails($hotel,$rtid);
+		
+		$maxAdults =$roomDes[0]['HotelsRoomCapacities']['max_adults'];
+		$maxChildren =$roomDes[0]['HotelsRoomCapacities']['max_children'];;
+		$no_of_rooms=$this->getbookingDets($ticket);
+		$this->set('ticket',$ticket);
+		$nofr=$no_of_rooms[0]['Booking']['number_of_rooms'];
+		$hotelname=$this->getHotelName($hotel);
+		$roomtype=$roomDes[0]['HotelsRoomType']['name'];
+		$this->set('hotelname',$hotelname[0]['Hotel']['name']);
+		$this->set('roomtype',$roomtype);
+		$this->set('nofr',$nofr);
+		$this->set('fromdate',$fromdate);
+		$this->set('todate',$todate);
+		
+		$this->set('maxAdults',$maxAdults);
+		$this->set('maxChildren',$maxChildren);
+		
+		$this->set('aadult',$aadult);
+		$this->set('achild',$achild);
+		
 	
 	}
 }

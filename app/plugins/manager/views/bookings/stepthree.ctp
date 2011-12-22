@@ -150,6 +150,13 @@ $usename   = $value['User']['first_name']." ".$value['User']['last_name'];
 <div style="width:450px;margin:10px 150px;border:dotted #CCC 1px;background:#F7FAF6;height:30px;margin: 10px 150px;padding-top: 5px;">
 <?=$this->Form->create('Booking',array('action'=>'/edit/'));?>
 <?=$this->Form->input('Booking.ticket',array('type'=>'hidden','value'=>$rID));?>
+<?=$this->Form->input('Booking.rtid',array('type'=>'hidden','value'=>$rtype));?>
+<?=$this->Form->input('Booking.fromdate',array('type'=>'hidden','value'=>$dFrom));?>
+<?=$this->Form->input('Booking.todate',array('type'=>'hidden','value'=>$dTo));?>
+<?=$this->Form->input('Booking.todate',array('type'=>'hidden','value'=>$dTo));?>
+<?=$this->Form->input('Booking.todate',array('type'=>'hidden','value'=>$dTo));?>
+<?=$this->Form->input('Booking.aadult',array('type'=>'hidden','value'=>$aacn));?>
+<?=$this->Form->input('Booking.achild',array('type'=>'hidden','value'=>$accn));?>
 <span style="color:#333;font-size:11px;width:auto;float:left">*If you want to edit/change/cancel your booking,please select edit option.</span>
 <?=$this->Form->end('Edit');?>
 </div>

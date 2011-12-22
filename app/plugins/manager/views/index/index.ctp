@@ -42,7 +42,7 @@
 
 .hotelname{
 	float:left;
-	width:55%;
+	width: 45%;
 	height:30px;
 	background:#F7FAF6;
 	margin:2px;
@@ -61,20 +61,6 @@
 
   
  $(document).ready(function(){ 
-
- 
-	$('.hotelLinks').click(function() {
-		var hotelid=this.id;
-		$('#rt').load('/manager/Index/setroomtypes/'+hotelid);
-  		/*
-			$.post("/manager/Index/setroomtypes/", { hotelid: hotelid},
-		   function(data) {
-			 $("#tabs").html(data);
-			 alert(data);
-			  
-		   });*/
-	});
-	
 	
 }
 )
@@ -154,7 +140,7 @@ function loadbookings(obj,hotelId,rtId){
 <div class="container">
 
    	 	
-    		<div class="hotelname">Hotels</div><div class="btns">Room Types</div><div class="btns">Booking Info</div><div class="btns">Booking</div>
+    		<div class="hotelname">Hotels</div><div class="btns">Room Types</div><div class="btns">Edit Rooms</div><div class="btns">Booking Info</div><div class="btns">Booking</div>
         	<div class="clr"></div>
 			<?php foreach($getHotels as $key=>$value){ ?>
             
@@ -166,6 +152,12 @@ function loadbookings(obj,hotelId,rtId){
 			<?=$this->Form->create('',array("action" => "/roomtypes/".$value['Hotel']['id'] ));?>
             <?=$this->Form->input('hotelid',array('type'=>'hidden','value'=>$value['Hotel']['id']));?>
 			<?=$this->Form->end('Room Types');?>
+            </div>
+            
+            <div class="btns" align="center">
+			<?=$this->Form->create('',array("action" => "/editrooms/".$value['Hotel']['id'] ));?>
+            <?=$this->Form->input('hotelid',array('type'=>'hidden','value'=>$value['Hotel']['id']));?>
+			<?=$this->Form->end('Edit Rooms');?>
             </div>
             
             <div class="btns" align="center">

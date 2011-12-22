@@ -141,7 +141,7 @@ class IndexController extends ManagerAppController{
 		$roomnums=array();
 		$i=0;
 		$rnmbs=$this->Rooms->find('all',array(
-			'fields'=>array('Rooms.roomname'),
+			'fields'=>array('Rooms.roomname','Rooms.id'),
 		    'conditions' =>array("Rooms.hotel_id='$hotelId'","Rooms.room_type_id='$rt';" ),
 		));	
 			
@@ -202,39 +202,7 @@ class IndexController extends ManagerAppController{
 		return $hotels;
 		
 	}
-	
-	/*function setroomtypes($hotelId=NULL){
-		
-		$hotelId=$this->params['pass'][0];
-		$this->Session->write('hotelId',$hotelId);
-		$roomtypes=$this->HotelsRoomType->find('all',array(			
-			 'fields' => array(
-     				'HotelsRoomType.id',
-                    'HotelsRoomType.`name`'),
-		  	'conditions' =>array("HotelsRoomType.hotel_id=$hotelId" ),
-		  )
-		);
-		
-		//debug($roomtypes);
-		
-		
-		$res='';
-		foreach($roomtypes as $key=>$value){
-			$res.="<form action=\"/manager/bookings/stepone/\" name=\"frm\" method=\"get\"><div class=\"roomtypediv\">";
-			$res.="<div class=\"roomtype\">".$value['HotelsRoomType']['name']."</div>";
-			$res.="<div class=\"roomtypesearch\" onclick='showRoomSearch(this)'  id=\"". $value['HotelsRoomType']['id']."\"></div>";
-			$res.="<div class=\"roomdests\" onclick=\"loadPopUp('".$value['HotelsRoomType']['id']."');\"></div>";
-			$res.="<div class=\"roomcap\" align=\"center\"><input type=\"text\" value=\"0\" id=\"book".$value['HotelsRoomType']['id']."\" name=\"data[bookings][nsr]\" readonly=\"readonly\"/></div>";
-			$res.="<input type=\"hidden\" value=\"".$value['HotelsRoomType']['id']."\" id=\"rtype".$value['HotelsRoomType']['id']."\" name=\"data[bookings][roomtype]\"/></div>";		
-			$res.="<div class=\"clr\"></div>";	
-			$res.="<div class=\"roomtypesearch".$value['HotelsRoomType']['id']."\"  id=\"roomtypesearch". $value['HotelsRoomType']['id']."\"></div>";
-			$res.="<div class=\"clr\"></div>";	
-			$res.="<div class=\"roomtypedes".$value['HotelsRoomType']['id']."\"></div></form>";
-				
-		}
-		echo $res;
-		
-	}*/
+
 	function roomtypes(){
 		$ph_id=$this->params['pass'][0];
 		/*$fh_id=$this->data['Hotel']['hotelid'];
@@ -587,5 +555,65 @@ class IndexController extends ManagerAppController{
 		return $RoomTotRooms;
 
 	}
+	
+	function editrooms($hotelId=NULL){
+		
+		$hotelId=$this->params['pass'][0];
+		$userId=$this -> Session -> read();
+		$mangerId=$userId['Auth']['User']['id'];
+		$hotels=$this->getHotelNames($mangerId,$hotelId);
+		$roomtp=$this->getroomtypes($hotelId);
+		$roomtype=array();
+		$roomNumbers=array();
+		foreach ($roomtp as $key=>$value) {
+			$a=$value['HotelsRoomType']['id'];
+			$roomtype[$a]=$value['HotelsRoomType']['name'];
+		}
+		//debug($roomtype);
+		
+		$roomNumbers='';
+		if(isset($this->data['Hotel']['roomtype'])){
+		$rt=$this->data['Hotel']['roomtype'];
+			if(!empty($rt)){
+				$roomNumbers=$this->getroomnumbers_with_id($hotelId,$rt);
+			}
+		}
+		if(isset($this->data['Hotel']['roomtphidden'])){
+			$rt=$this->data['Hotel']['roomtphidden'];
+			$roomNumbers=$this->getroomnumbers_with_id($hotelId,$rt);
+			App::import('Model', 'Manager.Rooms');
+            $Rooms = new Rooms();
+			foreach ($roomNumbers as $key=>$value){
+				$i=$value['Rooms']['id'];
+				$this->data['Rooms']['id']=$i;
+				$this->data['Rooms']['hotel_id']=$hotelId;
+				$this->data['Rooms']['room_type_id']=$rt;
+				$roomname=$this->data['Rooms']['roomname']=$this->data['Hotel']['roomtypehidden'.$value['Rooms']['id']];
+				$this->data['Rooms']['status']='ACTIVE';
+				if($this->Rooms->save($this->data)){
+					
+				}
+			}
+			$this->Session->setFlash("Room Numbers Updated!");
+			$roomNumbers=$this->getroomnumbers_with_id($hotelId,$rt);
+		}
+		$this->set(compact('hotels'));
+		$this->set(compact('roomtype'));
+		$rtselected=$rt;
+		$this->set('rtselected',$rtselected);
+		$this->set(compact('roomNumbers'));
+	}
+	
+	function getroomnumbers_with_id($hotelId=NULL,$rt=NULL){
+		$roomnums=array();
+		
+		$rnmbs=$this->Rooms->find('all',array(
+			'fields'=>array('Rooms.roomname','Rooms.id'),
+		    'conditions' =>array("Rooms.hotel_id='$hotelId'","Rooms.room_type_id='$rt';" ),
+		));	
+		
+		return $rnmbs;
+	}
+	
 }
 ?>
