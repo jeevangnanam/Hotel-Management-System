@@ -1,6 +1,6 @@
 <style>
 .stepFont{
-	width:147px;
+	width:267px;
 	float:left;
 	padding-top: 5px;
     text-align: center;
@@ -8,7 +8,7 @@
 .inactiveDiv{
 	background:url(<?php echo $html->webroot;?>img/booking_steps/stepsbg.png) repeat-x;
 	height:35px;
-	width:180px;
+	width:300px;
 	color:#360;
 	float:left;
 }
@@ -17,7 +17,7 @@
 	background:url(<?php echo $html->webroot;?>img/booking_steps/activestep.png) repeat-x;
 	height:35px;
 	color:#FFF;
-	width:180px;
+	width:300px;
 	float:left;
 	
 }
@@ -35,7 +35,8 @@
 }
 .cap{
 	float:left;
-	width:50%;
+	font-size:16px;
+    width: 98.5%;
 	height:40px;
 	color:#360;
 	text-align:center;
@@ -97,9 +98,9 @@
 }
 .submit input{
 	float:left;
-	background:url(<?php echo $html->webroot;?>img/icons/book_bg.png) repeat-x;
+	/*background:url(<?php echo $html->webroot;?>img/icons/book_bg.png) repeat-x;
 	width:58px;
-	height:20px;
+	height:20px;*/
 	cursor:pointer;
 	color:#FFF;
 	text-align:center;
@@ -112,9 +113,10 @@
 }
 </style>
 <?php
-$hotelName=$roomType=$rtId=$price=$maxAdults=$maxChildren=$additionalAdultCharge=$additionalChildCharge='';
+$hotelId=$hotelName=$roomType=$rtId=$price=$maxAdults=$maxChildren=$additionalAdultCharge=$additionalChildCharge='';
 
 foreach($roomDes as $key=>$value){
+$hotelId = $value['Hotel']['id'];
 $hotelName = $value['Hotel']['name'];
 $roomType  = $value['HotelsRoomType']['name'];
 $rtId	   = $value['HotelsRoomType']['id'];
@@ -146,7 +148,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
             <div class="stepFont">Step Three : Paymants</div>
             <div class="inactiveArrow"></div>
 	      </div>
-	      <div id="step4" class="inactiveDiv">
+	      <!--<div id="step4" class="inactiveDiv">
             <div class="stepFont">Step 4</div>
             <div class="inactiveArrow"></div>
         	
@@ -154,12 +156,12 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 	      <div id="step5" class="inactiveDiv">
         	<div class="stepFont">Step 5</div>
             <div class="inactiveArrow"></div>	
-	      </div>
+	      </div>-->
 </div>
 
  
 <div class="formContainer">
-<?=$this->Form->create('Nodes', array('controller'=>'bookings' ,'action' => '/steptwo/','type' => 'post','id'=>'cupon_check'));?>
+<?=$this->Form->create('Nodes', array('controller'=>'bookings' ,'action' => '/steptwo/'.$hotelId,'type' => 'post','id'=>'cupon_check'));?>
 	<div class="clr"></div>
 	<div class="detailLables">Room Type</div>
 	<div class="detailFields"><?=$roomType;?><?=$this->Form->input('room_type',array('type'=>'hidden','value'=>$rtId))?></div>

@@ -8,6 +8,7 @@
     padding-left: 10px;
     padding-top: 10px;
     text-align: left;
+	font-size:16px;
     width: 98.5%;
 }
 	.detailLables{
@@ -94,10 +95,12 @@ form label {
 }
 #amount{
 	width:100px;
+	display:none;
 }
 .rng{
 	margin-left:0px;
 	height:30px;
+	display:none;
 }
 .srooms{
 	border:dotted 1px;
@@ -111,6 +114,7 @@ form label {
 }
 #errormsg {
     color: #D55E35;
+	font-size:11px;
 }
 
 </style>
@@ -118,6 +122,7 @@ form label {
 
   
  $(document).ready(function(){ 
+ $('#book').val(0);
  $('#NodeDateFrom').datepicker({ dateFormat: 'yy-mm-dd' });
  $('#NodeDateTo').datepicker({ dateFormat: 'yy-mm-dd' });
 	$('#bookbtn').click(function() {
@@ -139,6 +144,9 @@ form label {
 		$('.xdiv').html("");
 		if($('#HotelRoomtype').val() == '' || HotelDateFrom == '0' || HotelDateTo == '0' ){
              $('#errormsg').html("* Required fields can not be empty.!");
+		}
+		else if($('#NodeDateFrom').val() > $('#NodeDateTo').val()){
+			$('#errormsg').html("* 'Date To' should be greater then or equal to 'Date From'.!");
 		}
 		else{
 			$('#frmsearch').submit();
@@ -236,8 +244,8 @@ $(function() {
      <?=$this->Form->input('dateFrom',array('type'=>'text','label'=>'Date From','value'=>$dfrom));?>
      <?=$this->Form->input('dateTo',array('type'=>'text','label'=>'Date To','value'=>$dto));?>
 
-
-    <?=$this->Form->input('amount',array('id'=>'amount','class'=>'rnr','type'=>'text','label'=>'Room Number range','value'=>0,'readonly'=>"readonly"));?>
+<!--Room Number range-->
+    <?=$this->Form->input('amount',array('id'=>'amount','class'=>'rnr','type'=>'text','label'=>'','value'=>0,'readonly'=>"readonly"));?>
     <div class="rng">
     	<div id="slider-range"></div>
     </div>
@@ -309,7 +317,7 @@ $(function() {
     <div class="srooms">
     
     </div>
-	<?=$this->Form->create('Nodes',array('id'=>'frmbook','action'=>'/stepone/'));?>
+	<?=$this->Form->create('Nodes',array('id'=>'frmbook','action'=>'/stepone/'.$getHotels[0]['Hotel']['id']));?>
     <?=$this->Form->input('roomcount',array('id'=>'book','label'=>'','value'=>'0','readonly'=>'readonly'));?>
     <?=$this->Form->input('fromDate',array('type'=>'hidden','id'=>'fromDate','label'=>'','value'=>$dfrom));?>
     <?=$this->Form->input('toDate',array('type'=>'hidden','id'=>'toDate','label'=>'','value'=>$dto));?>

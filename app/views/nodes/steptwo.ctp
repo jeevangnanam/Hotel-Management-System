@@ -1,6 +1,6 @@
 <style>
 .stepFont{
-	width:147px;
+	width:267px;
 	float:left;
 	padding-top: 5px;
     text-align: center;
@@ -8,7 +8,7 @@
 .inactiveDiv{
 	background:url(<?php echo $html->webroot;?>img/booking_steps/stepsbg.png) repeat-x;
 	height:35px;
-	width:180px;
+	width:300px;
 	color:#360;
 	float:left;
 }
@@ -17,7 +17,7 @@
 	background:url(<?php echo $html->webroot;?>img/booking_steps/activestep.png) repeat-x;
 	height:35px;
 	color:#FFF;
-	width:180px;
+	width:300px;
 	float:left;
 	
 }
@@ -35,7 +35,8 @@
 }
 .cap{
 	float:left;
-	width:50%;
+	font-size:16px;
+    width: 98.5%;
 	height:40px;
 	color:#360;
 	text-align:center;
@@ -114,14 +115,18 @@
     width: 100px !important;
 }
 .submitbtn {
-    background: url("/img/icons/book_bg.png") repeat-x scroll 0 0 transparent;
+   /* background: url("/img/icons/book_bg.png") repeat-x scroll 0 0 transparent;
+	height: 20px; 
+	width: 58px;*/
+	background: none repeat scroll 0 0 #72A946;
+    border: medium none;
     color: #FFFFFF;
     cursor: pointer;
-    float: left;
-    height: 20px;
+    float: left; 
     margin-left: 325px;
     text-align: center;
-    width: 58px;
+	height: 25px;
+    width: 70px;
 }
 .submit{
 	display:none;
@@ -186,7 +191,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
             <div class="stepFont">Step Three : Paymants</div>
             <div class="inactiveArrow"></div>
 	      </div>
-	      <div id="step4" class="inactiveDiv">
+	      <!--<div id="step4" class="inactiveDiv">
             <div class="stepFont">Step 4</div>
             <div class="inactiveArrow"></div>
         	
@@ -194,7 +199,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 	      <div id="step5" class="inactiveDiv">
         	<div class="stepFont">Step 5</div>
             <div class="inactiveArrow"></div>	
-	      </div>
+	      </div>-->
 </div>
 
 <div class="formContainer">

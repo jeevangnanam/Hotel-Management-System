@@ -20,10 +20,10 @@
 				<div class="hotelname">Hotel <?=$value['Hotel']['name'];?></div>
 				<div class="hoteladdress"><span class="htllbl">Address :</span><span class="htldet"><?=$value['Hotel']['address'];?></span></div>
 				<div class="hotelphone"><span class="htllbl">Phone :</span><span class="htldet"><?=$value['Hotel']['phone'];?></span></div>
-				<div class="hotelweb"><span class="htllbl">Web :</span><span class="htldet"><?=$value['Hotel']['email'];?></span></div>
-				<div class="hotelweb"><span class="htllbl">Email :</span><span class="htldet"><?=$value['Hotel']['web'];?></span></div>
+				<div class="hotelweb"><span class="htllbl">Web :</span><span class="htldet"><?=$value['Hotel']['web'];?></span></div>
+				<div class="hotelweb"><span class="htllbl">Email :</span><span class="htldet"><?=$value['Hotel']['email'];?></span></div>
 				<!--<div class="hotelweb"><span class="htllbl">&nbsp;</span><span class="htldet more">
-					<?=$this->Form->create(array('id'=>'htminf','class'=>'moreinfo','action'=>'/hoteldetails')); ?>
+					<?=$this->Form->create(array('id'=>'htminf','class'=>'moreinfo','action'=>'/hoteldetails/')); ?>
 					<?=$this->Form->input('hotelid',array('type'=>'hidden','label'=>'','value'=>$value['Hotel']['id']));?>
 				 	<?php echo $this->Form->end('More Details...'); ?>
 					</span>
@@ -40,7 +40,7 @@
 			<img src="<?php echo $this->Html->webroot;?>uploads/hotels/<?=$path;?>" class="img" />
 			<div class="clr"></div>
 			<div class="moredets">
-					<?=$this->Form->create(array('id'=>'htminf','class'=>'moreinfo','action'=>'/hoteldetails')); ?>
+					<?=$this->Form->create(array('id'=>'htminf','class'=>'moreinfo','action'=>'/hoteldetails/'.$value['Hotel']['id'])); ?>
 					<?=$this->Form->input('hotelid',array('type'=>'hidden','label'=>'','value'=>$value['Hotel']['id']));?>
 				 	<?php echo $this->Form->end('More Details...'); ?>
 			</div>
