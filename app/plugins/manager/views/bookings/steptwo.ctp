@@ -98,9 +98,9 @@
 }
 .submit input{
 	float:left;
-	background:url(<?php echo $html->webroot;?>img/icons/book_bg.png) repeat-x;
+	/*background:url(<?php echo $html->webroot;?>img/icons/book_bg.png) repeat-x;*/
 	width:58px;
-	height:20px;
+	height:25px;
 	cursor:pointer;
 	color:#FFF;
 	text-align:center;
@@ -194,8 +194,8 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 		$months = floor(($diff - $years * 365*60*60*24) / ($mc*60*60*24));
 		$days = floor(($diff - $years * 365*60*60*24 - $months*$mc*60*60*24)/ (60*60*24));
 	?>
-    <div class="detailLables">Cost for <?=$days;?> day(s)  <?=(($price*$noOfSelectedRooms)+$addC+$addAd);?>*<?=$days;?></div>
-	<div class="detailFields"><?=(($price*$noOfSelectedRooms)+$addC+$addAd)*$days;?><?=$this->Form->input('Booking.nofselecteddays',array('type'=>'hidden','value'=>$days))?></div>
+    <div class="detailLables">Cost for <?=($days+1);?> day(s)  <?=(($price*$noOfSelectedRooms)+$addC+$addAd);?>*<?=($days+1);?></div>
+	<div class="detailFields"><?=(($price*$noOfSelectedRooms)+$addC+$addAd)*($days+1);?><?=$this->Form->input('Booking.nofselecteddays',array('type'=>'hidden','value'=>($days+1)))?></div>
  
     <div class="clr"></div>
 	<div class="detailLables">Coupon Deduction <?=$cd;?>%</div>
@@ -203,7 +203,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 	<div class="detailFields"><?=$couponDeduction;?><?=$this->Form->input('Booking.coupondeduction',array('type'=>'hidden','value'=>$cd))?><?=$this->Form->input('Booking.couponid',array('type'=>'hidden','value'=>$cid))?></div>
 	<div class="clr"></div>
 	<div class="detailLables">Total Price</div>
-    <?php $total=((($price*$noOfSelectedRooms)+$addC+$addAd)*$days)-$couponDeduction; ?>
+    <?php $total=((($price*$noOfSelectedRooms)+$addC+$addAd)*($days+1))-$couponDeduction; ?>
 	<div class="detailFields"><?=$total?><?=$this->Form->input('Booking.total',array('type'=>'hidden','value'=>$total))?></div>
     <div class="clr"></div>
 <?=$this->Form->end('Submit');?>

@@ -2,7 +2,7 @@
 	.calenederarea{
 		float:left;
 		width:55%;
-		height:275px;
+		height:300px;
 		background:#F7FAF6;
 		border:dashed 1px #538136;
 	}
@@ -26,7 +26,7 @@
 		border: 1px dashed #538136;*/
 		float: left;
 		margin-left: -1px;
-		margin-top: 10px;
+		margin-top: 40px;
 		padding: 5px;
 		width: 98%;
 		height:20px;
@@ -34,6 +34,7 @@
 	#fromdate,#todate{
 		float:left;
 		margin:8px;
+		height:250px;
 	}
 	#HotelFromdate{
 		float:left;
@@ -109,6 +110,12 @@
     text-align: left;
     width: 96%;
 }
+.toparea{
+	width:100%;
+	height: 350px;;
+	
+}
+
 </style>
 
 <script>
@@ -133,6 +140,7 @@
 <div class="container">
 	<div class="cap"> Hotel <?=$hotels[0]['Hotel']['name'];?><?php $hid=$hotels[0]['Hotel']['id'];?></div>
 		<div class='clr'></div>
+		<div class="toparea">
 		<div class="calenederarea">
 		<?=$this->Form->create(array('id'=>'Nodes','action'=>"/stathome/$hid")); ?>
 			<div id="fromdate" >Date From</div>
@@ -148,6 +156,7 @@
 				<?php echo $this->Form->end('Search'); ?>
 			</div>
 		</div>
+		
 		<div class="detailarea">
 			<div class="tforroomtype">Booked Details </div>
 			<div class='clr'></div>
@@ -162,6 +171,8 @@
 			<div class="detailLables" >Total </div><div class='detailFields'><?=($booked+$process+$pending);?></div><div class='detailFields'> <?=number_format($income,2);?></div>
 			<div class='clr'></div>
 			<div class="tforroomtype">From : <?=$dfrom;?> - To : <?=$dto;?></div>
+		</div>
+		
 		</div>
 		<div class='clr'></div>
 		<div class="roomtypedetailarea">

@@ -148,7 +148,7 @@ $usename   = $value['User']['first_name']." ".$value['User']['last_name'];
     <div class="clr"></div>
 </div>
 <div style="width:450px;margin:10px 150px;border:dotted #CCC 1px;background:#F7FAF6;height:30px;margin: 10px 150px;padding-top: 5px;">
-<?=$this->Form->create('Booking',array('action'=>'/edit/'));?>
+<?=$this->Form->create('Booking',array('action'=>'/edit/'.$rID));?>
 <?=$this->Form->input('Booking.ticket',array('type'=>'hidden','value'=>$rID));?>
 <?=$this->Form->input('Booking.rtid',array('type'=>'hidden','value'=>$rtype));?>
 <?=$this->Form->input('Booking.fromdate',array('type'=>'hidden','value'=>$dFrom));?>

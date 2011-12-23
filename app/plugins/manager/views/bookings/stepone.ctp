@@ -98,9 +98,9 @@
 }
 .submit input{
 	float:left;
-	background:url(<?php echo $html->webroot;?>img/icons/book_bg.png) repeat-x;
+	/*background:url(<?php echo $html->webroot;?>img/icons/book_bg.png) repeat-x;*/
 	width:58px;
-	height:20px;
+	height:25px;
 	cursor:pointer;
 	color:#FFF;
 	text-align:center;

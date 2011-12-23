@@ -94,10 +94,12 @@ form label {
 }
 #amount{
 	width:100px;
+	display:none;
 }
 .rng{
 	margin-left:0px;
 	height:30px;
+	display:none;
 }
 .srooms{
 	border:dotted 1px;

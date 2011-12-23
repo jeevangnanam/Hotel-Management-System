@@ -91,7 +91,7 @@ class BookingsController extends ManagerAppController{
 		$this->set(compact('roomDes'));
 	}
 	function stepthree(){
-		
+		//debug($this->data);
 		if (!($this->Auth->isAuthorized())){
 			$this->Auth->allow('login');
 		}
@@ -120,11 +120,12 @@ class BookingsController extends ManagerAppController{
 					 'conditions' =>array("HotelsRoomType.hotel_id='$hotel'","HotelsRoomType.id='$rt';" ),
 			)
 		);
-		$aac=$det[0]['HotelsRoomCapacities']['additional_adult_charge']; 
-		$acc=$det[0]['HotelsRoomCapacities']['additional_child_charge'];
+		$aac=$det[0]['HotelsRoomCapacities']['additional_adult_charge']*$this->data['Booking']['aac']; 
+		$acc=$det[0]['HotelsRoomCapacities']['additional_child_charge']*$this->data['Booking']['acc'];
 		$p=$det[0]['HotelsRoomType']['price'];
-		
+		//print(((($nofr ."*".$det[0]['HotelsRoomType']['price'])."+".$aac."+".$acc)."*".$noofdays)."*".((100-$cd)/100));
 		$estimated_price=((($nofr * $det[0]['HotelsRoomType']['price'])+$aac+$acc)*$noofdays)*((100-$cd)/100);
+		
 		$this->data['Booking']['user_id'] = $this->Auth->user('id');
 		$this->data['Booking']['hotel_id'] = $this->Session->read('hotelId');
 		$rtype=$this->params['data']['Booking']['room_type'];
@@ -302,6 +303,14 @@ class BookingsController extends ManagerAppController{
 		$this->set('achild',$achild);
 		
 	
+	}
+	
+	function cancelbooking(){
+		
+	}
+	
+	function editbooking(){
+		
 	}
 }
 ?>
