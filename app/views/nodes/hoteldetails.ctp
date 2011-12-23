@@ -130,7 +130,7 @@ function submitform(frm){
 			<?php ?>
 			<div class="imgbox"><img src="<?php echo $this->Html->webroot;?>uploads/hotels/<?=$path;?>" class="img" /></div>
             <?=$this->Form->create('Nodes',array('action'=>"/bookingindex/$hotelid"));?>
-            <?=$this->Form->submit('Booking Process');?>
+            <?=$this->Form->submit('Book Now');?>
         </div>
 		<div class="clr"></div>
 		<div class="roomdets">

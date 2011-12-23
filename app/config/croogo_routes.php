@@ -14,6 +14,7 @@
     CroogoRouter::connect('/search/*', array('controller' => 'nodes', 'action' => 'search'));
    // CroogoRouter::connect('/manager/login/*', array('plugin' => 'manager', 'controller' => 'index', 'action' => 'login'));
     CroogoRouter::connect('/manager/logout', array('plugin' => 'manager', 'controller' => 'index', 'action' => 'logout'));
+    //CroogoRouter::connect('/manager/', array('plugin' => 'manager', 'controller' => 'index', 'action' => 'login'));
 
     // Blog
     CroogoRouter::connect('/blog', array('controller' => 'nodes', 'action' => 'index', 'type' => 'blog'));

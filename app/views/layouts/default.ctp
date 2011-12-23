@@ -95,7 +95,7 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
     height: 32px;
     width: 30px;
 }
-.detailarea{
+.logindetailarea{
 	float: left;
 	background:url(<?php echo $html->webroot;?>img/login_panel/tab_m.png) repeat-x;
 	padding-top:10px;
@@ -133,7 +133,7 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
       <?php if(!empty($username)){?>
       <div class="logingpanel">
       <div class="leftcorner"></div>
-      <div class="detailarea">Your Login as <?=$username?> | <?=$this->Html->link('Logout', '/manager/index/logout', array('class' => 'button', 'target' => '_self'));?></div>
+      <div class="logindetailarea">Your Login as <?=$username?> | <?=$this->Html->link('Logout', '/manager/index/logout', array('class' => 'button', 'target' => '_self'));?></div>
       <div class="rightcorner"></div>
       </div>
       <?php }?>
