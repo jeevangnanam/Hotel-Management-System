@@ -205,7 +205,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 		
 	?>
     <div class="detailLables">Number of days</div>
-	<div class="detailFields"><?=$days;?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>$days))?></div>
+	<div class="detailFields"><?=$days+1;?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>$days+1))?></div>
     <div class="clr"></div>
 	<div class="detailLables">Additional Child Charge</div>
 	<div class="detailFields"><?=$additionalChildCharge;?></div>

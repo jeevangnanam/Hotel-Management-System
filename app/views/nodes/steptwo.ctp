@@ -148,16 +148,27 @@
 		 flow+='<li>*Please enter your email.</li>';
 		  chk=1;
 	 }
+	 if($('#BookingEmail').val()!='' && !vbalidate_email($('#BookingEmail').val())){
+		flow+='<li>*Please enter valid email.</li>';
+		  chk=1; 
+	 }
+	 
 	 if($('#BookingContactno').val()==''){
 		flow+='<li>*Please enter your contact number.</li>';		
 		 chk=1;
 	 }
+	 
 	 flow+='</ul>';
 	 $('.msg').html(flow);
 	 if(chk==0){
 		 $('#cupon_check').submit();
 	 }
  }
+ 
+function vbalidate_email(e){
+	 var	email = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/;
+  	return e.match(email);
+}
 </script>
 <?php
 
@@ -247,8 +258,8 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 		$months = floor(($diff - $years * 365*60*60*24) / ($mc*60*60*24));
 		$days = floor(($diff - $years * 365*60*60*24 - $months*$mc*60*60*24)/ (60*60*24));
 	?>
-    <div class="detailLables">Cost for <?=$days;?> day(s)  <?=(($price*$noOfSelectedRooms)+$addC+$addAd);?>*<?=$days;?></div>
-	<div class="detailFields"><?=(($price*$noOfSelectedRooms)+$addC+$addAd)*$days;?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>$days))?></div>
+    <div class="detailLables">Cost for <?=$days+1;?> day(s)  <?=(($price*$noOfSelectedRooms)+$addC+$addAd);?>*<?=$days+1;?></div>
+	<div class="detailFields"><?=(($price*$noOfSelectedRooms)+$addC+$addAd)*($days+1);?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>$days+1))?></div>
     
     <div class="clr"></div>
 	<div class="detailLables">Coupon Deduction <?=$cd;?>%</div>
