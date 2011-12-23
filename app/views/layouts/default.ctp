@@ -76,6 +76,32 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 	width:200pcx;
 	height:80px;
 }
+.logingpanel{
+	float: right;
+    height: 32px;
+    margin: -24px 0 0;
+    width: auto;
+	
+}
+.leftcorner{
+	background:url(<?php echo $html->webroot;?>img/login_panel/tab_l.png) no-repeat scroll 0 0 transparent;
+    float: left;
+    height: 32px;
+    width: 30px;
+}
+.rightcorner{
+	background:url(<?php echo $html->webroot;?>img/login_panel/tab_r.png) no-repeat scroll 0 0 transparent;
+    float: left;
+    height: 32px;
+    width: 30px;
+}
+.detailarea{
+	float: left;
+	background:url(<?php echo $html->webroot;?>img/login_panel/tab_m.png) repeat-x;
+	padding-top:10px;
+	height: 32px;
+    width: auto;
+}
 </style>
 </head>
 <body>
@@ -83,21 +109,43 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 	if(empty($logo)){
 		$logo=$dlogo;
 	}
-
+	$murl='/manager/index/login';
+	$username="";
+	$ses=$this -> Session -> read();
+	if(isset($ses['Auth']['User']['role_id'])){
+	$userid=$ses['Auth']['User']['role_id'];
+	
+	
+	if($userid==2){
+		$username=$ses['Auth']['User']['name'];
+		$murl="/manager/index/";
+	}
+	else{
+		$murl="/manager/index/login";
+	}
+}
 ?>
 <div class="main">
 
   <div class="header">
     <div class="header_resize">
-      <div class="logo fbg_resize" style="width:890px;background-color: #FFF;margin:5px 0px 5px 0px; " ><h1><a href="index.html"><img src="<?=$logo;?>" class="logo" /> </a></h1></div>
+      <div class="logo fbg_resize" style="width:890px;background-color: #FFF;margin:5px 0px 5px 0px; " >
+      <?php if(!empty($username)){?>
+      <div class="logingpanel">
+      <div class="leftcorner"></div>
+      <div class="detailarea">Your Login as <?=$username?> | <?=$this->Html->link('Logout', '/manager/index/logout', array('class' => 'button', 'target' => '_self'));?></div>
+      <div class="rightcorner"></div>
+      </div>
+      <?php }?>
+      <h1><a href="/"><img src="<?=$logo;?>" class="logo" /> </a></h1></div>
       <div class="clr"></div>
       <div class="menu_nav">
         <ul>
-          <li class="active"><a href="index">Home</a></li>
-          <li><a href="support">Users</a></li>
-          <li><a href="about">HotelManagers</a></li>
-          <li><a href="blog">Promotions</a></li>
-          <li><a href="contact">Contact Us</a></li>
+          <li class="active"><a href="/">Home</a></li>
+          <!--<li><a href="support">Users</a></li>-->
+          <li><a href="<?=$murl;?>">HotelManagers</a></li>
+          <!--<li><a href="blog">Promotions</a></li>-->
+          <li><a href="/contact/">Contact Us</a></li>
         </ul>
         <div class="searchform">
           <form id="formsearch" name="formsearch" method="post" action="">
