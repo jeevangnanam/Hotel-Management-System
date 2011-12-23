@@ -146,7 +146,7 @@ form label {
              $('#errormsg').html("* Required fields can not be empty.!");
 		}
 		else if($('#NodeDateFrom').val() > $('#NodeDateTo').val()){
-			$('#errormsg').html("* 'Date To' should be greater then or equal to 'Date From'.!");
+			$('#errormsg').html("* 'Date To' should be greater than or equal to 'Date From'.!");
 		}
 		else{
 			$('#frmsearch').submit();
