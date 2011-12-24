@@ -172,9 +172,10 @@ function vbalidate_email(e){
 </script>
 <?php
 
-$hotelName=$roomType=$roomTypeId=$price=$maxAdults=$maxChildren=$additionalAdultCharge=$additionalChildCharge='';
+$hotelid=$hotelName=$roomType=$roomTypeId=$price=$maxAdults=$maxChildren=$additionalAdultCharge=$additionalChildCharge='';
 
 foreach($roomDes as $key=>$value){
+$hotelid=$value['Hotel']['id'];
 $hotelName=$value['Hotel']['name'];
 $roomTypeId=$value['HotelsRoomType']['id'];
 $roomType=$value['HotelsRoomType']['name'];
@@ -215,7 +216,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 
 <div class="formContainer">
 
-<?=$this->Form->create('Nodes', array('controller'=>'Nodes' ,'action' => '/stepthree/','type' => 'post','id'=>'cupon_check'));?>
+<?=$this->Form->create('Nodes', array('controller'=>'Nodes' ,'action' => '/stepthree/'.$hotelid,'type' => 'post','id'=>'cupon_check'));?>
  	<div class="clr"></div>
 	<div class="detailLables">Room Type</div>
 	<div class="detailFields"><?=$roomType;?><?=$this->Form->input('room_type',array('type'=>'hidden','value'=>$roomTypeId))?></div>	
@@ -258,8 +259,8 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 		$months = floor(($diff - $years * 365*60*60*24) / ($mc*60*60*24));
 		$days = floor(($diff - $years * 365*60*60*24 - $months*$mc*60*60*24)/ (60*60*24));
 	?>
-    <div class="detailLables">Cost for <?=$days+1;?> day(s)  <?=(($price*$noOfSelectedRooms)+$addC+$addAd);?>*<?=$days+1;?></div>
-	<div class="detailFields"><?=(($price*$noOfSelectedRooms)+$addC+$addAd)*($days+1);?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>$days+1))?></div>
+    <div class="detailLables">Cost for <?=($days+1);?> day(s)  <?=(($price*$noOfSelectedRooms)+$addC+$addAd);?>*<?=($days+1);?></div>
+	<div class="detailFields"><?=(($price*$noOfSelectedRooms)+$addC+$addAd)*($days+1);?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>($days+1)))?></div>
     
     <div class="clr"></div>
 	<div class="detailLables">Coupon Deduction <?=$cd;?>%</div>

@@ -363,8 +363,8 @@ class NodesController extends AppController {
     }
     
     function bookingindex(){
-    	
     	$hotelId=$this->params['pass'][0];
+    	$this->Session->write('hotelId',$hotelId);
     	$getHotels=$this->getHotels($hotelId);
         $this->set('hotelid',$hotelId);
         $this->set(compact('getHotels'));
