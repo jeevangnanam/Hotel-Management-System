@@ -93,8 +93,9 @@ function loadprompt(obj){
 	<div class="cap"><?=$hotels[0]['Hotel']['name'];?></div>
 	<div class="clr"></div>
 	<div class="sbox">
+	<?php $rt=$rtselected;?>
 		<?=$this->Form->create('',array('id'=>'editrooms','controller'=>'index','action'=>'/editrooms/'.$hotels[0]['Hotel']['id']));?>
-		<?=$this->Form->input('roomtype',array('type'=>'select','class'=>'rtype','options'=>$roomtype,'id'=>'roomtype','empty'=>'','label'=>'Room Type','selected'=>$rtselected));?>
+		<?=$this->Form->input('roomtype',array('type'=>'select','class'=>'rtype','options'=>$roomtype,'id'=>'roomtype','empty'=>'','label'=>'Room Type','selected'=>$rt));?>
 		<div id="ssubmit">
 		<?=$this->Form->end('Search');?>
 		</div>
@@ -105,7 +106,8 @@ function loadprompt(obj){
 	<div class="roomdetails">
 	<?php 
 	$c=1;
-	//debug($roomNumbers);
+	//debug(count($roomNumbers));
+	if(count($roomNumbers) > 1){
 		foreach($roomNumbers as $key=>$value){?>
 			<div class="roomdiv" onclick=" loadprompt(this)" id=<?="roomnumber-".$value['Rooms']['id'];?>>
 				<?=$value['Rooms']['roomname'];?>
@@ -115,6 +117,7 @@ function loadprompt(obj){
 			<?=$this->Form->input('upid'.$c,array('type'=>'text','value'=>$value['Rooms']['id']));?>
 			</div>
 		<?php $c++;
+		}
 		} 
 	?>
 	</div>

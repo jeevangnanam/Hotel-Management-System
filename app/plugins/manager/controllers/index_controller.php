@@ -578,6 +578,7 @@ class IndexController extends ManagerAppController{
 				$roomNumbers=$this->getroomnumbers_with_id($hotelId,$rt);
 			}
 		}
+		//$rt='';
 		if(isset($this->data['Hotel']['roomtphidden'])){
 			$rt=$this->data['Hotel']['roomtphidden'];
 			$roomNumbers=$this->getroomnumbers_with_id($hotelId,$rt);
@@ -599,7 +600,9 @@ class IndexController extends ManagerAppController{
 		}
 		$this->set(compact('hotels'));
 		$this->set(compact('roomtype'));
-		$rtselected=$rt;
+		if(isset($rt)){
+			$rtselected=$rt;
+		}
 		$this->set('rtselected',$rtselected);
 		$this->set(compact('roomNumbers'));
 	}

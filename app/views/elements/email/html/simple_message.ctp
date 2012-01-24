@@ -39,6 +39,17 @@
 <div style="clear:both;"></div>
  <div class="lbl" style="width:200px;float:left;">Total Price</div><div class="dataf" style="width:300px;float:left;"><?=$estprice;?></div>
  <div style="clear:both;">&nbsp;</div>
+ <?php 
+ /*$str ='24';
+				$enc = base64_encode($str);
+				echo $enc;
+				echo "<br/>";
+				
+				// decoding
+				$str2= $enc;
+				$dec = base64_decode($str2);
+				echo $dec;*/
+	?>			
   <div style="width:200px;float:left;">Thank you !</div>
  </p>
  

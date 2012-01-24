@@ -47,6 +47,10 @@ button  {
 .submit{
 	display:none;
 }
+#err{
+	margin-left:30px;
+	color:#E02727;
+}
 </style>
 <script>
  $(document).ready(function(){ 
@@ -66,6 +70,25 @@ function cancelbooking(){
 }
 
 function editbooking(){
+	var err="<ul>";
+	var chk=0;
+	if($('#BookingDfrom').val().length==0){
+		err+="<li>* Please select 'Date From'.</li>";
+		chk=1;
+	}
+	if($('#BookingDto').val().length==0){
+		err+="<li>* Please select 'Date To'.</li>";
+		chk=1;
+	}
+	if($('#BookingDto').val() < $('#BookingDfrom').val()){
+		err+="<li>'* Date To' is grater than or equal to 'Date From'.</li>";
+		chk=1;
+	}
+	err+="</ul>";
+	if(chk==1){	
+		$('#err').html(err);
+		return false;
+	}
 	jConfirm('Do you really need to edit your booking?', 'H o t e l M S', function(r) {
 		if(r){
 			$("#frm_edit").attr("action", "/manager/bookings/editbooking/"+$('#BookingTicket').val());
@@ -77,6 +100,7 @@ function editbooking(){
 </script>
 <div class="container">
 	<div class="edit_form" >
+		<div id='err'></div>
 		<?=$this->Form->create('Booking',array('id'=>'frm_edit'));?>
 		<div class="detailLables">Ticket No.</div><div class="detailFields"><?=$ticket;?><?=$this->Form->input('ticket',array('type'=>'hidden','value'=>$ticket));?></div>
 		<div class="clr"></div>

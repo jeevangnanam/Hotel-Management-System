@@ -333,7 +333,7 @@ class NodesController extends AppController {
         $this->redirect(array('action' => 'index'));
     }
 
-    public function index() {
+    public function index($hotelname=NULL,$location=NULL,$starclass=NULL,$category=NULL) {
        $hotelname=$location=$starclass=$hotelId=$subdomain=$category='';
        $domain=$this->getSubdomain();
        if(!empty($domain) && $domain!='demo-hotelms'){
@@ -343,10 +343,14 @@ class NodesController extends AppController {
        $tag=0;
        $subdomain=$domain;
        if(isset($this->params['data'])){
+       	if(isset($this->params['data']['Node']['hotelname'])){
        		$hotelname=$this->params['data']['Node']['hotelname'];
+       	}
+       	else{	
        		$location=$this->params['data']['Node']['location'];
        		$starclass=$this->params['data']['Node']['starclass'];
        		$category=$this->params['data']['Node']['category'];
+       	}
        		$tag=1;
        }
        	$hotelDets=$this->hotelsDets($hotelId,$hotelname,$location,$starclass,$tag,$category,$subdomain);
@@ -535,7 +539,6 @@ class NodesController extends AppController {
         	$this->setLogo($domain);
        	}
 		$hw='';
-		
 		if($tag==1){
 			if(!empty($hotelname) && !empty($location) && !empty($starclass) && !empty($category))
 				$hw=" AND Hotel.name like '%$hotelname%' AND Hotel.address like '%$location%' AND Hotel.starclass = '$starclass' AND Hotel.category = '$category' ";					
@@ -565,7 +568,7 @@ class NodesController extends AppController {
 				$hw=" AND Hotel.address like '%$location%' ";			
 			else if(!empty($starclass))
 				$hw=" AND Hotel.starclass = '$starclass'";				
-			else
+			else if(!empty($category))
 				$hw=" AND Hotel.category = '$category' ";
 				
 		}
@@ -615,8 +618,13 @@ class NodesController extends AppController {
 		$this->paginate =array(
         				'fields'=>array('Hotel.id',
         								'HotelsRoomType.id',
-        								'HotelsRoomType.`name`',
-										'HotelsRoomType.`status`'),
+        								'HotelsRoomType.name',
+										'HotelsRoomType.`status`',
+										'HotelsRoomType.price',
+										'HotelsRoomType.size',
+										'HotelsRoomType.info',
+										'HotelsRoomType.view',
+										'HotelsRoomType.cooling'),
         				'joins'=>array(
         						 array(
 		                       		'table' => 'hotels_room_types',
@@ -745,6 +753,7 @@ class NodesController extends AppController {
 		}
 		$this->set('hotelid',$hotelId);
 		$this->set('roomopt',$roomopt);
+		
 		$this->set(compact('hoteldets','hoteltypedets','loadHotelspics'));
 	}
 	function roomstatus($hotelId=NULL,$roomtypeid=NULL,$dateFrom=NULL,$dateTo=NULL){
@@ -1395,6 +1404,18 @@ class NodesController extends AppController {
                 }
             }
         }
+    }
+    
+    public function partners(){
+    	$this->paginate =array(
+        				'fields'=>array('Hotel.id',
+        								'Hotel.logo',
+        								'Hotel.name'),
+        				'conditions'=>array("Hotel.status"=>1),
+        							   
+        			
+        	);
+     $this->set('hotels',$this->paginate('Hotel'));
     }
 
 }

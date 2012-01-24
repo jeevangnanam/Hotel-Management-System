@@ -2,14 +2,19 @@
 	<div class="heading">Search Hotels</div>
     <div class="clr"></div>
     <div class="searchformcontent">
-    <?=$this->Form->create(array('id'=>'Nodes','action'=>'/')); ?>
-	<?=$this->Form->input('hotelname',array('type'=>'text','label'=>'Hotel Name'));?>
+    <?=$this->Form->create(array('id'=>'searc_one','controller'=>'nodes','action'=>'index')); ?>	
     <?=$this->Form->input('location',array('type'=>'text','label'=>'Location'));?>
     <?php $opt=array('1'=>'One','2'=>'Two','3'=>'Three','4'=>'Four','5'=>'Five');?>
-    <?=$this->Form->input('starclass',array('type'=>'select','label'=>'Star Class','options'=>$opt,'empty'=>'Select One'));?>
-	<?=$this->Form->input('category',array('type'=>'select','label'=>'Category','options'=>$catego,'empty'=>'Select One'));?>
+    <?=$this->Form->input('starclass',array('type'=>'select','label'=>'Star Class','options'=>$opt,'empty'=>'Any'));?>
+	<?=$this->Form->input('category',array('type'=>'select','label'=>'Category','options'=>$catego,'empty'=>'Any'));?>
     <?php echo $this->Form->end('Search'); ?>
     </div>
+	<div class="clr"></div>
+	<div class="searchformcontent">
+		<?=$this->Form->create(array('id'=>'searc_one','controller'=>'nodes','action'=>'index')); ?>
+		<?=$this->Form->input('hotelname',array('type'=>'text','label'=>'Hotel Name'));?>
+		<?php echo $this->Form->end('Search'); ?>
+	</div>
 </div>
 <div class="searchresult">
 <?php 

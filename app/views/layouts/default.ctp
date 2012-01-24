@@ -139,21 +139,6 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
       <?php }?>
       <h1><a href="/"><img src="<?=$logo;?>" class="logo" /> </a></h1></div>
       <div class="clr"></div>
-      <div class="menu_nav">
-        <ul>
-          <li class="active"><a href="/">Home</a></li>
-          <!--<li><a href="support">Users</a></li>-->
-          <li><a href="<?=$murl;?>">HotelManagers</a></li>
-          <!--<li><a href="blog">Promotions</a></li>-->
-          <li><a href="/contact/">Contact Us</a></li>
-        </ul>
-        <div class="searchform">
-          <form id="formsearch" name="formsearch" method="post" action="">
-            <span><input name="editbox_search" class="editbox_search" id="editbox_search" maxlength="80" value="Search our ste:" type="text" /></span>
-            <input name="button_search" src="/templates/limejungle/images/search_btn.gif" class="button_search" type="image" />
-          </form>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -186,11 +171,12 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
     <div class="footer_resize">
       <p class="lf">&copy; Copyright <a href="#">Loooops Selects</a><!--. Layout by [Z] <a href="http://www.freewebsitetemplatez.com/">Website Templates</a>--></p>
       <ul class="fmenu">
-        <li class="active"><a href="index">Home</a></li>
+        <li class="active"><a href="/">Home</a></li>
         <li><a href="#">Support</a></li>
         <li><a href="#">Blog</a></li>
         <li><a href="#">About Us</a></li>
-        <li><a href="#">Contacts</a></li>
+        <li><a href="/contact/">Contacts</a></li>
+        <li><a href="/nodes/partners">Partner Hotels</a></li>
       </ul>
       <div class="clr"></div>
     </div>

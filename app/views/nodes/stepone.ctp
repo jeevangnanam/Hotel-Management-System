@@ -54,21 +54,21 @@
 }
 .detailLables{
 	padding-left:10px;
-	width:300px;
+	width:150px;
 	height:20px;
 	float:left;
 	background:#F7FAF6;
-	border:dashed 1px #CCC;
+	border:none !important;
 	margin:5px ;
 	color:#360;
 }
 .detailFields{
 	padding-left:10px;
-	width:450px;
+	width:150px;
 	height:20px;
 	float:left;
 	background:#F7FAF6;
-	border:dashed 1px #CCC;
+	border:none !important;
 	margin:5px ;
 	color:#360;
 }
@@ -111,6 +111,59 @@
 	width:120px;
 	height:14px;
 }
+.main-detals{
+	float:left;
+	margin: 5px;
+    width: 42%;
+	padding: 10px;
+	border:solid 1px #E9E9E9;
+	border-radius: 5px; 
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px;
+}
+.add-charges{
+	float:left;
+	margin: 5px;
+	padding: 10px;
+    width: 42%;
+	border:solid 1px #E9E9E9;
+	border-radius: 5px; 
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px;
+}
+.selections{
+	float:left;
+	width:45%;
+	margin: 0 0 0 10px;
+	
+}
+
+.selections-detailLables{
+	padding-left:10px;
+	width:150px;
+	height:20px;
+	float:left;
+	background:#F7FAF6;
+	/*border:dashed 1px #CCC;*/
+	margin:5px ;
+	color:#360;
+}
+.selections-detailFields{
+	padding-left:10px;
+	width:150px;
+	height:20px;
+	float:left;
+	background:#F7FAF6;
+	/*border:dashed 1px #CCC;*/
+	margin:5px ;
+	color:#360;
+}
+.selections-div{
+	float:left;
+	margin:5px ;
+	height:auto;
+	padding: 2px;
+}
 </style>
 <?php
 $hotelId=$hotelName=$roomType=$rtId=$price=$maxAdults=$maxChildren=$additionalAdultCharge=$additionalChildCharge='';
@@ -148,43 +201,41 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
             <div class="stepFont">Step Three : Paymants</div>
             <div class="inactiveArrow"></div>
 	      </div>
-	      <!--<div id="step4" class="inactiveDiv">
-            <div class="stepFont">Step 4</div>
-            <div class="inactiveArrow"></div>
-        	
-	      </div>
-	      <div id="step5" class="inactiveDiv">
-        	<div class="stepFont">Step 5</div>
-            <div class="inactiveArrow"></div>	
-	      </div>-->
 </div>
 
  
 <div class="formContainer">
 <?=$this->Form->create('Nodes', array('controller'=>'bookings' ,'action' => '/steptwo/'.$hotelId,'type' => 'post','id'=>'cupon_check'));?>
 	<div class="clr"></div>
-	<div class="detailLables">Room Type</div>
-	<div class="detailFields"><?=$roomType;?><?=$this->Form->input('room_type',array('type'=>'hidden','value'=>$rtId))?></div>
-	<div class="clr"></div>
-    <div class="detailLables">Price</div>
-	<div class="detailFields"><?=$price;?></div>
-	<div class="clr"></div>
-	<div class="detailLables">Date From</div>
-	<div class="detailFields"><?=$fromDate;?><?=$this->Form->input('fromdate',array('type'=>'hidden','value'=>$fromDate))?></div>
-	<div class="clr"></div>
-	<div class="detailLables">Date To</div>
-	<div class="detailFields"><?=$toDate;?><?=$this->Form->input('todate',array('type'=>'hidden','value'=>$toDate))?></div>
-	<div class="clr"></div>
-	<div class="detailLables">Max Adults</div>
-	<div class="detailFields"><?=$maxAdults;?></div>
-	<div class="clr"></div>
-	<div class="detailLables">Max Children</div>
-	<div class="detailFields"><?=$maxChildren;?></div>
-	<div class="clr"></div>
-	<div class="detailLables">Additional Adult Charge</div>
-	<div class="detailFields"><?=$additionalAdultCharge;?></div>
-	<div class="clr"></div>
-    <?php 
+    <div class="main-detals">
+        <div class="detailLables">Room Type</div>
+        <div class="detailFields"><?=$roomType;?><?=$this->Form->input('room_type',array('type'=>'hidden','value'=>$rtId))?></div>
+        <div class="clr"></div>
+        <div class="detailLables">Price</div>
+        <div class="detailFields"><?=$price;?></div>
+        <div class="clr"></div>
+        <div class="detailLables">Date From</div>
+        <div class="detailFields"><?=$fromDate;?><?=$this->Form->input('fromdate',array('type'=>'hidden','value'=>$fromDate))?></div>
+        <div class="clr"></div>
+        <div class="detailLables">Date To</div>
+        <div class="detailFields"><?=$toDate;?><?=$this->Form->input('todate',array('type'=>'hidden','value'=>$toDate))?></div>
+        <div class="clr"></div>
+    </div>
+    <div class="add-charges">
+        <div class="detailLables">Max Adults</div>
+        <div class="detailFields"><?=$maxAdults;?></div>
+        <div class="clr"></div>
+        <div class="detailLables">Max Children</div>
+        <div class="detailFields"><?=$maxChildren;?></div>
+        <div class="clr"></div>
+        <div class="detailLables">Additional Adult Charge</div>
+        <div class="detailFields"><?=$additionalAdultCharge;?></div>
+		<div class="clr"></div>
+        <div class="detailLables">Additional Child Charge</div>
+        <div class="detailFields"><?=$additionalChildCharge;?></div>
+		<div class="clr"></div>
+    </div>
+     <?php 
 		
 		
 		$date1 = $fromDate;
@@ -204,27 +255,29 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 		
 		
 	?>
-    <div class="detailLables">Number of days</div>
-	<div class="detailFields"><?=($days+1);?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>($days+1)))?></div>
-    <div class="clr"></div>
-	<div class="detailLables">Additional Child Charge</div>
-	<div class="detailFields"><?=$additionalChildCharge;?></div>
-	<div class="clr"></div>
-	<div class="detailLables">No of Selected Rooms</div>
-	<div class="detailFields"><?=$nsr;?><?=$this->Form->input('nofselectedrooms',array('type'=>'hidden','value'=>$nsr))?></div>
-	<div class="clr"></div>
-    <div class="detailLables">Selected Rooms</div>
-	<div class="detailFields"><?=$nsrooms;?><?=$this->Form->input('Nodes.selectedrooms',array('type'=>'hidden','value'=>$nsrooms))?></div>
-	<div class="clr"></div>
-    <div class="detailLables">Coupon</div>
-	<div class="detailFields"><?=$this->Form->input('coupon',array('type'=>'text','value'=>'','label'=>''))?></div>
-	<div class="clr"></div>
-	<?php $opt=array('0'=>'Select','1'=>'One','2'=>'Two','3'=>'Three','4'=>'Four','5'=>'Five','6'=>'Six','7'=>'Seven');?>
-    <div class="detailLableAdditional">No of Additional Adults</div>  
-	<div class="detailFieldsAdditional"><?=$this->Form->input('max_adults',array('type'=>'select','label'=>'','options'=>array_slice($opt, 0, $maxAdults+1)))?></div>
-    <div class="detailLableAdditional">No of Additional Children</div>
-	<div class="detailFieldsAdditional"><?=$this->Form->input('max_children',array('type'=>'select','label'=>'','options'=>array_slice($opt, 0, $maxChildren+1)))?></div>
-    <div class="clr"></div>
+    <div class="selections-div">
+        <div class="selections">
+            <div class="selections-detailLables">Number of days</div>
+            <div class="selections-detailFields"><?=($days+1);?><?=$this->Form->input('nofselecteddays',array('type'=>'hidden','value'=>($days+1)))?></div>
+            <div class="selections-detailLables">No of Selected Rooms</div>
+            <div class="selections-detailFields"><?=$nsr;?><?=$this->Form->input('nofselectedrooms',array('type'=>'hidden','value'=>$nsr))?></div>
+            <div class="selections-detailLables">Selected Rooms</div>
+            <div class="selections-detailFields"><?=$nsrooms;?><?=$this->Form->input('Nodes.selectedrooms',array('type'=>'hidden','value'=>$nsrooms))?></div>
+        </div>
+    
+        <div class="selections">
+            <div class="selections-detailLables">Coupon</div>
+            <div class="selections-detailFields"><?=$this->Form->input('coupon',array('type'=>'text','value'=>'','label'=>''))?></div>
+            <div class="clr"></div>
+            <?php $opt=array('0'=>'Select','1'=>'One','2'=>'Two','3'=>'Three','4'=>'Four','5'=>'Five','6'=>'Six','7'=>'Seven');?>
+            <div class="selections-detailLables">No of Additional Adults</div>  
+            <div class="selections-detailFields"><?=$this->Form->input('max_adults',array('type'=>'select','label'=>'','options'=>array_slice($opt, 0, $maxAdults+1)))?></div>
+            <div class="selections-detailLables">No of Additional Children</div>
+            <div class="selections-detailFields"><?=$this->Form->input('max_children',array('type'=>'select','label'=>'','options'=>array_slice($opt, 0, $maxChildren+1)))?></div>
+            <div class="clr"></div>
+         </div>
+     </div>
+     <div class="clr"></div>
 <?=$this->Form->end('Submit');?>
  
 </div>

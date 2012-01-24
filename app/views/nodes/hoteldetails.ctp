@@ -137,21 +137,31 @@ function submitform(frm){
         <div class="clr"></div>
         <div class="rtypestopic">Room Types</div>
         <div class="clr"></div>
-        <?php foreach($hoteltypedets as $key=>$value){ ?>
-			<div class="roomtype"><?=$value['HotelsRoomType']['name'];?><div class="roomdests" onclick="loadPopUpnormal(<?=$value['Hotel']['id'];?>,<?=$value['HotelsRoomType']['id'];?>);"></div></div>
-		<?php } ?>
-        <div class="clr"></div>
-        <!-- Shows the page numbers -->
-        <?php echo $paginator->numbers(); ?>
-        <!-- Shows the next and previous links -->
-        <?php
-            echo $paginator->prev('« Previous ', null, null, array('class' => 'disabled'));
-            echo $paginator->next(' Next »', null, null, array('class' => 'disabled'));
-        ?> 
-        <!-- prints X of Y, where X is current page and Y is number of pages -->
-        <?php echo $paginator->counter(); ?>
-		<div class="clr"></div>
-		</div>
+            <div id="tabs">
+                <ul>
+                <?php foreach($hoteltypedets as $key=>$value){ ?>
+                    <li><a href="#<?=$value['HotelsRoomType']['id'];?>"><?=$value['HotelsRoomType']['name'];?></a></li>
+                    
+                <?php } ?>
+                </ul>
+            <?php foreach($hoteltypedets as $key=>$value){ ?>
+                <div id="<?=$value['HotelsRoomType']['id'];?>" class="roomtype-des">
+				<div>Room Type</div><div><?=$value['HotelsRoomType']['name'];?></div>
+                <div class="clr"></div>
+                <div>Price</div><div><?=$value['HotelsRoomType']['price'];?></div>
+                <div class="clr"></div>
+                <div>Size</div><div><?=$value['HotelsRoomType']['size'];?></div>
+                <div class="clr"></div>
+                <div>Info</div><div><?=$value['HotelsRoomType']['info'];?></div>
+                <div class="clr"></div>
+                <div>View</div><div><?=$value['HotelsRoomType']['view'];?></div>
+                <div class="clr"></div>
+                <div>Colling</div><div><?=$value['HotelsRoomType']['cooling'];?></div>
+                </div>
+            <?php } ?>
+            
+            </div>
+        </div>
 		<div class="clr"></div>
         	
             

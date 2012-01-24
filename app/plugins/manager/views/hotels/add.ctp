@@ -156,8 +156,9 @@
 			<ul>
 				<li><a href="#hotel-details">Hotel details</a></li>
 				<li><a href="#hotel-pictures"><span>Hotel Pictures</span></a></li>
-				<li><a href="#hotel-room-types">Room types</a></li>
+				<li><a href="#hotel-room-types">Room types</a></li>				
                 <li><a href="#hotel-rooms"><span>Rooms</span></a></li>
+				<li><a href="#hotel-meal-plan">Meal Plan</a></li>
 				<li><a href="#hotel-features">Features</a></li>
 				<li><a href="#hotel-managers">Managers</a></li>
 				<li><a href="#hotel-meta">Meta values</a></li>
@@ -232,6 +233,12 @@
 		</div>	
 		<div style="clear:both;"></div>
 		<div style="float:left;width:100px;"></div>
+		<div style="clear:both;"></div>
+		<div style="float:left;width:100px;">Description :</div>
+		<div style="float:left;">
+		   <?=$this->Form->input('Hotel.description',array('label'=>'', 'empty'=>''));?>
+		</div>
+		<div style="clear:both;"></div>
 		<div style="float:left;">
 			<?=$this->Form->end(__('Submit', true)); ?>
 		<div>
@@ -303,9 +310,10 @@
 		</div>
 </fieldset>
 </div>
+
 <div id="hotel-rooms">
    <fieldset>
-	<legend>Upload Photo</legend>
+	<legend>Room Capacity</legend>
  <?= $this->Form->create('Hotel');?>
                 <?php
 
@@ -316,6 +324,25 @@
 		echo $this->Form->input('HotelsRoomCapacity.additional_adult_charge');
 		echo $this->Form->input('HotelsRoomCapacity.additional_child_charge');
 		echo $this->Form->input('HotelsRoomCapacity.total_rooms');
+
+                ?>
+ <?php echo $this->Form->end(__('Save..', true)); ?>
+
+</div>
+
+<div id="hotel-meal-plan">
+   <fieldset>
+	<legend>Meal Plan</legend>
+ <?= $this->Form->create('Hotel');?>
+                <?php
+
+                
+                echo $this->Form->input('MealTypes.room_type_id');
+                echo $this->Form->input('MealTypes.max_adults');
+		echo $this->Form->input('MealTypes.max_children');
+		echo $this->Form->input('MealTypes.additional_adult_charge');
+		echo $this->Form->input('MealTypes.additional_child_charge');
+		echo $this->Form->input('MealTypes.total_rooms');
 
                 ?>
  <?php echo $this->Form->end(__('Save..', true)); ?>

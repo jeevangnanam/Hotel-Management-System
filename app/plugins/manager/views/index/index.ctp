@@ -37,7 +37,7 @@
     font-style: normal;
     height: 25px;
     margin-right: 10px;
-    width: 90px;
+    width: auto;
 }
 
 .hotelname{
@@ -56,6 +56,18 @@
 	background:#F7FAF6;
 	margin:2px;
 }
+.main_row{
+	float:left;
+	width:50%;
+	margin:5px;
+}
+.tpdiv,.btndiv{
+	float:left;
+}
+.tpdiv{
+	width:50%;
+}
+
 </style>
 <script>
 
@@ -138,8 +150,26 @@ function loadbookings(obj,hotelId,rtId){
 }
 </script>
 <div class="container">
-
-   	 	
+			<div class="topic">
+            	Manager Control Panel
+            </div>
+   	 		<div class="clr"></div>
+            <div class="main_row">
+            <div class="tpdiv">Add new Hotels</div>
+            <div class="btndiv">
+            	<?=$this->Form->create('Hotels',array("action" => "/add/" ));?>
+			    <?=$this->Form->end('Add New Hotels');?>
+             </div>
+             </div>
+             <div class="clr"></div>
+             <div class="main_row">
+             <div class="tpdiv">Edit Hotels</div>
+             <div class="btndiv">   
+                <?=$this->Form->create('Hotels',array("action" => "/edit/" ));?>
+			    <?=$this->Form->end('Edit Hotels');?>
+             </div>	 
+            </div>
+            <div class="clr"></div>
     		<div class="hotelname">Hotels</div><div class="btns">Room Types</div><div class="btns">Edit Rooms</div><div class="btns">Booking Info</div><div class="btns">Booking</div>
         	<div class="clr"></div>
 			<?php foreach($getHotels as $key=>$value){ ?>

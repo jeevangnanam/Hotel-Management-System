@@ -18,6 +18,17 @@
                 'elements' => 'NodeBody',
             ),
         ),
+        'Hotels/add' => array(
+            array(
+                'elements' => 'HotelDescription',
+            ),
+        ),
+        'Hotels/edit' => array(
+            array(
+                'elements' => 'HotelDescription',
+            ),
+        ),
+       
     ));
 
 /**

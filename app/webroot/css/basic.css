@@ -126,3 +126,10 @@
 	width:100%;
 	background:#F7FAF6;
 }
+.roomtype-des{
+	height:150px;
+}
+.roomtype-des div{
+	float:left;
+	width:100px;	
+}

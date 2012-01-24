@@ -306,11 +306,113 @@ class BookingsController extends ManagerAppController{
 	}
 	
 	function cancelbooking(){
-		
+		if(isset($this->params['pass'][0])){
+			$copyData=$this->Booking->find('all',
+				array(
+				'fields'=>array('Booking.id,Booking.user_id,Booking.hotel_id,Booking.room_type_id,
+				Booking.number_of_rooms,Booking.from_date,Booking.end_date,estimated_price,Booking.coupon_id,Booking.notes,Booking.status,Booking.rooms'),
+				'conditions'=>array('Booking.id'=>$this->params['pass'][0])
+				)
+				);
+			if(count($copyData) > 0){
+				//,'BookingEdit'
+				/*$this->BookingEdit->data['ticket_id']=$copyData[0]['Booking']['id'];
+				$this->BookingEdit->data['user_id']=$copyData[0]['Booking']['user_id'];
+				$this->BookingEdit->data['user_id']=$copyData[0]['Booking']['hotel_id'];*/
+				$this -> Booking -> deleteAll(array('Booking.id' => $this->params['pass'][0]));				
+				$this->Session->setFlash('Your booking is canceled,');
+				//echo $this->Session->read('hotelId');
+				$this->redirect('/manager/index/bookingindex/'.$this->Session->read('hotelId'));
+			}
+			else{
+				$this->Session->setFlash('Your booking is already canceled,');
+				//echo $this->Session->read('hotelId');
+				$this->redirect('/manager/index/bookingindex/'.$this->Session->read('hotelId'));
+			}
+			
+		}
 	}
 	
-	function editbooking(){
+	function editbooking($hotelId=NULL){
+		$hotelId=$this->Session->read('hotelId');
+		if($this->params['pass'][0]==$this->data['Booking']['ticket']){
+			$copyData=$this->Booking->find('all',
+				array(
+				'fields'=>array('Booking.id,Booking.user_id,Booking.hotel_id,Booking.room_type_id,
+				Booking.number_of_rooms,Booking.from_date,Booking.end_date,estimated_price,Booking.coupon_id,Booking.notes,Booking.status,Booking.rooms'),
+				'conditions'=>array('Booking.id'=>$this->params['pass'][0])
+				)
+				);
+				$roomtype=$copyData[0]['Booking']['room_type_id'];
+				$roomPrice=$this->HotelsRoomType->find('all',
+					array(
+						'fields'=>array('HotelsRoomType.price'),
+						'conditions'=>array('HotelsRoomType.id'=>$roomtype,'HotelsRoomType.hotel_id'=>$hotelId),
+					
+					));
+				  $roomCapPrices=$this->HotelsRoomCapacities->find('all',
+			  				array(
+			  					'fields'=>array('HotelsRoomCapacities.additional_adult_charge,HotelsRoomCapacities.additional_child_charge'),
+			  					'conditions'=>array('HotelsRoomCapacities.hotel_id'=>$hotelId,'HotelsRoomCapacities.room_type_id'=>$roomtype),
+			  				));
+			  				
+			  $adc=$roomCapPrices[0]['HotelsRoomCapacities']['additional_adult_charge'];
+			  $acc=$roomCapPrices[0]['HotelsRoomCapacities']['additional_child_charge'];
+			
+			  $date1 = $this->data['Booking']['dfrom'];			
+			  $date2 = $this->data['Booking']['dto'];
+			
+			$diff = abs(strtotime($date2) - strtotime($date1));
+			$s=(strlen($this->data['Booking']['dfrom'])-2);
+			$e=strlen($this->data['Booking']['dto']);
+			$m=(substr($this->data['Booking']['dto'],$s,$e));
+			$mc=30;
+			if($m==31){
+				$mc=$m;
+			}
+			$years = floor($diff / (365*60*60*24));
+			$months = floor(($diff - $years * 365*60*60*24) / ($mc*60*60*24));
+			
+			$days = floor(($diff - $years * 365*60*60*24 - $months*$mc*60*60*24)/ (60*60*24));	
+				
+			$price=$roomPrice[0]['HotelsRoomType']['price'];
+			$nofrooms=$copyData[0]['Booking']['number_of_rooms'];
+			$noofadults=$this->data['Booking']['noofadults'];
+			$noofchildren=$this->data['Booking']['noofchildren'];
+			$estimated_price=((($price*$nofrooms)+($noofadults*$adc)+($noofchildren*$acc))*($days+1));
+			
+			$this->data['Booking']['id']=$this->data['Booking']['ticket'];
+			$this->data['Booking']['from_date']=$this->data['Booking']['dfrom'];
+			$this->data['Booking']['end_date']=$this->data['Booking']['dto'];
+			$this->data['Booking']['estimated_price']=$estimated_price;
+			
+			if($this->Booking->save($this->data)){
+				// encoding
+				/*$str ='30';
+				$enc = base64_encode($str);
+				echo $enc;
+				echo "<br/>";
+				
+				// decoding
+				$str2= $enc;
+				$dec = base64_decode($str2);
+				echo $dec;*/
+				$this->Session->setFlash('Your booking is Edited,');
+			}
 		
+		}
+		
+		
+	
+	}
+	
+	function checkAvailability($ticket=NULL){
+		/*[ticket] => 27
+            [noofselectedrooms] => 2
+            [dfrom] => 2012-01-31
+            [dto] => 2012-01-31
+            [noofadults] => 0
+            [noofchildren] => 0*/
 	}
 }
 ?>
