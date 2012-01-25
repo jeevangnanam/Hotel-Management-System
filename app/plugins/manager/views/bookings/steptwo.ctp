@@ -53,24 +53,24 @@
   
 }
 .detailLables{
-	padding-left:10px;
-	width:300px;
-	height:20px;
-	float:left;
-	background:#F7FAF6;
-	border:dashed 1px #CCC;
-	margin:5px ;
-	color:#360;
+	background: none repeat scroll 0 0 #F7FAF6;
+    border: medium none !important;
+    color: #336600;
+    float: left;
+    height: 20px;
+    margin: 5px;
+    padding-left: 10px;
+    width: 300px;
 }
 .detailFields{
-	padding-left:10px;
-	width:450px;
-	height:20px;
-	float:left;
-	background:#F7FAF6;
-	border:dashed 1px #CCC;
-	margin:5px ;
-	color:#360;
+	background: none repeat scroll 0 0 #F7FAF6;
+    border: medium none !important;
+    color: #336600;
+    float: left;
+    height: 20px;
+    margin: 5px;
+    padding-left: 10px;
+    width: 450px;
 }
 .detailLableAdditional{
 	padding:0 10px;
@@ -105,6 +105,41 @@
 	color:#FFF;
 	text-align:center;
 	margin-left: 325px;
+}
+.selections{
+	float:left;
+	border:solid 1px #E9E9E9;
+	border-radius: 5px; 
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px;	
+	margin:5px 0;
+}
+
+.selections-detailLables{
+	padding-left:10px;
+	width:150px;
+	height:20px;
+	float:left;
+	background:#F7FAF6;
+	/*border:dashed 1px #CCC;*/
+	margin:5px ;
+	color:#360;
+}
+.selections-detailFields{
+	padding-left:10px;
+	width:150px;
+	height:20px;
+	float:left;
+	background:#F7FAF6;
+	/*border:dashed 1px #CCC;*/
+	margin:5px ;
+	color:#360;
+}
+.selections-div{
+	float:left;
+	margin:5px ;
+	height:auto;
+	padding: 2px;
 }
 </style>
 <?php
@@ -153,6 +188,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 <div class="formContainer">
 <?=$this->Form->create('Booking', array('controller'=>'Booking' ,'action' => '/stepthree/','type' => 'post','id'=>'cupon_check'));?>
  	<div class="clr"></div>
+    <div class="selections">
 	<div class="detailLables">Room Type</div>
 	<div class="detailFields"><?=$roomType;?><?=$this->Form->input('Booking.room_type',array('type'=>'hidden','value'=>$roomTypeId))?></div>	
     <div class="clr"></div>
@@ -206,6 +242,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
     <?php $total=((($price*$noOfSelectedRooms)+$addC+$addAd)*($days+1))-$couponDeduction; ?>
 	<div class="detailFields"><?=$total?><?=$this->Form->input('Booking.total',array('type'=>'hidden','value'=>$total))?></div>
     <div class="clr"></div>
+    </div>
 <?=$this->Form->end('Submit');?>
  
 </div>

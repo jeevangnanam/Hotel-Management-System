@@ -211,6 +211,7 @@ class IndexController extends ManagerAppController{
 		}*/
 		$this->paginate = array(
         				'fields'=>array('Hotel.`name`',
+        								'HotelsRoomType.id',
         								'HotelsRoomType.`name`',
 									    'HotelsRoomType.price','HotelsRoomType.size',
 									    'HotelsRoomType.info',
@@ -230,7 +231,7 @@ class IndexController extends ManagerAppController{
         				'conditions'=>array("Hotel.id=$ph_id "),
         				
         				'order'    => array('HotelsRoomType.id'    => 'asc'),
-        				'limit' =>2
+        				
         							   
         			);
         		$loadHotelsRoomType=$this->paginate('HotelsRoomType');

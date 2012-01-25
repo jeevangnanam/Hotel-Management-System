@@ -34,15 +34,17 @@
 	#fromdate,#todate{
 		float:left;
 		margin:8px;
-		height:250px;
+		height:250px;	
 	}
 	#HotelFromdate{
 		float:left;
 		width:100px;
+		display:none;
 	}
 	#HotelDateto{
 		float:left;
 		width:100px;
+		display:none;
 	}
 	.dCap{
 		float:left;

@@ -201,6 +201,10 @@ class ContactsController extends AppController {
 
         return $continue;
     }
+    
+    public function index(){
+    	
+    }
 
 }
 ?>

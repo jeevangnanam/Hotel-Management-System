@@ -1410,13 +1410,42 @@ class NodesController extends AppController {
     	$this->paginate =array(
         				'fields'=>array('Hotel.id',
         								'Hotel.logo',
-        								'Hotel.name'),
+        								'Hotel.name',
+    									'Hotel.web'),
         				'conditions'=>array("Hotel.status"=>1),
         							   
         			
         	);
      $this->set('hotels',$this->paginate('Hotel'));
     }
-
+	
+    public function searchpartners($hotelName=NULL){
+    	if(isset($this->params['pass'][0])){
+    		$hotelName=$this->params['pass'][0];
+    	}
+    	$con="";
+    	if(!empty($hotelName)){
+    		$con.=" AND Hotel.name LIKE  '%$hotelName%'";
+    	}
+    	
+    	$this->layout='ajax';
+    	$dets=$this->Hotel->find('all',array(
+        				'fields'=>array('Hotel.id',
+        								'Hotel.logo',
+        								'Hotel.name',
+    									'Hotel.web'),
+        				'conditions'=>array("Hotel.status=1 $con"),
+        							   
+        			
+        	));
+     	$arr =array();
+ 		
+    	 foreach ($dets as $key=>$value){
+    	 	$arr['Hotels'][]=array('id'=>$value['Hotel']['id'],'logo'=>$value['Hotel']['logo'],'name'=>$value['Hotel']['name'],'web'=>$value['Hotel']['web'],);
+    	 }
+    	 
+		echo json_encode($arr);
+		
+    }
 }
 ?>
