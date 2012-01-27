@@ -4,6 +4,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title><?php echo $title_for_layout; ?> - <?php __('Croogo'); ?></title>
     <?php
+	if($session->read('Auth.User.role_id') <> 2){
+			Header("Location:/");
+	}
         echo $html->script(array('jquery/jquery.min'));
         echo $layout->js();
         echo $html->css(array(

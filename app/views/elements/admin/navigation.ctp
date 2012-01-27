@@ -48,13 +48,13 @@
             </ul>
         </li>
 
-        <li>
+        <!--<li>
             <a href="<?php echo $html->url(array('plugin' => null, 'controller' => 'blocks', 'action' => 'index')); ?>"><span class="ui-icon ui-icon-copy"></span><?php __('Blocks'); ?></a>
             <ul>
                 <li><?php echo $html->link('<span class="ui-icon ui-icon-copy"></span>' . __('Blocks', true), array('plugin' => null, 'controller' => 'blocks', 'action' => 'index'), array('escape' => false)); ?></li>
                 <li><?php echo $html->link('<span class="ui-icon ui-icon-bullet"></span>' . __('Regions', true), array('plugin' => null, 'controller' => 'regions', 'action' => 'index'), array('escape' => false)); ?></li>
             </ul>
-        </li>
+        </li>-->
 
         <li>
             <a href="<?php echo $html->url(array('plugin' => 'extensions', 'controller' => 'extensions_plugins', 'action' => 'index')); ?>"><span class="ui-icon ui-icon-gear"></span><?php __('Extensions'); ?></a>

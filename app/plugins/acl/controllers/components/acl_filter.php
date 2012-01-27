@@ -31,10 +31,13 @@ class AclFilterComponent extends Object {
         $this->controller->Auth->authorize = 'actions';
         $this->controller->Auth->loginAction = array('plugin' => 0, 'controller' => 'users', 'action' => 'login');
         $this->controller->Auth->logoutRedirect = array('plugin' => 0, 'controller' => 'users', 'action' => 'login');
-        $this->controller->Auth->loginRedirect = array('plugin' => 0, 'controller' => 'users', 'action' => 'index');
+    
         $this->controller->Auth->userScope = array('User.status' => 1);
         $this->controller->Auth->actionPath = 'controllers/';
-
+		
+        if($this->controller->Auth->user('role_id')==1){
+        	$this->controller->Auth->logoutRedirect = array('plugin' => 0, 'controller' => 'settings','action' => 'dashboard');
+        }
         if ($this->controller->Auth->user() &&
             $this->controller->Auth->user('role_id') == 1) {
             // Role: Admin

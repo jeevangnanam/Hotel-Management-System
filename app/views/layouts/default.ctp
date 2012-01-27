@@ -167,6 +167,7 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
       <div class="clr"></div>
     </div>
   </div>
+  
   <div class="footer">
     <div class="footer_resize">
       <p class="lf">&copy; Copyright <a href="#">Loooops Selects</a><!--. Layout by [Z] <a href="http://www.freewebsitetemplatez.com/">Website Templates</a>--></p>
