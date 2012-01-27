@@ -144,10 +144,7 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 
   <div class="content">
     <div class="content_resize">
-      <div class="mainbar">
-   
-      
-      
+      <div class="mainbar">    
         <div class="article">
         <?php
                 $layout->sessionFlash();
@@ -162,23 +159,25 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
     </div>
   </div>
 
-  <div class="fbg">
+<!--  <div class="fbg">
     <div class="fbg_resize">
       <div class="clr"></div>
     </div>
-  </div>
+  </div>-->
   
   <div class="footer">
     <div class="footer_resize">
       <p class="lf">&copy; Copyright <a href="#">Loooops Selects</a><!--. Layout by [Z] <a href="http://www.freewebsitetemplatez.com/">Website Templates</a>--></p>
       <ul class="fmenu">
-        <li class="active"><a href="/">Home</a></li>
+        <!--<li class="active"><a href="/">Home</a></li>
         <li><a href="#">Support</a></li>
         <li><a href="#">Blog</a></li>
         <li><a href="#">About Us</a></li>
         <li><a href="/contact/">Contacts</a></li>
-        <li><a href="/nodes/partners">Partner Hotels</a></li>
+        <li><a href="/nodes/partners">Partner Hotels</a></li> -->
+		<?php echo $this->Layout->menu('footer', array('dropdown' => true)); ?>
       </ul>
+      
       <div class="clr"></div>
     </div>
   </div>
