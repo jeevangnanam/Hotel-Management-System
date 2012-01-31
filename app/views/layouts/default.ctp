@@ -105,7 +105,7 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 </style>
 </head>
 <body>
-<?php $dlogo='/templates/limejungle/images/logo.png';
+<?php $dlogo='/templates/limejungle/images/png/logo_6.png';//logo.png
 	if(empty($logo)){
 		$logo=$dlogo;
 	}

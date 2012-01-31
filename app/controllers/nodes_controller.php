@@ -1,4 +1,4 @@
-<?php
+<?php 
 /**
  * Nodes Controller
  *
@@ -588,6 +588,7 @@ class NodesController extends AppController {
         								'Hotel.contactperson',
 										'Hotel.starclass',
 		 								'Hotel.logo',
+		 								'Hotel.description',
         								'Users.first_name',
 										'Users.last_name'),
         				'joins'=>array(
@@ -637,7 +638,7 @@ class NodesController extends AppController {
         				'conditions'=>array("HotelsRoomType.`status`='APPROVED' AND HotelsRoomType.hotel_id='$hotelId'"),
         				/*'group'=>array('HotelsRoomType.id'),*/
         				'order'    => array('HotelsRoomType.id'    => 'asc'),
-        				'limit' =>3
+        				'limit' =>5
         							   
         			
         	);

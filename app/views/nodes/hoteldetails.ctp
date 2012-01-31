@@ -1,5 +1,37 @@
+<?php  
+ echo $html->css(array('jsCarousel-2.0.0.css','colorbox.css'));
+ echo $html->script(array('jsCarousel-2.0.0.js'));
+ echo $html->script(array('colorbox/jquery.colorbox.js','colorbox/jquery.colorbox-min.js'));
+?>
 <script type="text/javascript">
+ $(document).ready(function() {
+            $('#carouselh').jsCarousel({ autoscroll: false, circular: false, masked: false, itemstodisplay: 5, orientation: 'h' });
+			//onthumbnailclick: function(src) { alert(src); },
 
+				//Examples of how to assign the ColorBox event to elements
+				$(".group1").colorbox({rel:'group1'});
+				$(".group2").colorbox({rel:'group2', transition:"fade"});
+				$(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
+				$(".group4").colorbox({rel:'group4', slideshow:true});
+				$(".ajax").colorbox();
+				$(".youtube").colorbox({iframe:true, innerWidth:425, innerHeight:344});
+				$(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
+				$(".inline").colorbox({inline:true, width:"50%"});
+				$(".callbacks").colorbox({
+					onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+					onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+					onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+					onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+					onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+				});
+				
+				//Example of preserving a JavaScript event for inline calls.
+				$("#click").click(function(){ 
+					$('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+					return false;
+				});
+			});
+		
 function loadroomavailabity(){
 	$('#roomcount').val(0);
 	var rtid=$('#roomtypes').val()
@@ -62,7 +94,7 @@ function submitform(frm){
 	float:left;
 }
 .submit{
-	/*display:none;*/
+	margin: 30px 35px;
 }
 #datefrom,#dateto{
 	margin-left:2px;
@@ -87,8 +119,9 @@ function submitform(frm){
 	background:#E7E7E9;
 }
 .img {
-    height: 78px;
-    width: 276px;
+   	height: 80px;
+    margin: 5px;
+    width: 261px;
 }
 .cap{
 	color:#538136;
@@ -101,14 +134,21 @@ function submitform(frm){
 	width:120px;
 }
 .submit input {
-    width: 150px;
+    background: none repeat scroll 0 0 #DD7F27;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    margin: 30px 40px 5px 20px;
+    width: auto;
+}
+.submit input:hover {
+	color:#538136;
 }
 </style>
 <?php
 	foreach($hoteldets as $key=>$value){ ?>
 		<div class="hoteldescontainer">
 			<div class="hoteldets">
-				<div class="hotelname">Hotel <?=$value['Hotel']['name'];?></div>
+				<div class="hotelname"><span class="ht-icon"></span><span class="ht-name"><?=$value['Hotel']['name'];?></span></div>
 				<div class="clr"></div>
 				<div class="hoteladdress"><span class="htllbl">Address :</span><span class="htldet"><?=$value['Hotel']['address'];?></span></div>
 				<div class="clr"></div>
@@ -128,14 +168,15 @@ function submitform(frm){
 				  	$path=$value['Hotel']['id']."/".$value['Hotel']['logo'];
 		    ?>
 			<?php ?>
-			<div class="imgbox"><img src="<?php echo $this->Html->webroot;?>uploads/hotels/<?=$path;?>" class="img" /></div>
+			<div class="imgbox"><img src="<?php echo $this->Html->webroot;?>uploads/hotels/<?=$path;?>" class="img" />
             <?=$this->Form->create('Nodes',array('action'=>"/bookingindex/$hotelid"));?>
             <?=$this->Form->submit('Book Now');?>
+            </div>
         </div>
 		<div class="clr"></div>
 		<div class="roomdets">
         <div class="clr"></div>
-        <div class="rtypestopic">Room Types</div>
+        <!--<div class="rtypestopic">Room Types</div>-->
         <div class="clr"></div>
             <div id="tabs">
                 <ul>
@@ -166,105 +207,28 @@ function submitform(frm){
         	
             
         <div class="clr"></div>
-        <div class="gallerystopic">Hotel Images</div>        
 <?php }?>
-		<?=$html->css(array('skins/ie7/skin.css','fancybox/jquery.fancybox-1.3.4.css'));//'slide_show.css'?>,
-		<?=$html->script(array('jquery/jquery.jcarousel.min.js','thickbox/thickbox.js','fancybox/jquery.fancybox-1.3.4.pack.js'));?>
-
-
-		<!--asdadas-->
-		<script type="text/javascript">
-
-// Set thickbox loading image
-tb_pathToImage = "img/loading-thickbox.gif"; 
-
-var mycarousel_itemList = new Array();
-</script>
+		
+<div id="v2">
+<div id="demo-wrapper">
+<div id="demo-right">
+<div id="hWrapper">
+<div id="carouselh">
 <?php $i=0; 
-		foreach($loadHotelspics as $key=>$value){
-	 ?>
-<script>
-
-	mycarousel_itemList[<?=$i;?>]= {url:"<?=$this->Html->webroot;?>uploads/hotels/<?=$value['Hotel']['id'];?>/<?=$value['HotelsPicture']['picture'];?>", title: "" ,id:"<?=$value['HotelsPicture']['picture'];?>"}
-</script>
-<?php $i++; } ?>
-<script>
-function mycarousel_itemLoadCallback(carousel, state)
-{
-    for (var i = carousel.first; i <= carousel.last; i++) {
-        if (carousel.has(i)) {
-            continue;
-        }
-
-        if (i > mycarousel_itemList.length) {
-            break;
-        }
-
-        // Create an object from HTML
-        var item = jQuery(mycarousel_getItemHTML(mycarousel_itemList[i-1])).get(0);
-
-        // Apply thickbox
-        tb_init(item);
-
-        carousel.add(i, item);
-    }
-};
-
-/**
- * Item html creation helper.
- */
-function mycarousel_getItemHTML(item)
-{
-    var url_m = item.url.replace(/_s.jpg/g, '_m.jpg');
-    return '<a rel="fancyboxclass"  id="' + item.id + '"href="' + url_m + '" title="' + item.title + '"><img src="' + item.url + '" width="140" height="140" border="0" alt="' + item.title + '" /></a>';
-};
-
-jQuery(document).ready(function() {
-    jQuery('#mycarousel').jcarousel({
-        size: mycarousel_itemList.length,
-        itemLoadCallback: {onBeforeAnimation: mycarousel_itemLoadCallback}
-    });
-	/*$(".fancyboxclass").fancybox({
-				'overlayShow'	: true,
-				'transitionIn'	: 'elastic',
-				'transitionOut'	: 'elastic'
-			});*/
-	$("a[rel=fancyboxclass]").fancybox({
-				'transitionIn'		: 'none',
-				'transitionOut'		: 'none',
-				'titlePosition' 	: 'over',
-				'transitionIn'	: 'elastic',
-				'transitionOut'	: 'elastic',
-				'titleFormat'		: function(title, currentArray, currentIndex, currentOpts) {
-					return '<span id="fancybox-title-over">Image ' + (currentIndex + 1) + ' / ' + currentArray.length + (title.length ? ' &nbsp; ' + title : '') + '</span>';
-				}
-			});
-
-});
-
-function loadfancybox(obj) {
-
-			$(".fancyboxclass").fancybox({
-				'overlayShow'	: false,
-				'transitionIn'	: 'elastic',
-				'transitionOut'	: 'elastic'
-			});
-
-			
-		}
-</script>
-
-<div id="wrap">
-  
-
-  <ul id="mycarousel" class="jcarousel-skin-ie7">
-    <!-- The content will be dynamically loaded in here -->
-  </ul>
-
+	foreach($loadHotelspics as $key=>$value){
+?>
+<div>
+<a class="group1" href="<? echo $this->Html->webroot."uploads/hotels/".$value['Hotel']['id']."/".$value['HotelsPicture']['picture'];?>" ><img alt="" src="<? echo $this->Html->webroot."uploads/hotels/".$value['Hotel']['id']."/".$value['HotelsPicture']['picture'];?>" /></a>
 </div>
-<!--end-->
+</div>
+</div>
 
-	<div id="popupContact" class="popupContact">
+<?php $i++; } ?>
+</div>
+</div>
+</div>
+
+	<!--<div id="popupContact" class="popupContact">
 		<a id="popupContactClose"><?=$html->image('/img/icons/close.png',array('width'=>'20px'));?></a>
 		
         <div style="" class="cap">Room Details</div>
@@ -303,4 +267,18 @@ function loadfancybox(obj) {
 		</p>
        
 	</div>
-	<div id="backgroundPopup" class="backgroundPopup"></div>
+	<div id="backgroundPopup" class="backgroundPopup"></div>-->
+    
+    
+    <!-- This contains the hidden content for inline calls -->
+		<div style='display:none'>
+			<div id='inline_content' style='padding:10px; background:#fff;'>
+			<p><strong>This content comes from a hidden element on this page.</strong></p>
+			<p>The inline option preserves bound JavaScript events and changes, and it puts the content back where it came from when it is closed.</p>
+			<p><a id="click" href="#" style='padding:5px; background:#ccc;'>Click me, it will be preserved!</a></p>
+			
+			<p><strong>If you try to open a new ColorBox while it is already open, it will update itself with the new content.</strong></p>
+			<p>Updating Content Example:<br />
+			<a class="ajax" href="../content/flash.html">Click here to load new content</a></p>
+			</div>
+		</div>

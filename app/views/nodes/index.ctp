@@ -22,17 +22,17 @@
 	foreach($hotelDets as $key=>$value){?>
     	<div class="hoteldescontainer">
 			<div class="hoteldets">
-				<div class="hotelname">Hotel <?=$value['Hotel']['name'];?></div>
-				<div class="hoteladdress"><span class="htllbl">Address :</span><span class="htldet"><?=$value['Hotel']['address'];?></span></div>
-				<div class="hotelphone"><span class="htllbl">Phone :</span><span class="htldet"><?=$value['Hotel']['phone'];?></span></div>
-				<div class="hotelweb"><span class="htllbl">Web :</span><span class="htldet"><?=$value['Hotel']['web'];?></span></div>
-				<div class="hotelweb"><span class="htllbl">Email :</span><span class="htldet"><?=$value['Hotel']['email'];?></span></div>
-				<!--<div class="hotelweb"><span class="htllbl">&nbsp;</span><span class="htldet more">
-					<?=$this->Form->create(array('id'=>'htminf','class'=>'moreinfo','action'=>'/hoteldetails/')); ?>
+				<div class="hotelname"><span class="ht-icon"></span><span class="ht-name"><?=$value['Hotel']['name'];?></span></div>
+				<div class="clr"></div>
+				<div class="description-container">
+				
+				<?=$value['Hotel']['description'];?>
+				<div class="moredets">
+					<?=$this->Form->create(array('id'=>'htminf','class'=>'moreinfo','action'=>'/hoteldetails/'.$value['Hotel']['id'])); ?>
 					<?=$this->Form->input('hotelid',array('type'=>'hidden','label'=>'','value'=>$value['Hotel']['id']));?>
-				 	<?php echo $this->Form->end('More Details...'); ?>
-					</span>
-				</div>-->
+				 	<?php echo $this->Form->end('More Details'); ?>
+				</div>
+				</div>
 			</div>
 			<?php $path='';
 				 if(empty($value['Hotel']['logo']))
@@ -44,10 +44,14 @@
 			<div class="imgbox">
 			<img src="<?php echo $this->Html->webroot;?>uploads/hotels/<?=$path;?>" class="img" />
 			<div class="clr"></div>
-			<div class="moredets">
-					<?=$this->Form->create(array('id'=>'htminf','class'=>'moreinfo','action'=>'/hoteldetails/'.$value['Hotel']['id'])); ?>
-					<?=$this->Form->input('hotelid',array('type'=>'hidden','label'=>'','value'=>$value['Hotel']['id']));?>
-				 	<?php echo $this->Form->end('More Details...'); ?>
+			<div class="contact-inf">
+				<div><?=$value['Hotel']['address'];?></div>
+				<div class="clr"></div>
+				<div><?=$value['Hotel']['phone'];?></div>
+				<div class="clr"></div>
+				<div><?=$value['Hotel']['email'];?></div>
+				<div class="clr"></div>
+				<div><?=$value['Hotel']['web'];?></div>
 			</div>
 			</div>
 			
@@ -55,16 +59,22 @@
 		
 	
 	<?php }?>
+	
 	<div class="clr"></div>
-	<!-- Shows the page numbers -->
-	<?php echo $paginator->numbers(); ?>
+</div> 
+	<div class="clr"></div>
+	<div class="pg-div">
 	<!-- Shows the next and previous links -->
 	<?php
 		echo $paginator->prev('« Previous ', null, null, array('class' => 'disabled'));
-		echo $paginator->next(' Next »', null, null, array('class' => 'disabled'));
-	?> 
+	?>
+	 <!-- Shows the page numbers -->
+	<?php 
+		echo $paginator->numbers();
+		echo $paginator->next(' Next »', null, null, array('class' => 'disabled')); 
+	?>
+	
 	<!-- prints X of Y, where X is current page and Y is number of pages -->
 	<?php echo $paginator->counter(); ?>
-	<div class="clr"></div>
-</div> 
-
+	</div>
+<div class="clr"></div>
