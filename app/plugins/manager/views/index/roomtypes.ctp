@@ -1,6 +1,6 @@
 <style>
 .container{
-	margin:10px 0 10px 80px;
+	margin: 10px 0 10px 0;
 }
 .detailLables {
     background: none repeat scroll 0 0 #E7E7E7;/*F7FAF6*/
@@ -35,6 +35,7 @@
 }
 </style>
 <div class="container">
+<div class="hotelname"><span class="ht-icon"></span><span class="ht-name"><?=$hotelName;?> Room Type Details.</span></div>
     <div id="tabs">
              <ul>
                  <?php foreach($loadHotelsRoomType as $key=>$value){ ?>
@@ -46,9 +47,6 @@
             ?>
             <div id="<?=$value['HotelsRoomType']['id'];?>">
             <div class="tforroomtype"><?=$value['Hotel']['name'];?> Room Type Details.</div>
-            <div class="clr"></div>
-            <div class="detailLables">Room Type </div>
-            <div class="detailFields"><?=$value['HotelsRoomType']['name'];?></div>
             <div class="clr"></div>
             <div class="detailLables">Room Price </div>
             <div class="detailFields"><?=$value['HotelsRoomType']['price'];?></div>

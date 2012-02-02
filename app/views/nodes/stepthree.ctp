@@ -1,6 +1,6 @@
 <style>
 .stepFont{
-	width:147px;
+	width:267px;
 	float:left;
 	padding-top: 5px;
     text-align: center;
@@ -8,7 +8,7 @@
 .inactiveDiv{
 	background:url(<?php echo $html->webroot;?>img/booking_steps/stepsbg.png) repeat-x;
 	height:35px;
-	width:180px;
+	width:300px;
 	color:#360;
 	float:left;
 }
@@ -17,7 +17,7 @@
 	background:url(<?php echo $html->webroot;?>img/booking_steps/activestep.png) repeat-x;
 	height:35px;
 	color:#FFF;
-	width:180px;
+	width:300px;
 	float:left;
 	
 }
@@ -62,7 +62,7 @@
 ?>
 <div class="container">
 <div class="clr"></div>
-<div class="cap">Hotel Name : <?=$hotelName;?></div>
+<div class="hotelname"> <span class="ht-icon"></span><span class="ht-name"><?=$hotelName;?></span></div>
 <div class="clr"></div>
 <div>
       <div id="step1" class="inactiveDiv">
@@ -78,7 +78,7 @@
             <div class="stepFont">Step Three : Paymants</div>
             <div class="activeArrow"></div>
 	      </div>
-	      <div id="step4" class="inactiveDiv">
+<!--	      <div id="step4" class="inactiveDiv">
             <div class="stepFont">Step 4</div>
             <div class="inactiveArrow"></div>
         	
@@ -86,7 +86,7 @@
 	      <div id="step5" class="inactiveDiv">
         	<div class="stepFont">Step 5</div>
             <div class="inactiveArrow"></div>	
-	      </div>
+	      </div>-->
 </div>
 
 <h1>Thank you !</h1>

@@ -140,7 +140,7 @@
 </script>
 
 <div class="container">
-	<div class="cap"> Hotel <?=$hotels[0]['Hotel']['name'];?><?php $hid=$hotels[0]['Hotel']['id'];?></div>
+<div class="hotelname"><span class="ht-icon"></span><span class="ht-name"><?=$hotels[0]['Hotel']['name'];?><?php $hid=$hotels[0]['Hotel']['id'];?></span></div>
 		<div class='clr'></div>
 		<div class="toparea">
 		<div class="calenederarea">

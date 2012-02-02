@@ -51,14 +51,14 @@
 
   <div class="header">
     <div class="header_resize">
-      <div class="logo fbg_resize" style="width:890px;background-color: #FFF;margin:5px 0px 5px 0px; " ><h1><a href="index.html"><img src="/templates/limejungle/images/logo.png" /> </a></h1></div>
+      <div class="logo fbg_resize" style="width:890px;background-color: #FFF;margin:5px 0px 5px 0px; " ><h1><a href="index.html"><img src="/templates/limejungle/images/png/logo_6.png" /> </a></h1></div>
       <div class="clr"></div>
-      <div class="menu_nav">
+      <!--<div class="menu_nav">
         <ul>
           <li class="active"><a href="/">Home</a></li>
-          <!--<li><a href="support">Users</a></li>-->
+          <li><a href="support">Users</a></li>
           <li><a href="<?=$murl;?>">HotelManagers</a></li>
-          <!--<li><a href="blog">Promotions</a></li>-->
+          <li><a href="blog">Promotions</a></li>
           <li><a href="/contact/">Contact Us</a></li>
         </ul>
         <div class="searchform">
@@ -67,7 +67,7 @@
             <input name="button_search" src="/templates/limejungle/images/search_btn.gif" class="button_search" type="image" />
           </form>
         </div>
-      </div>
+      </div>-->
       <div class="clr"></div>
       <img src="/templates/limejungle/images/hbg_img.jpg" width="970" height="260" alt="image" />
     </div>

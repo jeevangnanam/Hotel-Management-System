@@ -67,7 +67,33 @@
 .tpdiv{
 	width:50%;
 }
-
+table{
+	 width: 95%;	
+}
+th {
+	width:auto;
+	color:#72A946;	
+	font-weight:bold;
+	background:#F7F7F7;
+	text-align:center;
+}
+td {
+	width:auto;
+	color:#72A946;	
+	font-weight:bold;
+	text-align:center;
+	border-bottom:1px dashed #CCC;
+}
+#hotelName{
+	width:40%;
+}
+.hotelName{
+	text-align:left;
+}
+.pg-div {
+    padding-left: 30px;
+    width: auto;
+}
 </style>
 <script>
 
@@ -151,7 +177,7 @@ function loadbookings(obj,hotelId,rtId){
 </script>
 <div class="container">
 			<div class="topic">
-            	Manager Control Panel
+            	Control Panel
             </div>
    	 		<div class="clr"></div>
             <div class="main_row">
@@ -170,39 +196,59 @@ function loadbookings(obj,hotelId,rtId){
              </div>	 
             </div>
             <div class="clr"></div>
-    		<div class="hotelname">Hotels</div><div class="btns">Room Types</div><div class="btns">Edit Rooms</div><div class="btns">Booking Info</div><div class="btns">Booking</div>
-        	<div class="clr"></div>
+            <table>
+            <thead>
+            <tr>
+            <th id="hotelName">Hotels</th>
+            <th>Room Types</th>
+            <th>Edit Rooms</th>
+            <th>Booking Info</th>
+            <th>Booking</th>
+            </tr>
+            </thead>
+            <tbody>
 			<?php foreach($getHotels as $key=>$value){ ?>
-            
-            <div class="hotelname">
-			<?=$value['Hotel']['name']; ?>
-            </div>
-            
-            <div class="btns" align="center">
+            <tr>
+            <td class="hotelName"><?=$value['Hotel']['name']; ?></td>
+            <td>
 			<?=$this->Form->create('',array("action" => "/roomtypes/".$value['Hotel']['id'] ));?>
             <?=$this->Form->input('hotelid',array('type'=>'hidden','value'=>$value['Hotel']['id']));?>
 			<?=$this->Form->end('Room Types');?>
-            </div>
-            
-            <div class="btns" align="center">
+            </td>
+            <td>
 			<?=$this->Form->create('',array("action" => "/editrooms/".$value['Hotel']['id'] ));?>
             <?=$this->Form->input('hotelid',array('type'=>'hidden','value'=>$value['Hotel']['id']));?>
 			<?=$this->Form->end('Edit Rooms');?>
-            </div>
-            
-            <div class="btns" align="center">
+            </td>
+            <td>
 			<?php echo $this->Form->create('',array("action" => "/stathome/".$value['Hotel']['id'] ));?>
 			<?=$this->Form->end('Booking Info');?>
-            </div>
-            
-            <div class="btns" align="center">
+            </td>
+            <td>
 			<?=$this->Form->create('',array("action" => "/bookingindex/".$value['Hotel']['id'] ));?>
             <?=$this->Form->input('hotelid',array('type'=>'hidden','value'=>$value['Hotel']['id']));?>
 			<?=$this->Form->end('Booking');?>
-            </div>
-            <div class="clr"></div>
+            </td>
+            </tr>
            
             <?php }?>
-        
+            </tbody>
+        </table>
+        <div class="clr"></div>
+	<div class="pg-div">
+	<!-- Shows the next and previous links -->
+	<?php
+		echo $paginator->prev('« Previous ', null, null, array('class' => 'disabled'));
+	?>
+	 <!-- Shows the page numbers -->
+	<?php 
+		echo $paginator->numbers();
+		echo $paginator->next(' Next »', null, null, array('class' => 'disabled')); 
+	?>
+	
+	<!-- prints X of Y, where X is current page and Y is number of pages -->
+	<?php echo $paginator->counter(); ?>
+	</div>
+<div class="clr"></div>
     </div>
    

@@ -90,7 +90,7 @@ function loadprompt(obj){
 }
 </script>
 <div class="container">
-	<div class="cap"><?=$hotels[0]['Hotel']['name'];?></div>
+	<div class="hotelname"><span class="ht-icon"></span><span class="ht-name"><?=$hotels[0]['Hotel']['name'];?></span></div>
 	<div class="clr"></div>
 	<div class="sbox">
 	<?php $rt=$rtselected;?>

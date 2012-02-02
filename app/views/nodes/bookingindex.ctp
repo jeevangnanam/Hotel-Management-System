@@ -37,6 +37,8 @@
     font-size: 16px;
     width: 35%;
 	background:#F7FAF6;
+	border-radius: 5px 5px 5px 5px;
+	padding: 0 0 10px;
 }
 .detailFields {
     width: 250px;
@@ -46,13 +48,18 @@
 }
 #NodeRoomtype{
 	width:243px;
+	color: #DD7F27;
+	font-weight:bold;
 }
 #NodeDateFrom,#NodeDateTo{
 	width:100px;
+	color: #DD7F27;
+	font-weight:bold;
 }
 button  {
-    background: none repeat scroll 0 0 #72A946;
+    background: none repeat scroll 0 0 #538136;
     border: medium none;
+    border-radius: 5px 5px 5px 5px;
     color: #FFFFFF;
     cursor: pointer;
     float: right;
@@ -60,8 +67,12 @@ button  {
     font-style: normal;
     height: 25px;
     margin-right: 10px;
+    padding: 0 10px;
     width: auto;
-	padding: 0 10px;
+	font-weight: bold;
+}
+button:hover {
+	background:#DD7F27;
 }
 #dsubmit{
 	display:none;
@@ -231,7 +242,7 @@ $(function() {
 
 
 <div class="container">
-	<div class="cap"> Hotel <?=$getHotels[0]['Hotel']['name']; ?></div>
+	<div class="hotelname"> <span class="ht-icon"></span> <span class="ht-name"><?=$getHotels[0]['Hotel']['name']; ?></span></div>
     <div class="clr"></div>
 	<div class="searchroomsavl">
      <?php //$rt=$dfrom=$dto=$roomavl=''?>
@@ -256,6 +267,7 @@ $(function() {
 	 <div id="dsubmit">
 	 	<?=$this->Form->end('Search');?>	
      </div>
+	 <div class="clr"></div>
     </div>
     
     <div class="roomTypes" style="height:250px;">

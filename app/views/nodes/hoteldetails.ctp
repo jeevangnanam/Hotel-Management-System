@@ -5,7 +5,7 @@
 ?>
 <script type="text/javascript">
  $(document).ready(function() {
-            $('#carouselh').jsCarousel({ autoscroll: false, circular: false, masked: false, itemstodisplay: 5, orientation: 'h' });
+            $('#carouselh').jsCarousel({ autoscroll: false, circular: true, masked: false, itemstodisplay: 10, orientation: 'h' });
 			//onthumbnailclick: function(src) { alert(src); },
 
 				//Examples of how to assign the ColorBox event to elements
@@ -31,57 +31,7 @@
 					return false;
 				});
 			});
-		
-function loadroomavailabity(){
-	$('#roomcount').val(0);
-	var rtid=$('#roomtypes').val()
-	var dateFrom=$('#datefrom').val();
-	var dateTo=$('#dateto').val();
-	if(dateFrom==""){
-		alert("Please select 'Date From'.");
-		return false;
-	}
-	else if(dateTo==""){
-		alert("Please select 'Date To'.");
-		return false;
-	}
-	else{
-		//$(".roomtypedes"+rtid).slideToggle("slow");
-		$.post("/Nodes/roomavailability/", { rtid: rtid,dateFrom:dateFrom,dateTo:dateTo},
-		   function(data) {
-			 $(".roomtypedes").html(data);
-			// alert(data);
-			  
-		   });
-	}
-}
-	
-function loadCalander(str){
- $('#'+str).datepicker({ dateFormat: 'yy-mm-dd' });
- //$('#'+str).datepicker({ dateFormat: 'yy-mm-dd' });
-}
 
-function selectDiv(obj,id){
-	var sr=0;
-	if($(obj).is('.ediv')){
-		$(obj).removeClass('ediv');
-		$(obj).addClass('roomselected');
-			sr=$('#roomcount').val();
-			$('#roomcount').val(parseInt(sr)+1);
-	}
-	else{
-		if($(obj).is('.roomselected')){
-			$(obj).removeClass('roomselected');
-			$(obj).addClass('ediv');
-			   sr=$('#roomcount').val();
-			   $('#roomcount').val(parseInt(sr)-1);
-		}			
-	}
-}
-
-function submitform(frm){
-	$('#'+frm)[0].submit();
-}
 </script>
 <style>
 .detailLables{
@@ -158,9 +108,13 @@ function submitform(frm){
 				<div class="clr"></div>
 				<div class="hotelweb"><span class="htllbl">Email :</span><span class="htldet"><?=$value['Hotel']['web'];?></span></div>
 				<div class="clr"></div>
-				<div class="hoteladdress"><span class="htllbl">Contact person :</span><span class="htldet"><?=$value['Users']['first_name'];?> &nbsp;<?=$value['Users']['last_name'];?></span></div>
+				<div class="hoteladdress"><span class="htllbl">Contact person :</span><span class="htldet"><?=$value['Users']['first_name'];?>&nbsp;<?=$value['Users']['last_name'];?></span></div>
+                <div class="clr"></div>
+                 <div class="description-container"><?=$value['Hotel']['description'];?></div>
 				<div class="clr"></div>
+               
 			</div>
+            
 			<?php $path='';
 				 if(empty($value['Hotel']['logo']))
 					$path='no_photo.jpg';
@@ -169,9 +123,13 @@ function submitform(frm){
 		    ?>
 			<?php ?>
 			<div class="imgbox"><img src="<?php echo $this->Html->webroot;?>uploads/hotels/<?=$path;?>" class="img" />
-            <?=$this->Form->create('Nodes',array('action'=>"/bookingindex/$hotelid"));?>
-            <?=$this->Form->submit('Book Now');?>
+            <? //$this->Form->create('Nodes',array('controller'=>'nodes','action'=>'bookingindex/'.$hotelid));?>
+            <? //$this->Form->submit('Book Now');?>
+            <div class="bookiing-link">
+            	<?=$this->Html->link('Book Now',array('controller'=>'nodes','action'=>'bookingindex/'.$hotelid));?>
             </div>
+            </div>
+            
         </div>
 		<div class="clr"></div>
 		<div class="roomdets">
@@ -220,10 +178,11 @@ function submitform(frm){
 <div>
 <a class="group1" href="<? echo $this->Html->webroot."uploads/hotels/".$value['Hotel']['id']."/".$value['HotelsPicture']['picture'];?>" ><img alt="" src="<? echo $this->Html->webroot."uploads/hotels/".$value['Hotel']['id']."/".$value['HotelsPicture']['picture'];?>" /></a>
 </div>
-</div>
-</div>
+
 
 <?php $i++; } ?>
+</div>
+</div>
 </div>
 </div>
 </div>

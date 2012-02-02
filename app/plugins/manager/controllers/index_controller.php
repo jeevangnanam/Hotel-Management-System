@@ -21,6 +21,7 @@ class IndexController extends ManagerAppController{
        $getHotels=$this->getHotels($userid,$hotelId);
        $this->set(compact('getHotels'));
        
+       
     }
     
     function bookingindex($hotel=NULL){
@@ -174,7 +175,7 @@ class IndexController extends ManagerAppController{
 			$ht=" AND Hotel.id=$hotelId";
 		}
 		
-		$hotels=$this->Hotel->find('all',array(			
+		$this->paginate=array(			
 			 'fields' => array(
      				'Hotel.id',
                     'Hotel.`name`'),
@@ -197,9 +198,11 @@ class IndexController extends ManagerAppController{
 		 	
 		  	),
 		  	'conditions' =>array("User.id=$userid $ht"),
-		  )
+		  	'limit' =>10
+		  
 		);
-		return $hotels;
+		return $this->paginate('Hotel');
+		
 		
 	}
 
@@ -236,6 +239,7 @@ class IndexController extends ManagerAppController{
         			);
         		$loadHotelsRoomType=$this->paginate('HotelsRoomType');
       			$this->set(compact('loadHotelsRoomType'));
+      			$this->set('hotelName',$loadHotelsRoomType[0]['Hotel']['name']);
 	}
 	function popuproomdetails($hotelId=NULL,$roomtype=NULL){
 		$hotelId=$this->Session->read('hotelId'); 

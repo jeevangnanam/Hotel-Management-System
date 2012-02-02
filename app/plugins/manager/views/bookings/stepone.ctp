@@ -183,7 +183,7 @@ $coupon=$value['Coupon']['reduce_percentage'];
 ?>
 <div class="container">
 <div class="clr"></div>
-<div class="cap">Hotel Name : <?=$hotelName;?></div>
+<div class="hotelname"><span class="ht-icon"></span><span class="ht-name"><?=$hotelName;?></span></div>
 <div class="clr"></div>
 <div>
       <div id="step1" class="activeDiv">

@@ -37,6 +37,24 @@
 	-moz-border-radius: 5px; 
 	-webkit-border-radius: 5px;
 }
+
+.search-hotels-icon{
+	float:left;
+	background:url(/img/search.png) no-repeat;
+	margin: -10px 0;
+    padding: 60px 20px 0 40px;
+}
+.page-cap{
+	float:left;
+	color:#72A946;
+	padding:5px;
+}
+#search_hotels{
+	color: #DD7F27;
+    font-weight: bold;
+    padding: 5px;
+    width: 200px;
+}
 </style>
 <script>
 $(document).ready(function(){ 
@@ -63,7 +81,7 @@ $(document).ready(function(){
 	
 </script>
 <div class="container">
-	<div class="search-container"><div>Search Hotels</div><div><input type="text"  id="search_hotels"/></div></div>
+	<div class="search-container"><div><span class="search-hotels-icon"></span><span class="page-cap">Search Hotels</span></div><div><input type="text"  id="search_hotels"/></div></div>
     <div class="clr"></div>
     <div class="search_details">
 	<?php foreach($hotels as $key=>$value):?>

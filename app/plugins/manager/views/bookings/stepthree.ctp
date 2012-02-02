@@ -92,7 +92,7 @@ $usename   = $value['User']['first_name']." ".$value['User']['last_name'];
 
 ?>
 <div class="container">
-
+<div class="hotelname"><span class="ht-icon"></span><span class="ht-name"><?=$hotelName;?></span></div>
 <div class="clr"></div>
 <div>
       <div id="step1" class="inactiveDiv">

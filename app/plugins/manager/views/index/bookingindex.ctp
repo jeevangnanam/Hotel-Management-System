@@ -32,10 +32,12 @@
 		margin-bottom:5px;
 	}
 .searchroomsavl {
+    background: none repeat scroll 0 0 #F7FAF6;
+    border-radius: 5px 5px 5px 5px;
     float: left;
     font-size: 16px;
+    padding: 0 0 10px;
     width: 35%;
-	background:#F7FAF6;
 }
 .detailFields {
     width: 250px;
@@ -45,22 +47,31 @@
 }
 #HotelRoomtype{
 	width:243px;
+	 color: #DD7F27;
+    font-weight: bold;
 }
 #HotelDateFrom,#HotelDateTo{
 	width:100px;
+	 color: #DD7F27;
+    font-weight: bold;
 }
 button  {
-    background: none repeat scroll 0 0 #72A946;
+    background: none repeat scroll 0 0 #538136;
     border: medium none;
+    border-radius: 5px 5px 5px 5px;
     color: #FFFFFF;
     cursor: pointer;
     float: right;
     font-size: 14px;
     font-style: normal;
+    font-weight: bold;
     height: 25px;
     margin-right: 10px;
+    padding: 0 10px;
     width: auto;
-	padding: 0 10px;
+}
+button:hover {
+	background:#DD7F27;
 }
 #dsubmit{
 	display:none;
@@ -112,7 +123,8 @@ form label {
 	display:none;
 }
 #errormsg{
-color:#D55E35;
+	color: #D55E35;
+    font-size: 11px;
 }
 </style>
 <script>
@@ -224,7 +236,7 @@ $(function() {
 
 
 <div class="container">
-	<div class="cap"> Hotel <?=$getHotels[0]['Hotel']['name']; ?></div>
+	<div class="hotelname"><span class="ht-icon"></span><span class="ht-name"><?=$getHotels[0]['Hotel']['name']; ?></span></div>
     <div class="clr"></div>
 	<div class="searchroomsavl">
      <?php //$rt=$dfrom=$dto=$roomavl=''?>
@@ -238,7 +250,7 @@ $(function() {
      <?=$this->Form->input('dateTo',array('type'=>'text','label'=>'Date To *','value'=>$dto));?>
 
 
-    <?=$this->Form->input('amount',array('id'=>'amount','class'=>'rnr','type'=>'text','label'=>'Room Number range','value'=>0,'readonly'=>"readonly"));?>
+    <?//$this->Form->input('amount',array('id'=>'amount','class'=>'rnr','type'=>'text','label'=>'Room Number range','value'=>0,'readonly'=>"readonly"));?>
     <div class="rng">
     	<div id="slider-range"></div>
     </div>

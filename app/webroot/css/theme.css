@@ -87,7 +87,17 @@ ul.sf-menu li li li.sfHover ul { left:10em; top:0; }
 /**
  * Main
  */
-.message { border: 2px dashed #eee; padding: 10px; margin: 0px 0px 10px 0px; }
+.message { background: none repeat scroll 0 0 #DD7F27;
+   /* border: 2px dashed #EEEEEE; */
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0 0 10px;
+    padding: 10px;
+    text-align: center; 
+	border-radius: 5px 5px 5px 5px;
+}
+
 
 .nodes .node h2 { font-size: 26px; }
 

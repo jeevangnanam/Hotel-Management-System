@@ -119,8 +119,8 @@
    /* background: url("/img/icons/book_bg.png") repeat-x scroll 0 0 transparent;
 	height: 20px; 
 	width: 58px;*/
-	background: none repeat scroll 0 0 #72A946;
-    border: medium none;
+	border: medium none;
+	background: none repeat scroll 0 0 #538136;
     color: #FFFFFF;
     cursor: pointer;
     float: left; 
@@ -128,6 +128,11 @@
     text-align: center;
 	height: 25px;
     width: 70px;
+	border-radius: 5px 5px 5px 5px;
+	font-weight: bold;
+}
+.submitbtn:hover {
+	background:#DD7F27;
 }
 .submit{
 	display:none;
@@ -223,7 +228,7 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
 ?>
 <div class="container">
 <div class="clr"></div>
-<div class="cap">Hotel Name : <?=$hotelName;?></div>
+<div class="hotelname"> <span class="ht-icon"></span><span class="ht-name"><?=$hotelName;?></span></div>
 <div class="clr"></div>
 <div>
       <div id="step1" class="inactiveDiv">
@@ -307,11 +312,12 @@ $additionalChildCharge=$value['HotelsRoomCapacities']['additional_child_charge']
         <div class="detailLables">Total Price</div>
         <?php $total=((($price*$noOfSelectedRooms)+$addC+$addAd)*$days)-$couponDeduction; ?>
         <div class="detailFields"><?=$total?><?=$this->Form->input('total',array('type'=>'hidden','value'=>$total))?></div>
-        <div class="clr"></div>
-        <div class="msg"></div>
-        <div class="clr"></div>
+        
     </div>
     <div class="selections">
+    	<div class="clr"></div>
+        <div class="msg"></div>
+        <div class="clr"></div>
         <div class="detailLables">Enter Your Name</div>
         <div class="detailFields"><?=$this->Form->input('Booking.name',array('type'=>'text','value'=>'','class'=>'BookingName','label'=>''))?></div>
         <div class="clr"></div>
