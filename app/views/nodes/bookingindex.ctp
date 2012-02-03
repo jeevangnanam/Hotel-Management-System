@@ -115,10 +115,12 @@ form label {
 }
 .srooms{
 	border:dotted 1px;
+    background: none repeat scroll 0 0 #F7FAF6;
     float: left;
-    overflow-y:scroll;
-    width: 400px;
-	height:50px;	
+    height: 50px;
+    margin: 0 0 0 -9px;
+    overflow-y: scroll;
+    width: 400px;	
 }
 #roomnos{
 	display:none;
@@ -270,7 +272,7 @@ $(function() {
 	 <div class="clr"></div>
     </div>
     
-    <div class="roomTypes" style="height:250px;">
+    <div class="roomTypes" style="height:350px;">
     
     <div class="caps">
 		<?=$this->Form->button('Available',array('type'=>'button','id'=>'ravlilable','class'=>'ravlilable'));?>

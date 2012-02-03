@@ -138,24 +138,11 @@
     color: #FFFFFF;
     margin: -5px 35px;
     width: 100px;
-	/*background: -moz-linear-gradient(center top , #FDA649 0%, #FDA649 50%, #FF7300 50%, #FF7300) repeat scroll 0 0 transparent;
-    border: 1px solid #D67628;
-    border-radius: 8px 8px 8px 8px;
-    box-shadow: 0 0 0 transparent, 0 0 0 rgba(255, 255, 255, 0) inset;
-    color: #FFFFFF;
-    cursor: pointer;
-    font-family: Arial,Helvetica,sans-serif;
-    margin: -5px 35px;
-    padding: 5px 14px;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3), 0 0 0 rgba(255, 255, 255, 0);
-    text-transform: uppercase;
-    width: 120px;*/
 	
 }
 .moreinfo div input:hover{
-	/*background: -moz-linear-gradient(center top , #FF7300 50%, #FDA649 0% ,#FDA649 50%,  #FF7300) repeat scroll 0 0 transparent;
-    color: #DD7F27;font-weight:bold;*/
 	background:#DD7F27;
+	width: 100px;
 }
 .roomdets{
 	width:100%;

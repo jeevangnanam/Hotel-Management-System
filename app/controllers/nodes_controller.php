@@ -356,7 +356,7 @@ class NodesController extends AppController {
        	$hotelDets=$this->hotelsDets($hotelId,$hotelname,$location,$starclass,$tag,$category,$subdomain);
         $cat=$this->setHotelCategory();
         $category = array();
-        $c=0;
+        $c=1;
         foreach ($cat as $key=>$value){
         	$catego[$c]=$value['HotelsCategoryList']['name'];
         	$c++;

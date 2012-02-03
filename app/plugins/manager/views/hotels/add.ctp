@@ -1,6 +1,21 @@
-
-
-
+<style>
+.ui-widget-content {
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    color: #333333;
+}
+#frm,#hotel-room-types div{
+	color:#538136;
+}
+fieldset legend{
+	color: #72A946;
+    font-size: 20px;
+    font-weight: bold;
+    height: 35px;
+    margin-left: -10px;
+    padding: 5px 0 5px 10px;
+}
+</style>
 <script>
     $(document).ready(function(){
 
@@ -389,7 +404,9 @@
 </div>
 
 <div id="hotel-meta">
-	<div>Hotel meta&nbsp;<?php echo $html->image('icons/add.png',array("width" => "20px","onclick" => "addNew(this)")); ?></div>
+<fieldset>
+	<legend>Hotel meta</legend>
+	<div>&nbsp;<?php echo $html->image('icons/add.png',array("width" => "20px","onclick" => "addNew(this)")); ?></div>
 	<div style="clear:both;"></div>	 
 	<div>
 	 
@@ -414,6 +431,7 @@
 		<div><input type='button' value='Save..' onclick="saveMeta();"/></div>
 	<!--	<?= $this->Form->end(__('Save..', true)); ?>-->
 	</div>
+	</fieldset>
 </div> 
 </fieldset>
 

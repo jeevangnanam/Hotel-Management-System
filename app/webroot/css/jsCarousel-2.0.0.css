@@ -3,7 +3,7 @@
 {
 	width: auto;
 	height: 118px;
-	background-color: #538136;
+	background-color: #F7F7F7;
 	border: solid 1px #7A7677;
 	margin-top: 10px;
 	padding: 0;
@@ -37,6 +37,16 @@
 	background-repeat: no-repeat;
 	background-position: right;
 	border-radius: 5px 5px 5px 5px;
+}
+
+.jscarousal-horizontal-back:hover
+{
+	background-image: url(/img/left_arrow_h.jpg);
+}
+
+.jscarousal-horizontal-forward:hover
+{
+	background-image: url(/img/right_arrow_h.jpg);
 }
 .jscarousal-contents-horizontal
 {

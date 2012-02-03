@@ -1,3 +1,21 @@
+<style>
+.ui-widget-content {
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    color: #333333;
+}
+#frm,#hotel-room-types div{
+	color:#538136;
+}
+fieldset legend{
+	color: #72A946;
+    font-size: 20px;
+    font-weight: bold;
+    height: 35px;
+    margin-left: -10px;
+    padding: 5px 0 5px 10px;
+}
+</style>
 <?=  $html->script(array('/js/image_upload/jquery.imgareaselect-0.3.min'),false); ?>
 <script>
     $(document).ready(function(){
@@ -224,7 +242,7 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 
 		  echo  $this->Form->create('Hotel',array("enctype" => "multipart/form-data","name" => "frm","id"=>"frm" ));
 		  if(count($records) < 1){
-		 	 $hid=$hname=$haddress=$hphone=$hemail=$hweb=$hcontact=$hstar=$hstatus=$subdomain='';
+		 	 $hid=$hname=$haddress=$hphone=$hemail=$hweb=$hcontact=$hstar=$hstatus=$subdomain=$description='';
 		  }
 		  else{
 		    $hid=$records[0]['Hotel']['id'];
@@ -237,6 +255,7 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 			$hstar=$records[0]['Hotel']['starclass'];
 			$hstatus=$records[0]['Hotel']['status'];
 			$subdomain=$records[0]['Hotel']['subdomain'];
+			$description=$records[0]['Hotel']['description'];
 		  }
 		?>
 				<div style="width:25%;float:left;">Name :</div>
@@ -296,6 +315,10 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 					<?=$this->Form->input('Hotel.logo',array('type' => 'file','label' => false)); ?>
 				</div>
 				<div style="width:100%;clear:both;">&nbsp;</div>
+				<div style="float:left;width:100px;">Description :</div>
+				<div style="float:left;">
+				   <?=$this->Form->input('Hotel.description',array('label'=>'', 'value'=>$description));?>
+				</div>
 				<div style="width:25%;float:left;">Status :</div>
 				<div style="width:75%;float:left;">
 					<?php echo $this->Form->input('Hotel.status',array('type' => 'checkbox','label'=>'','checked'=>$hstatus)); ?>
@@ -605,7 +628,9 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 </div>
 
 <div id="hotel-meta">
-	<div>Hotel meta&nbsp;<?php echo $html->image('icons/add.png',array("width" => "20px","onclick" => "addNew(this)")); ?></div>
+	<fieldset>
+	<legend>Hotel meta</legend>
+	<div>&nbsp;<?php echo $html->image('icons/add.png',array("width" => "20px","onclick" => "addNew(this)")); ?></div>
 	<div style="clear:both;"></div>	 
 	<div>
 	 
@@ -631,6 +656,7 @@ $( 'html, body' ).animate( { scrollTop: 0 }, 0 );
 		<div><input type='button' value='Save..' onclick="saveMeta();"/></div>
 	<!--	<?= $this->Form->end(__('Save..', true)); ?>-->
 	</div>
+	</fieldset>
 </div> 
 
 

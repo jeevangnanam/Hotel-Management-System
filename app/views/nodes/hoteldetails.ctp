@@ -5,7 +5,7 @@
 ?>
 <script type="text/javascript">
  $(document).ready(function() {
-            $('#carouselh').jsCarousel({ autoscroll: false, circular: true, masked: false, itemstodisplay: 10, orientation: 'h' });
+            $('#carouselh').jsCarousel({ autoscroll: false, circular: true, masked: false, itemstodisplay: 6, orientation: 'h' });
 			//onthumbnailclick: function(src) { alert(src); },
 
 				//Examples of how to assign the ColorBox event to elements

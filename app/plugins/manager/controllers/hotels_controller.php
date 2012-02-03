@@ -811,6 +811,7 @@ class HotelsController extends ManagerAppController {
                     'Hotel.web',
                     'Hotel.contactperson',
                     'Hotel.starclass',
+    				'Hotel.description',
 					'Hotel.`status`',
     				'Hotel.`subdomain`'),
                 'joins' => array(
