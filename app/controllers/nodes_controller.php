@@ -334,6 +334,7 @@ class NodesController extends AppController {
     }
 
     public function index($hotelname=NULL,$location=NULL,$starclass=NULL,$category=NULL) {
+    	$this->set('title_for_layout', '');
        $hotelname=$location=$starclass=$hotelId=$subdomain=$category='';
        $domain=$this->getSubdomain();
        if(!empty($domain) && $domain!='demo-hotelms'){
@@ -446,7 +447,7 @@ class NodesController extends AppController {
        $this->set(compact('roomavl'));
        $this->set('dto',$dto);
        $this->Session->write('ticket','');
-       
+       $this->set('title_for_layout', $getHotels[0]['Hotel']['name']);
     	
     }
     
@@ -735,6 +736,7 @@ class NodesController extends AppController {
 	}
 
 	function hoteldetails($hotelId=NULL){
+		
 		if(!isset($this->params['pass'][0])){
 			$hotelId=$this->data['Node']['hotelid'];
 		}
@@ -756,6 +758,7 @@ class NodesController extends AppController {
 		$this->set('roomopt',$roomopt);
 		
 		$this->set(compact('hoteldets','hoteltypedets','loadHotelspics'));
+		$this->set('title_for_layout', $hoteldets[0]['Hotel']['name']);
 	}
 	function roomstatus($hotelId=NULL,$roomtypeid=NULL,$dateFrom=NULL,$dateTo=NULL){
 		$roomStatus=$this->Booking->find('all',
@@ -803,6 +806,7 @@ class NodesController extends AppController {
 		$this->set('nsr',$noOfRooms);
 		$this->set('nsrooms',substr($selectedroomnos,0,strlen($selectedroomnos)-1));
 		$this->set(compact('roomDes'));
+		$this->set('title_for_layout', $roomDes[0]['Hotel']['name']);
 		
 	}
 	/* booking step two */
@@ -855,6 +859,7 @@ class NodesController extends AppController {
 		$this->set('cid',$cid);	
 		$roomDes=$this->getRoomTypeDets($hotelId,$rtId);
 		$this->set(compact('roomDes'));
+		$this->set('title_for_layout', $roomDes[0]['Hotel']['name']);
 		
 	}
 	/* booking step stepthree */
@@ -950,13 +955,21 @@ class NodesController extends AppController {
 				);
 			$ht=$ht[0]['Hotel']['name'];
 			$this->set('hotelName',$ht);
-			$this->_sendNewUserMail( $this->data);
+			//if($this->_sendNewUserMail( $this->data)){
+				$invoice = file_get_contents("http://localhost:81/sampath/samples/Pay.asp?amount=".$this->data['Booking']['estimated_price']."&merchent_reference=".$this->data['Booking']['email']);
+ 
+            $content = "<i>Please wait...</i>";
+            $content .= "<form method='post'  action='https://epay.sipg.lk/ipg/Servlet_HyDirectPAccCustom' name='frm1' id='frm1'>";
+            $content .= "<input type='hidden' id='MerchantInvoice' name='MerchantInvoice' value=$invoice />";
+            $content .= "</form>";
+         $this->set('content', $content);
+			//}
         	
         	}
         	else{}
         }        
         
-         
+        $this->set('title_for_layout', $ht); 
         
 		
 	}
@@ -1418,6 +1431,7 @@ class NodesController extends AppController {
         			
         	);
      $this->set('hotels',$this->paginate('Hotel'));
+     $this->set('title_for_layout','Partner Hotels'); 
     }
 	
     public function searchpartners($hotelName=NULL){
@@ -1446,7 +1460,7 @@ class NodesController extends AppController {
     	 }
     	 
 		echo json_encode($arr);
-		
+		$this->set('title_for_layout', 'Partner Hotels'); 
     }
 }
 ?>

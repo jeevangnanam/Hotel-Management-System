@@ -44,4 +44,6 @@
     
      CroogoRouter::connect('/manager/logout', array('plugin' => 'manager', 'controller' => 'booking', 'action' => 'logout'));
     */
+    //hotel details
+    CroogoRouter::connect('/hoteldetails/*', array('controller' => 'nodes', 'action' => 'hoteldetails'));
 ?>

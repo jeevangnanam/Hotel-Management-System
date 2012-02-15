@@ -20,7 +20,7 @@ class IndexController extends ManagerAppController{
        $userid=$ses['Auth']['User']['id'];
        $getHotels=$this->getHotels($userid,$hotelId);
        $this->set(compact('getHotels'));
-       
+       $this->set('title_for_layout', 'Manager Control Panel'); 
        
     }
     
@@ -156,11 +156,13 @@ class IndexController extends ManagerAppController{
 	
     function login()
 	{
+		$this->set('title_for_layout', 'Manager Login'); 
             $this->layout = "limejungle_manger_login";
           
            if($this->Auth->isAuthorized()){
                 $this->redirect("/manager/index/");
            }
+           
 	}
  	function dashboard(){}
 	function logout(){

@@ -92,6 +92,24 @@ $(document).ready(function(){
 			<div><a href="<?=$value['Hotel']['web'];?>"><?=$value['Hotel']['web'];?></a></div>
         </div>
 	</div>
-	<?php endforeach;?>
+	<?php endforeach; echo $paginator->numbers()?>
     </div>
+    <?php if($paginator->numbers() != ""){?>
+    <div class="clr"></div>
+	<div class="pg-div">
+	<!-- Shows the next and previous links -->
+	<?php
+		echo $paginator->prev('« Previous ', null, null, array('class' => 'disabled'));
+	?>
+	 <!-- Shows the page numbers -->
+	<?php 
+		echo $paginator->numbers();
+		echo $paginator->next(' Next »', null, null, array('class' => 'disabled')); 
+	?>
+	
+	<!-- prints X of Y, where X is current page and Y is number of pages -->
+	<?php echo $paginator->counter(); ?>
+	</div>
+<div class="clr"></div>
+<?php }?>
 </div>

@@ -28,6 +28,7 @@
 
 /* General Style Info */
 body {
+	@font-face { font-family: Tondo_Std; src: url('/font/Futura Beyaz Italic.ttf'); 
 	background: #003d4c;
 	color: #fff;
 	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
